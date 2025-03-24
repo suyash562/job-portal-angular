@@ -1,4 +1,4 @@
-import { AbstractControl, ValidationErrors } from "@angular/forms";
+import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 
 
 export class CustomFormValidators{
@@ -28,7 +28,7 @@ export class CustomFormValidators{
     }
     
     validatePhoneNumber(control : AbstractControl) : ValidationErrors | null {
-        const regEx : RegExp = /^[0-9]{10}$/;
+        const regEx : RegExp = /^[6-9]\d{9}$/;
         if(!regEx.test(control.value)){
             return {error : 'Invalid phone number'}
         }
