@@ -1,0 +1,21 @@
+
+<form [formGroup]="loginForm" (ngSubmit)="submitForm()">
+    <div id="emailInputDiv">
+        <div >
+            <input id="emailInput" formControlName="email" placeholder="E-mail" />
+            <small [ngClass]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid ? 'error' : 'hideView'" id="emailError" id="username-help">Please enter a valid E-mail</small>
+        </div>
+    </div>
+    <div id="passwordInputDiv">
+        <div>
+            <input id="passwordInput" formControlName="password" placeholder="Password"/>
+            <small [ngClass]="loginForm.get('password')!.touched && loginForm.get('password')!.invalid ? 'error' : 'hideView'" id="emailError" id="username-help">Password must be at least 8 characters long</small>
+        </div>
+    </div>
+    <div>
+        Forgot Password
+    </div>
+    <div>
+        <button [disabled]="loginForm.invalid">Submit</button>
+    </div>
+</form>

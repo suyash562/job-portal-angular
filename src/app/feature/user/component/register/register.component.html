@@ -1,0 +1,50 @@
+
+<form [formGroup]="registerForm" (ngSubmit)="submitForm()">
+    <div id="emailInputDiv">
+        <input id="emailInput" formControlName="email" placeholder="E-mail" />
+        <small [ngClass]="registerForm.get('email')?.touched && registerForm.get('email')?.errors ? 'error' : 'hideView'">{{getErrorMessage('email')}}</small>
+    </div>
+    <div id="passwordInputDiv">
+        <input id="passwordInput" formControlName="password" placeholder="Password"/>
+        <small>{{getErrorMessage('password')}}</small>
+    </div>
+    <div id="confirmPasswordInputDiv">
+        <input id="confirmPasswordInput" formControlName="confirmPassword" placeholder="Confirm Password"/>
+        <small>{{getErrorMessage('confirmPassword')}}</small>
+    </div>
+    <div id="firstNameDiv">
+        <input id="firstName" formControlName="firstName" placeholder="First Name"/>
+        <small>{{getErrorMessage('firstName')}}</small>
+    </div>
+    <div id="lastNameDiv">
+        <div>
+            <input id="lastNameInput" formControlName="lastName" placeholder="Last Name"/>
+            <small>{{getErrorMessage('lastName')}}</small>
+        </div>
+    </div>
+    <button (click)="addNewContact()">+</button>
+    <div formArrayName="phoneNumbers">
+        <ng-container *ngFor="let phoneNumber of phoneNumbers; let i = index ">
+            <span>
+                <p>Contact Number {{i+1}}</p>
+                <input type="number" formControlName="{{i}}">
+                <small>{{getErrorMessageForContact(i)}}</small>
+            </span>
+        </ng-container>
+    </div>
+    <div id="addressDiv">
+        <div>
+            <input id="addressInput" formControlName="address" placeholder="Address"/>
+            <small>{{getErrorMessage('address')}}</small>
+        </div>
+    </div>   
+    <div id="resumeDiv">
+        <div>
+            <input id="resumeInput" formControlName="resume" placeholder="resume"/>
+            <small>{{getErrorMessage('resume')}}</small>
+        </div>
+    </div>   
+    <div>
+        <button [disabled]="registerForm.invalid">Submit</button>
+    </div>
+</form>
