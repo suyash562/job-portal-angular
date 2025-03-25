@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CustomFormValidators } from '../../validators/formValidators';
+import { UserService } from '../../service/user.service';
+import { UserProfile } from '../../entity/userProfile';
+import { User } from '../../entity/user';
+import { EmployeerRegistrationFormComponent } from '../employeer-registration-form/employeer-registration-form.component';
 
 @Component({
   selector: 'app-register',
@@ -8,9 +12,21 @@ import { CustomFormValidators } from '../../validators/formValidators';
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit, AfterViewInit{
   customFormValidators! : CustomFormValidators;
   registerForm! : FormGroup;
+  employeerRegistration : boolean = false;
+  employeerCompanyFormGroup! : FormGroup;
+  @ViewChild(EmployeerRegistrationFormComponent) employeerRegistrationComponent! : EmployeerRegistrationFormComponent;
+
+  constructor(
+    private userService : UserService
+  ){}
+
+  ngAfterViewInit(): void {
+    this.employeerCompanyFormGroup = this.employeerRegistrationComponent.employeerCompanyForm;
+    
+  }
 
   ngOnInit(): void {
 
@@ -29,6 +45,7 @@ export class RegisterComponent {
           ]
         ),
         address : new FormControl('', [this.customFormValidators.validateAddress]),
+        employeerCompany : this.employeerCompanyFormGroup,
         resume  : new FormControl('', [Validators.required]),
       }
     );
@@ -55,7 +72,28 @@ export class RegisterComponent {
 
   submitForm(){
     if(!this.registerForm.invalid){
-      console.log(this.registerForm);
+      const user : User & UserProfile = {
+        email : this.registerForm.get('email')!.value,
+        password : this.registerForm.controls['password'].value,
+        address : this.registerForm.controls['address'].value,
+        firstName : this.registerForm.controls['firstName'].value,
+        lastName : this.registerForm.controls['lastName'].value,
+        phoneNumber : this.registerForm.controls['phoneNumber'].value,
+        resume : this.registerForm.controls['resume'].value,
+        role : 'user',
+      }
+      this.userService.register(user).subscribe(
+        {
+          next : ()=>{
+            alert('Registration Successfull');
+
+          },
+          error : (err)=>{
+            console.log(err);
+            alert('Registration Failed');
+          }
+        }
+      )
     }
     else{
       this.registerForm.get('email')?.markAsDirty();
@@ -67,7 +105,7 @@ export class RegisterComponent {
       this.phoneNumbers[0].markAsDirty();
       this.phoneNumbers[1]?.markAsDirty();    
       if(this.registerForm.get('password')?.value !== this.registerForm.get('confirmPassword')?.value){
-        this.registerForm.get('confirmPassword')?.setErrors({error : 'Confirm password must match provided password'})
+        this.registerForm.get('confirmPassword')?.setErrors({error : 'Confirm password must match provided password'});
       }
     }
   }
