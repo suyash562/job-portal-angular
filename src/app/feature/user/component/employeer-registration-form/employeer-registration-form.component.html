@@ -1,11 +1,11 @@
 
 <form [formGroup]="employeerCompanyForm">
 
-    <div id="emailInputDiv">
-        <input id="emailInput" formControlName="email" placeholder="E-mail" />
-        <small>{{getErrorMessage('email')}}</small>
+    <div id="companyNameInputDiv">
+        <input id="companyNameInput" formControlName="companyName" placeholder="Company Name" />
+        <small>Error</small>
     </div>
-    
+    <!-- 
     <div id="passwordInputDiv">
         <input id="passwordInput" formControlName="password" placeholder="Password"/>
         <small>{{getErrorMessage('password')}}</small>
@@ -34,5 +34,5 @@
             <input id="addressInput" formControlName="address" placeholder="Address"/>
             <small>{{getErrorMessage('address')}}</small>
         </div>
-    </div>   
+    </div>    -->
 </form>

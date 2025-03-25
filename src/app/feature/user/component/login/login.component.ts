@@ -5,6 +5,7 @@ import { UserService } from '../../service/user.service';
 import { User } from '../../entity/user';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit, OnDestroy{
   
   constructor(
       private userService : UserService,
-      private router : Router 
+      private router : Router,
+      private cookieService : CookieService
   ){}
 
   ngOnInit(): void {
@@ -49,10 +51,12 @@ export class LoginComponent implements OnInit, OnDestroy{
         {
           next : ()=>{
             alert('Login Successfull');
+            sessionStorage.setItem('userToken','COOKIE');
+            this.userService.userLoggedInSubject.next(true);
             this.router.navigate(['/jobs']);
           },
           error : (err)=>{
-            console.log(err);
+            console.log(err.error);
             alert('Login Failed');
           }
         }

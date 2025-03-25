@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-employeer-registration-form',
@@ -10,11 +10,11 @@ import { FormGroup } from '@angular/forms';
 export class EmployeerRegistrationFormComponent {
   employeerCompanyForm = new FormGroup(
     {
-      
+      companyName : new FormControl('', Validators.required),
     }
   );
 
-  getErrorMessage(field : string){
+  // getErrorMessage(field : string){
 
-  }
+  // }
 }

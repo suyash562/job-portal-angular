@@ -4,7 +4,6 @@ import { CustomFormValidators } from '../../validators/formValidators';
 import { UserService } from '../../service/user.service';
 import { UserProfile } from '../../entity/userProfile';
 import { User } from '../../entity/user';
-import { EmployeerRegistrationFormComponent } from '../employeer-registration-form/employeer-registration-form.component';
 
 @Component({
   selector: 'app-register',
@@ -12,21 +11,16 @@ import { EmployeerRegistrationFormComponent } from '../employeer-registration-fo
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent implements OnInit, AfterViewInit{
+export class RegisterComponent implements OnInit{
   customFormValidators! : CustomFormValidators;
   registerForm! : FormGroup;
   employeerRegistration : boolean = false;
-  employeerCompanyFormGroup! : FormGroup;
-  @ViewChild(EmployeerRegistrationFormComponent) employeerRegistrationComponent! : EmployeerRegistrationFormComponent;
+  employeerCompanyFormGroup : FormGroup = new FormGroup([]);
 
   constructor(
     private userService : UserService
   ){}
 
-  ngAfterViewInit(): void {
-    this.employeerCompanyFormGroup = this.employeerRegistrationComponent.employeerCompanyForm;
-    
-  }
 
   ngOnInit(): void {
 
@@ -45,7 +39,6 @@ export class RegisterComponent implements OnInit, AfterViewInit{
           ]
         ),
         address : new FormControl('', [this.customFormValidators.validateAddress]),
-        employeerCompany : this.employeerCompanyFormGroup,
         resume  : new FormControl('', [Validators.required]),
       }
     );
@@ -71,6 +64,7 @@ export class RegisterComponent implements OnInit, AfterViewInit{
   }
 
   submitForm(){
+    
     if(!this.registerForm.invalid){
       const user : User & UserProfile = {
         email : this.registerForm.get('email')!.value,
@@ -78,15 +72,15 @@ export class RegisterComponent implements OnInit, AfterViewInit{
         address : this.registerForm.controls['address'].value,
         firstName : this.registerForm.controls['firstName'].value,
         lastName : this.registerForm.controls['lastName'].value,
-        phoneNumber : this.registerForm.controls['phoneNumber'].value,
+        phoneNumber : this.phoneNumbers[0].value + (this.phoneNumbers[1] ? ' '+ this.phoneNumbers[1].value : ''),
         resume : this.registerForm.controls['resume'].value,
         role : 'user',
       }
+      
       this.userService.register(user).subscribe(
         {
           next : ()=>{
             alert('Registration Successfull');
-
           },
           error : (err)=>{
             console.log(err);
@@ -96,6 +90,8 @@ export class RegisterComponent implements OnInit, AfterViewInit{
       )
     }
     else{
+      
+      console.log('registerForm');
       this.registerForm.get('email')?.markAsDirty();
       this.registerForm.get('password')?.markAsDirty();
       this.registerForm.get('confirmPassword')?.markAsDirty();
