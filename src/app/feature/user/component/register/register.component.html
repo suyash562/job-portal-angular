@@ -1,62 +1,82 @@
 
-<button (click)="employeerRegistration = true">Register as Employeer</button>
 <form [formGroup]="registerForm" (ngSubmit)="submitForm()">
 
-    <div id="emailInputDiv">
-        <input id="emailInput" formControlName="email" placeholder="E-mail" />
-        <small>{{getErrorMessage('email')}}</small>
-    </div>
-    
-    <div id="passwordInputDiv">
-        <input id="passwordInput" formControlName="password" placeholder="Password"/>
-        <small>{{getErrorMessage('password')}}</small>
-    </div>
+    <button id="employeeRegistrationButton" type="button" (click)="employeerRegistration ? disableEmployeerRegistration() : enableEmployeerRegistration()">{{employeerRegistration ? 'Register as Job Seeker' : 'Register as Employeer'}}</button>
 
-    <div id="confirmPasswordInputDiv">
-        <input id="confirmPasswordInput" formControlName="confirmPassword" placeholder="Confirm Password"/>
-        <small>{{getErrorMessage('confirmPassword')}}</small>
-    </div>
-
-    <div id="firstNameDiv">
-        <input id="firstName" formControlName="firstName" placeholder="First Name"/>
-        <small>{{getErrorMessage('firstName')}}</small>
-    </div>
-
-    <div id="lastNameDiv">
-        <div>
-            <input id="lastNameInput" formControlName="lastName" placeholder="Last Name"/>
-            <small>{{getErrorMessage('lastName')}}</small>
-        </div>
-    </div>
-
-    <button type="button" (click)="addNewContact()">+</button>
-    <div formArrayName="phoneNumbers">
-        <ng-container *ngFor="let phoneNumber of phoneNumbers; let i = index ">
-            <span>
-                <p>Contact Number {{i+1}}</p>
-                <input type="number" formControlName="{{i}}">
-                <small>{{getErrorMessageForContact(i)}}</small>
-            </span>
+    <div *ngFor="let inputField of formInputFields">
+        <ng-container *ngIf=" inputField.formControlName === 'resume' ? !employeerRegistration : true">
+            <input id={{inputField.id}} formControlName={{inputField.formControlName}} placeholder={{inputField.placeholder}} />
+            <small>{{getErrorMessage(inputField.formControlName)}}</small>
         </ng-container>
     </div>
 
-    <div id="addressDiv">
-        <div>
-            <input id="addressInput" formControlName="address" placeholder="Address"/>
-            <small>{{getErrorMessage('address')}}</small>
-        </div>
-    </div>   
+    <ng-container *ngIf="phoneNumbers.length === 1; else removeContactTemplate">
+        <button type="button" (click)="addNewContact()">+</button>
+    </ng-container>
 
-    <div *ngIf="employeerRegistration">
-        <app-employeer-registration-form></app-employeer-registration-form>
+    <ng-template #removeContactTemplate>
+        <button type="button" (click)="removeContact()">-</button>
+    </ng-template>
+
+    <div formArrayName="phoneNumbers">
+        <div id="contactDiv">
+            <ng-container *ngFor="let phoneNumber of phoneNumbers; let i = index">
+                <div id="contact">
+                    <p>Contact Number {{i+1}}</p>
+                    <input type="number" formControlName="{{i}}" [placeholder]="`Contact ${i+1}`">
+                    <small>{{getErrorMessageForContact(i)}}</small>
+                </div>
+            </ng-container>
+        </div>
     </div>
 
-    <div id="resumeDiv">
-        <div>
-            <input id="resumeInput" formControlName="resume" placeholder="resume"/>
-            <small>{{getErrorMessage('resume')}}</small>
+    <ng-container *ngIf="employeerRegistration">
+        <div formGroupName="employeerCompany">
+            <div>
+                <input id='companyNameInput' formControlName='companyName' type="text" placeholder='Company Name' />
+                <small>{{getErrorMessage('employeerCompany.companyName')}}</small>
+            </div>
+            <div>
+                <input id='descriptionInput' formControlName='description' type="text" placeholder='Company Description' />
+                <small>{{getErrorMessage('employeerCompany.description')}}</small>
+            </div>
+            <div id="industryAndCompanySizeDiv">
+                <div id="industryDiv">
+                    <p>Industry</p>
+                    <div>
+                        <select name="industrySelect" id="industrySelect" formControlName='industry'>
+                            <ng-container *ngFor="let option of industryFieldOptions; let i = index">
+                                
+                                <ng-container *ngIf="option != 'Select'; else defaultOption">
+                                    <option>{{option}}</option>
+                                </ng-container>
+
+                                <ng-template #defaultOption>
+                                    <option selected>{{option}}</option>
+                                </ng-template>
+                            
+                            </ng-container>
+                        </select>
+                    </div>
+                    <div>
+                        <small>{{getErrorMessage('employeerCompany.industry')}}</small> 
+                    </div>
+                </div>
+                <div>
+                    <input id='companySizeInput' formControlName='companySize' type="number" placeholder='Company Size' />
+                    <small>{{getErrorMessage('employeerCompany.companySize')}}</small>
+                </div>
+            </div>
+            <div>
+                <input id='websiteInput' formControlName='website' type="url" placeholder='Company Website' />
+                <small>{{getErrorMessage('employeerCompany.website')}}</small>
+            </div>
+            <div>
+                <input id='locationInput' formControlName='location' type="text" placeholder='Location' />
+                <small>{{getErrorMessage('employeerCompany.location')}}</small>
+            </div>
         </div>
-    </div>   
+    </ng-container>
 
     <div>
         <button type="submit">Submit</button>

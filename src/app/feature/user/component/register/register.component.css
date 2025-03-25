@@ -1,0 +1,68 @@
+
+form {
+    max-width: 600px;
+    margin: auto;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+#employeeRegistrationButton{
+    float: right;
+}
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4c7aaf;
+    color: white;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #4556a0;
+}
+
+small {
+    color: red;
+    display: block;
+    /* margin-top: -10px; */
+    /* margin-bottom: 10px; */
+}
+
+#emailInputDiv, #passwordInputDiv, #confirmPasswordInputDiv, #firstNameDiv, #lastNameDiv, #addressDiv, #resumeDiv {
+    margin-bottom: 20px;
+}
+
+#contactDiv{
+    display: flex;
+    justify-content: space-between;
+}
+
+#contact{
+    width: 45%;
+}
+
+#industryAndCompanySizeDiv{
+    display: flex;
+    justify-content: space-between;
+}
+
+#industryDiv{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+}

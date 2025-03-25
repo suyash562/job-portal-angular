@@ -8,11 +8,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrl: './employeer-registration-form.component.css'
 })
 export class EmployeerRegistrationFormComponent {
-  employeerCompanyForm = new FormGroup(
-    {
-      companyName : new FormControl('', Validators.required),
-    }
-  );
+  // employeerCompanyForm = new FormGroup(
+  //   {
+      companyName = new FormControl('', Validators.required);
+  //   }
+  // );
 
   // getErrorMessage(field : string){
 

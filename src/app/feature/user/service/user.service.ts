@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { UserProfile } from '../entity/userProfile';
 import { User } from '../entity/user';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { EmployeerCompany } from '../entity/employeerCompany';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +19,8 @@ export class UserService {
     return this.isUserLoggedIn;
   }
 
-  register(user : User & UserProfile){
-    return this.httpClient.post("http://localhost:3200/user/register",{user : user});
+  register(user : User & UserProfile, employeerCompany : EmployeerCompany){
+    return this.httpClient.post("http://localhost:3200/user/register",{user : user, employeerCompany : employeerCompany});
   }
 
   login(user : Partial<User>){
