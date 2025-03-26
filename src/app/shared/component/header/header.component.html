@@ -3,12 +3,15 @@
     <nav>
         <a [routerLink]="['jobs']">Jobs</a>
         <a [routerLink]="['dashboard']">Dashboard</a>
+
         <ng-container *ngIf="isUserLoggedIn; else userLoggedIn">
             <button (click)="logout()">Logout</button>
         </ng-container>
+
         <ng-template #userLoggedIn>
             <a [routerLink]="['user/login']">Login</a>
             <a [routerLink]="['user/register']">Register</a>
         </ng-template>
+        
     </nav>
 </header>

@@ -1,15 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserProfile } from '../entity/userProfile';
-import { User } from '../entity/user';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { EmployeerCompany } from '../entity/employeerCompany';
+import { UserProfile } from '../../../shared/entity/userProfile';
+import { User } from '../../../shared/entity/user';
+import { EmployeerCompany } from '../../../shared/entity/employeerCompany';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private isUserLoggedIn : BehaviorSubject<boolean> = new BehaviorSubject(sessionStorage.getItem('userToken') ? true : false);
+  private isUserLoggedIn : BehaviorSubject<boolean> = new BehaviorSubject(sessionStorage.getItem('role') ? true : false);
 
   constructor(
     private httpClient : HttpClient,
@@ -36,6 +36,10 @@ export class UserService {
   }
 
   isLoggedIn(){
-    return sessionStorage.getItem('userToken') ? true : false;
+    return sessionStorage.getItem('role') ? true : false;
+  }
+
+  getUserRole(){
+    return sessionStorage.getItem('role');
   }
 }

@@ -1,1 +1,57 @@
-<p>add-job works!</p>
+
+<form [formGroup]="addJobFormGroup" (ngSubmit)="submitForm()">
+
+    <div *ngFor="let inputField of formInputFields">
+            <input id={{inputField.id}} type={{inputField.inputType}} formControlName={{inputField.formControlName}} placeholder={{inputField.placeholder}} />
+            <small>{{getErrorMessage(inputField.formControlName)}}</small>
+    </div>
+
+    <div id="employementTypeSelectDiv">
+        <div id="employementTypeTitleDiv">
+            <p>Employment Type</p>
+        </div>
+        <select name="employementTypeSelect" id="employementTypeInputSelect" formControlName='employementType'>
+            <ng-container *ngFor="let option of employementTypeInputFields">
+                
+                <ng-container *ngIf="option != 'Select'; else defaultOption">
+                    <option>{{option}}</option>
+                </ng-container>
+
+                <ng-template #defaultOption>
+                    <option selected>{{option}}</option>
+                </ng-template>
+            
+            </ng-container>
+        </select>
+        <div>
+            <small>{{getErrorMessage('employementType')}}</small> 
+        </div>
+    </div>
+    
+    <div id="workModeDiv">
+        <div id="workModeTitleDiv">
+            <p>Work Mode</p>
+        </div>
+        <select name="workModeSelect" id="workModeSelect" formControlName='workMode'>
+            <ng-container *ngFor="let option of workModeInputFields">
+                
+                <ng-container *ngIf="option != 'Select'; else defaultOption">
+                    <option>{{option}}</option>
+                </ng-container>
+
+                <ng-template #defaultOption>
+                    <option selected>{{option}}</option>
+                </ng-template>
+            
+            </ng-container>
+        </select>
+        <div>
+            <small>{{getErrorMessage('workMode')}}</small> 
+        </div>
+    </div>
+
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+    
+</form>

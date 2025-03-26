@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { CustomFormValidators } from '../../validators/formValidators';
+import { FormControl, FormGroup } from '@angular/forms';
 import { UserService } from '../../service/user.service';
-import { User } from '../../entity/user';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
+import { User } from '../../../../shared/entity/user';
+import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 
 @Component({
   selector: 'app-login',
@@ -19,9 +19,8 @@ export class LoginComponent implements OnInit, OnDestroy{
   loginSubscription! : Subscription;
   
   constructor(
-      private userService : UserService,
-      private router : Router,
-      private cookieService : CookieService
+    private userService : UserService,
+    private router : Router,
   ){}
 
   ngOnInit(): void {
@@ -49,9 +48,9 @@ export class LoginComponent implements OnInit, OnDestroy{
 
       this.loginSubscription = this.userService.login(user).subscribe(
         {
-          next : ()=>{
+          next : (value : any)=>{
             alert('Login Successfull');
-            sessionStorage.setItem('userToken','COOKIE');
+            sessionStorage.setItem('role', value.role);
             this.userService.updateUserLoginStatus(true);
             this.router.navigate(['/jobs']);
           },

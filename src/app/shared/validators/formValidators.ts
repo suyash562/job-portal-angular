@@ -1,6 +1,9 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { Injectable } from "@angular/core";
+import { AbstractControl, ValidationErrors } from "@angular/forms";
 
-
+@Injectable({
+    providedIn :'root'
+})
 export class CustomFormValidators{
 
     defaultValidator(control : AbstractControl) : ValidationErrors | null {  
@@ -56,6 +59,13 @@ export class CustomFormValidators{
         const regEx : RegExp = /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/;
         if(!regEx.test(control.value)){
             return {error : 'Invalid url'}
+        }
+        return null;
+    }
+
+    validateNumber(control : AbstractControl) : ValidationErrors | null{
+        if(control.value < 0){
+            return {error : 'Invalid'}
         }
         return null;
     }

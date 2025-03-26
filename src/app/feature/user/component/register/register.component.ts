@@ -1,10 +1,11 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CustomFormValidators } from '../../validators/formValidators';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { UserService } from '../../service/user.service';
-import { UserProfile } from '../../entity/userProfile';
-import { User } from '../../entity/user';
-import { EmployeerCompany } from '../../entity/employeerCompany';
+import { UserProfile } from '../../../../shared/entity/userProfile';
+import { User } from '../../../../shared/entity/user';
+import { EmployeerCompany } from '../../../../shared/entity/employeerCompany';
+import { CustomFormValidators } from '../../../../shared/validators/formValidators';
+
 
 @Component({
   selector: 'app-register',
@@ -13,8 +14,6 @@ import { EmployeerCompany } from '../../entity/employeerCompany';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit{
-
-  customFormValidators! : CustomFormValidators;
   registerForm! : FormGroup;
   employeerCompanyFormGroup! : FormGroup;
   employeerRegistration : boolean = false;
@@ -30,11 +29,11 @@ export class RegisterComponent implements OnInit{
   industryFieldOptions = ['Select','Agriculture', 'Automotive', 'Banking and Finance', 'Construction', 'Consumer Goods', 'Education', 'Energy', 'Entertainment', 'Healthcare', 'Information Technology', 'Manufacturing', 'Media', 'Real Estate', 'Retail', 'Telecommunications', 'Transportation', 'Travel and Tourism'];
 
   constructor(
-    private userService : UserService
+    private userService : UserService,
+    private customFormValidators : CustomFormValidators
   ){}
 
   ngOnInit(): void {
-    this.customFormValidators = new CustomFormValidators();
     this.registerForm = new FormGroup(
       {
         email    : new FormControl('', [this.customFormValidators.validateEmail, this.customFormValidators.defaultValidator]),

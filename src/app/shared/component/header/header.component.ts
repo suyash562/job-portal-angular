@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UserService } from '../../../feature/user/service/user.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -9,11 +8,11 @@ import { Router } from '@angular/router';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit{
-  isUserLoggedIn : boolean = false;
+  @Input('isUserLoggedIn') isUserLoggedIn! : boolean;
+  @Output() logoutEvent : EventEmitter<void> = new EventEmitter();
   
   constructor(
     private userService : UserService,
-    private router : Router
   ){}
 
   ngOnInit(): void {
@@ -25,15 +24,6 @@ export class HeaderComponent implements OnInit{
   }
 
   logout(){
-    this.userService.logout().subscribe({
-      next : () => {
-        sessionStorage.removeItem('userToken');
-        this.userService.updateUserLoginStatus(false);
-        this.router.navigate(['']);
-      },
-      error : (err) => {
-        console.log(err);
-      }
-    })
-  }
+    this.logoutEvent.emit();
+  } 
 }

@@ -6,6 +6,8 @@ import { DashboardParentComponent } from './component/dashboard-parent/dashboard
 import { SidebarComponent } from './component/sidebar/sidebar.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { AddJobComponent } from './component/add-job/add-job.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ManageJobsComponent } from './component/manage-jobs/manage-jobs.component';
 
 
 @NgModule({
@@ -13,11 +15,13 @@ import { AddJobComponent } from './component/add-job/add-job.component';
     DashboardParentComponent,
     SidebarComponent,
     ProfileComponent,
-    AddJobComponent
+    AddJobComponent,
+    ManageJobsComponent
   ],
   imports: [
     CommonModule,
-    DashboardRoutingModule
+    DashboardRoutingModule,
+    ReactiveFormsModule
   ]
 })
 export class DashboardModule { }

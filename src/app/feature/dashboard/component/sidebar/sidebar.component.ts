@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarService } from '../../service/sidebar/sidebar.service';
+import { UserService } from '../../../user/service/user.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,18 +8,13 @@ import { SidebarService } from '../../service/sidebar/sidebar.service';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent implements OnInit{
-  userRole! : string;
+  userRole! : string | null;
 
   constructor(
-    private sidebarService : SidebarService
+    private userService : UserService
   ){}
+
   ngOnInit(): void {
-    this.sidebarService.getUserRole().subscribe({
-      next : (value : any) =>{
-        this.userRole = value.role;
-      }
-    })
+    this.userRole = this.userService.getUserRole();
   }
-
-
 }
