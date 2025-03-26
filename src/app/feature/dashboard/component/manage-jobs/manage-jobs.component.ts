@@ -19,7 +19,7 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
   ){}
 
   ngOnInit(): void {
-    this.getPostedJobsSubscription = this.employeerService.getPostedJobs().subscribe({
+    this.getPostedJobsSubscription = this.employeerService.getAllPostedJobs().subscribe({
       next : (result : RequestResult) => {
         this.postedJobs = result.value;        
       },

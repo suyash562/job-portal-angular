@@ -20,7 +20,7 @@
                 <td>{{job.salaryRange}}</td>
                 <td>{{job.postingDate}}</td>
                 <td class="actions">
-                    <button (click)="updateJob(job.id)">Update</button>
+                    <a [routerLink]="['/dashboard/component/updateJob']" [queryParams]="{'jobId' : job.id}">Update</a>
                     <button (click)="deleteJob(job.id)">Delete</button>
                 </td>
             </tr>
