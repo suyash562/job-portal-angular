@@ -1,1 +1,29 @@
-<p>manage-jobs works!</p>
+<table>
+    <thead>
+        <tr>
+            <th>Job Title</th>
+            <th>Vacancies</th>
+            <th>Employment Type</th>
+            <th>Work Mode</th>
+            <th>Salary Range</th>
+            <th>Posting Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let job of postedJobs">
+            <tr>
+                <td>{{job.title}}</td>
+                <td>{{job.vacancies}}</td>
+                <td>{{job.employementType}}</td>
+                <td>{{job.workMode}}</td>
+                <td>{{job.salaryRange}}</td>
+                <td>{{job.postingDate}}</td>
+                <td class="actions">
+                    <button (click)="updateJob(job.id)">Update</button>
+                    <button (click)="deleteJob(job.id)">Delete</button>
+                </td>
+            </tr>
+        </ng-container>
+    </tbody>
+</table>

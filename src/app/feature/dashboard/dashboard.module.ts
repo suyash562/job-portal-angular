@@ -8,6 +8,7 @@ import { ProfileComponent } from './component/profile/profile.component';
 import { AddJobComponent } from './component/add-job/add-job.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ManageJobsComponent } from './component/manage-jobs/manage-jobs.component';
+import { UpdateJobComponent } from './component/update-job/update-job.component';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { ManageJobsComponent } from './component/manage-jobs/manage-jobs.compone
     SidebarComponent,
     ProfileComponent,
     AddJobComponent,
-    ManageJobsComponent
+    ManageJobsComponent,
+    UpdateJobComponent
   ],
   imports: [
     CommonModule,

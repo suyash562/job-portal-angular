@@ -3,6 +3,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 import { Job } from '../../../../shared/entity/job';
 import { EmployeerService } from '../../service/employeer/employeer.service';
+import { RequestResult } from '../../../../shared/types/types';
 
 @Component({
   selector: 'app-add-job',
@@ -66,30 +67,29 @@ export class AddJobComponent implements OnInit{
   submitForm(){
     if(!this.addJobFormGroup.invalid){
     
-      const newJob : Job = {
-        title : this.addJobFormGroup.controls['title'].value,
-        description : this.addJobFormGroup.controls['description'].value,
-        requiredSkills : this.addJobFormGroup.controls['requiredSkills'].value,
-        vacancies : this.addJobFormGroup.controls['vacancies'].value,
-        preferredSkills : this.addJobFormGroup.controls['preferredSkills'].value,
-        employementType : this.addJobFormGroup.controls['employementType'].value,
-        workMode : this.addJobFormGroup.controls['workMode'].value,
-        salaryRange : this.addJobFormGroup.controls['salaryRange'].value,
-        facilities : this.addJobFormGroup.controls['facilities'].value,
-        experienceLevel : this.addJobFormGroup.controls['experienceLevel'].value,
-        workLocation : this.addJobFormGroup.controls['workLocation'].value,
-        deadlineForApplying : this.addJobFormGroup.controls['deadlineForApplying'].value,
-        postingDate : this.addJobFormGroup.controls['postingDate'].value,
-      }
+      const newJob : Job = new Job(
+        this.addJobFormGroup.controls['title'].value,
+        this.addJobFormGroup.controls['description'].value,
+        this.addJobFormGroup.controls['requiredSkills'].value,
+        this.addJobFormGroup.controls['vacancies'].value,
+        this.addJobFormGroup.controls['preferredSkills'].value,
+        this.addJobFormGroup.controls['employementType'].value,
+        this.addJobFormGroup.controls['workMode'].value,
+        this.addJobFormGroup.controls['salaryRange'].value,
+        this.addJobFormGroup.controls['facilities'].value,
+        this.addJobFormGroup.controls['experienceLevel'].value,
+        this.addJobFormGroup.controls['workLocation'].value,
+        this.addJobFormGroup.controls['deadlineForApplying'].value,
+        this.addJobFormGroup.controls['postingDate'].value,
+      )
       
       this.employeerService.addNewJob(newJob).subscribe(
         {
           next : ()=>{
             alert('Job Added Successfull');
           },
-          error : (err)=>{
-            console.log(err);
-            alert(err.error.error);
+          error : (requestResult : RequestResult)=>{
+            alert(requestResult.message);
           }
         }
       )

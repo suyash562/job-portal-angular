@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { User } from '../../../../shared/entity/user';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
+import { RequestResult } from '../../../../shared/types/types';
 
 @Component({
   selector: 'app-login',
@@ -48,9 +49,9 @@ export class LoginComponent implements OnInit, OnDestroy{
 
       this.loginSubscription = this.userService.login(user).subscribe(
         {
-          next : (value : any)=>{
+          next : (requestResult : RequestResult)=>{
             alert('Login Successfull');
-            sessionStorage.setItem('role', value.role);
+            sessionStorage.setItem('role', requestResult.value.role);
             this.userService.updateUserLoginStatus(true);
             this.router.navigate(['/jobs']);
           },

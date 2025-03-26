@@ -1,5 +1,6 @@
 
 export class Job{
+    id! : number;
     title : string;
     description : string;
     requiredSkills : string;
@@ -10,8 +11,8 @@ export class Job{
     salaryRange : string; 
     facilities : string;
     experienceLevel : string;
-    deadlineForApplying : Date;
     workLocation : string;
+    deadlineForApplying : Date;
     postingDate : Date;
 
     constructor(
@@ -25,8 +26,8 @@ export class Job{
         salaryRange : string,
         facilities : string,
         experienceLevel : string,
-        deadlineForApplying : Date,
         workLocation : string,
+        deadlineForApplying : Date,
         postingDate : Date,
     ){
         this.title = title;

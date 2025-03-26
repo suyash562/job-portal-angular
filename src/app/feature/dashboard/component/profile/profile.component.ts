@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileService } from '../../service/profile/profile.service';
 import { UserProfile } from '../../../../shared/entity/userProfile';
+import { RequestResult } from '../../../../shared/types/types';
 
 @Component({
   selector: 'app-profile',
@@ -17,8 +18,8 @@ export class ProfileComponent implements OnInit{
   
   ngOnInit(): void {
     this.profileService.getUserProfile().subscribe({
-      next : (userProfile : UserProfile) => {
-        this.userProfile = userProfile;
+      next : (requestResult : RequestResult) => {       
+        this.userProfile = requestResult.value;
       },
       error : (err) => {
         console.log(err);

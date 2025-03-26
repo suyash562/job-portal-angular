@@ -5,6 +5,7 @@ import { UserProfile } from '../../../../shared/entity/userProfile';
 import { User } from '../../../../shared/entity/user';
 import { EmployeerCompany } from '../../../../shared/entity/employeerCompany';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
+import { RequestResult } from '../../../../shared/types/types';
 
 
 @Component({
@@ -127,7 +128,7 @@ export class RegisterComponent implements OnInit{
 
       this.userService.register(user, employeerCompany).subscribe(
         {
-          next : ()=>{
+          next : (requestResult : RequestResult)=>{
             alert('Registration Successfull');
           },
           error : (err)=>{

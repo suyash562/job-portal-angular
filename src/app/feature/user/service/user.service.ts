@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { UserProfile } from '../../../shared/entity/userProfile';
 import { User } from '../../../shared/entity/user';
 import { EmployeerCompany } from '../../../shared/entity/employeerCompany';
+import { RequestResult } from '../../../shared/types/types';
 
 @Injectable({
   providedIn: 'root'
@@ -24,15 +25,15 @@ export class UserService {
   }
 
   register(user : User & UserProfile, employeerCompany : EmployeerCompany){    
-    return this.httpClient.post("http://localhost:3200/user/register",{user : user, employeerCompany : employeerCompany});
+    return this.httpClient.post<RequestResult>("http://localhost:3200/user/register",{user : user, employeerCompany : employeerCompany});
   }
 
   login(user : Partial<User>){
-    return this.httpClient.post("http://localhost:3200/user/login",{user : user},{withCredentials : true});
+    return this.httpClient.post<RequestResult>("http://localhost:3200/user/login",{user : user},{withCredentials : true});
   }
   
   logout(){
-    return this.httpClient.get("http://localhost:3200/user/logout",{withCredentials : true});
+    return this.httpClient.get<RequestResult>("http://localhost:3200/user/logout",{withCredentials : true});
   }
 
   isLoggedIn(){
