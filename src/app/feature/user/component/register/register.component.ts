@@ -69,11 +69,13 @@ export class RegisterComponent implements OnInit{
   
   enableEmployeerRegistration(){
     this.employeerRegistration = true;
+    this.registerForm.controls['resume'].clearValidators();
     this.registerForm.addControl('employeerCompany', this.employeerCompanyFormGroup);
   }
   
   disableEmployeerRegistration(){
     this.employeerRegistration = false;
+    this.registerForm.controls['resume'].addValidators(this.customFormValidators.defaultValidator);
     this.registerForm.removeControl('employeerCompany');
   }
 
@@ -107,8 +109,9 @@ export class RegisterComponent implements OnInit{
         firstName : this.registerForm.controls['firstName'].value,
         lastName : this.registerForm.controls['lastName'].value,
         phoneNumber : this.phoneNumbers[0].value + (this.phoneNumbers[1] ? ' '+ this.phoneNumbers[1].value : ''),
-        resume : this.registerForm.controls['resume'].value,
+        resume : !this.employeerRegistration ? this.registerForm.controls['resume'].value : null,
         role : this.employeerRegistration ? 'employeer' : 'user',
+        user : undefined,
       }
       let employeerCompany! : EmployeerCompany;
       if(this.employeerRegistration){
@@ -130,7 +133,7 @@ export class RegisterComponent implements OnInit{
           },
           error : (err)=>{
             console.log(err);
-            alert('Registration Failed');
+            alert(err.error.error);
           }
         }
       )

@@ -29,8 +29,8 @@ export class LoginComponent implements OnInit, OnDestroy{
 
     this.loginForm = new FormGroup(
       {
-        email : new FormControl('', [this.customFormValidators.validateEmail]),
-        password : new FormControl('', [this.customFormValidators.validatePassword]),
+        email : new FormControl('', [this.customFormValidators.validateEmail, this.customFormValidators.defaultValidator]),
+        password : new FormControl('', [this.customFormValidators.validatePassword, this.customFormValidators.defaultValidator]),
       }
     );
   }
@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit, OnDestroy{
           next : ()=>{
             alert('Login Successfull');
             sessionStorage.setItem('userToken','COOKIE');
-            this.userService.userLoggedInSubject.next(true);
+            this.userService.updateUserLoginStatus(true);
             this.router.navigate(['/jobs']);
           },
           error : (err)=>{

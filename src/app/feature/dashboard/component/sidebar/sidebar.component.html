@@ -1,1 +1,27 @@
-<p>sidebar works!</p>
+<div class="optionsDiv">
+    <a [routerLink]="['/dashboard']">Profile</a>
+</div>
+
+<div *ngIf="userRole === 'user'">
+    <div class="optionsDiv">
+        <a [routerLink]="[]">Applications</a>
+    </div>
+</div>
+
+<div *ngIf="userRole === 'employeer'">
+    <div class="optionsDiv">
+        <a [routerLink]="['addJob']">Add Job</a>
+    </div>
+    <div class="optionsDiv">
+        <a [routerLink]="[]">Manage Jobs</a>
+    </div>
+    <div class="optionsDiv">
+        <a [routerLink]="[]">Applications</a>
+    </div>
+</div>
+
+<div *ngIf="userRole === 'admin'">
+    <div class="optionsDiv">
+        <a [routerLink]="[]">Stats</a>
+    </div>
+</div>

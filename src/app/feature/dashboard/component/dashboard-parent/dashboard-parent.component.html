@@ -1,2 +1,10 @@
-<p>dashboard-parent works!</p>
-<app-sidebar></app-sidebar>
+<!-- <p>dashboard-parent works!</p> -->
+
+<div id="dashboardContainer">
+    <div id="sidebarContainer">
+        <app-sidebar></app-sidebar>
+    </div>
+    <div id="selectedContentContainer">
+        <router-outlet></router-outlet>
+    </div>
+</div>

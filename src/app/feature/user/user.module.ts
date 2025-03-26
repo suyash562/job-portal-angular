@@ -6,6 +6,7 @@ import { LoginComponent } from './component/login/login.component';
 import { RegisterComponent } from './component/register/register.component';
 import { EmployeerRegistrationFormComponent } from './component/employeer-registration-form/employeer-registration-form.component';
 
+
 @NgModule({
   declarations: [
     LoginComponent,
@@ -15,7 +16,7 @@ import { EmployeerRegistrationFormComponent } from './component/employeer-regist
   imports: [
     CommonModule,
     UserRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ]
 })
 export class UserModule { }

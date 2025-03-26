@@ -12,10 +12,10 @@
             <small>{{getErrorMessage('password')}}</small>
         </div>
     </div>
-    <div>
-        Forgot Password
-    </div>
-    <div>
-        <button type="submit">Submit</button>
+    <div id="submitContainer">
+        <div id="submitOptionsDiv">
+            <a [routerLink]="['/user/forgotPassword']">Forgot Password</a>
+            <button type="submit">Submit</button>
+        </div>
     </div>
 </form>

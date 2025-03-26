@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit{
     this.userService.logout().subscribe({
       next : () => {
         sessionStorage.removeItem('userToken');
-        this.userService.userLoggedInSubject.next(false);
+        this.userService.updateUserLoginStatus(false);
         this.router.navigate(['']);
       },
       error : (err) => {

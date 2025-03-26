@@ -1,0 +1,13 @@
+
+<div *ngIf="userProfile">
+    <p>Name : </p>
+    <p>{{userProfile.firstName+' '+userProfile.lastName}}</p>
+    <p>Contact Number : </p>
+    <p>{{userProfile.phoneNumber}}</p>
+    <p>Address : </p>
+    <p>{{userProfile.address}}</p>
+    <div *ngIf="userProfile.user?.role === 'user'">
+        <p>Resume : </p>
+        <p>{{userProfile.resume}}</p>
+    </div>
+</div>

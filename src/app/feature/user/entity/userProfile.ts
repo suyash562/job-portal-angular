@@ -1,3 +1,4 @@
+import { User } from "./user";
 
 export class UserProfile{
     firstName : string;
@@ -5,6 +6,7 @@ export class UserProfile{
     phoneNumber : string;
     address : string;
     resume : string | null;
+    user : User | undefined;
 
     constructor(
         firstName : string,

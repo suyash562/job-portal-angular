@@ -4,7 +4,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 export class CustomFormValidators{
 
     defaultValidator(control : AbstractControl) : ValidationErrors | null {  
-        if(control.value === ''){
+        if(control.value === '' || control.value === 'Select'){
             return {error : '* Required'};
         }
         else if((control.value as string).startsWith(' ') || (control.value as string).endsWith(' ')){
@@ -22,10 +22,7 @@ export class CustomFormValidators{
     
     validatePassword(control : AbstractControl) : ValidationErrors | null {  
         const regEx : RegExp = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;  
-        if(control.value === ''){
-            return {error : '* Required'};
-        }
-        else if(!regEx.test(control.value)){
+        if(!regEx.test(control.value)){
           return {error : 'Password must contain at least eight characters, one number, one letter and special characters'};
         }
         return null;

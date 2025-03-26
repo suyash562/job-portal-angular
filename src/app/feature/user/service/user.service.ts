@@ -16,10 +16,14 @@ export class UserService {
   ){}
 
   get userLoggedInSubject(){
-    return this.isUserLoggedIn;
+    return this.isUserLoggedIn.asObservable();
   }
 
-  register(user : User & UserProfile, employeerCompany : EmployeerCompany){
+  updateUserLoginStatus(status : boolean){
+    this.isUserLoggedIn.next(status);
+  }
+
+  register(user : User & UserProfile, employeerCompany : EmployeerCompany){    
     return this.httpClient.post("http://localhost:3200/user/register",{user : user, employeerCompany : employeerCompany});
   }
 
