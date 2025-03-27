@@ -16,6 +16,7 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
   job! : Job;
   userRole! : string | null;
   selectedJobSubscription! : Subscription;
+  applyForJobSubscription! : Subscription;
 
   constructor(
     private jobListService : JobListService,
@@ -41,7 +42,7 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
 
   applyForJob(jobId : number){
     if(this.userService.isLoggedIn()){
-      this.jobListService.applyForJob(jobId).subscribe({
+      this.applyForJobSubscription = this.jobListService.applyForJob(jobId).subscribe({
         next : (result : RequestResult) => {
           if(result.value){
             alert('Applied Successfully')
@@ -62,6 +63,7 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
 
   ngOnDestroy(): void {
     this.selectedJobSubscription?.unsubscribe();
+    this.applyForJobSubscription?.unsubscribe();
   }
 
 }

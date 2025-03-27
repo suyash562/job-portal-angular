@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JobListService } from '../../service/jobList/job-list.service';
 import { RequestResult } from '../../../../shared/types/types';
 import { Job } from '../../../../shared/entity/job';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-job-list',
@@ -10,10 +11,11 @@ import { Router } from '@angular/router';
   templateUrl: './job-list.component.html',
   styleUrl: './job-list.component.css'
 })
-export class JobListComponent implements OnInit{
+export class JobListComponent implements OnInit, OnDestroy{
   jobs! : Job[];
   page : number =  1;
   limit : number = 5;
+  getAllJobsSubscription! : Subscription;
 
   constructor(
     private jobListService : JobListService,
@@ -25,7 +27,7 @@ export class JobListComponent implements OnInit{
   }
 
   getJobs(){
-    this.jobListService.getAllJobs(this.page, this.limit).subscribe({
+    this.getAllJobsSubscription = this.jobListService.getAllJobs(this.page, this.limit).subscribe({
       next : (result : RequestResult) => {
         this.jobs = result.value;     
       }
@@ -45,5 +47,9 @@ export class JobListComponent implements OnInit{
   loadNextPage(){
     this.page++;
     this.getJobs();
+  }
+
+  ngOnDestroy(): void {
+    this.getAllJobsSubscription?.unsubscribe();
   }
 }

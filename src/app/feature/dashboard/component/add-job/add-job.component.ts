@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 import { Job } from '../../../../shared/entity/job';
@@ -6,6 +6,7 @@ import { EmployeerService } from '../../service/employeer/employeer.service';
 import { RequestResult } from '../../../../shared/types/types';
 import { ActivatedRoute } from '@angular/router';
 import { JobListService } from '../../../job-list/service/jobList/job-list.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-job',
@@ -13,7 +14,7 @@ import { JobListService } from '../../../job-list/service/jobList/job-list.servi
   templateUrl: './add-job.component.html',
   styleUrl: './add-job.component.css'
 })
-export class AddJobComponent implements OnInit{
+export class AddJobComponent implements OnInit, OnDestroy{
   jobIdToUpdate! : number;
   updateJobForm! : boolean;
   currentDate : string = new Date().toISOString().split('T')[0];
@@ -21,6 +22,10 @@ export class AddJobComponent implements OnInit{
   formInputFields! : {id : string, inputType : string, formControlName : string, placeholder : string}[];
   employementTypeInputFields! : string[];
   workModeInputFields! : string[];
+  routeParamsSubscription! : Subscription;
+  routeUrlSubscription! : Subscription;
+  getJobByIdSubscription! : Subscription;
+  addNewJobSubscription! : Subscription;
 
   constructor(
     private customFormValidators : CustomFormValidators,
@@ -30,10 +35,10 @@ export class AddJobComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
-    this.activatedRoute.params.subscribe({
+    this.routeParamsSubscription = this.activatedRoute.params.subscribe({
       next : (param : any) => {
         this.jobIdToUpdate = param.jobId;
-        this.activatedRoute.url.subscribe({
+        this.routeUrlSubscription = this.activatedRoute.url.subscribe({
           next : (val) => {
               this.updateJobForm = val[0].path === 'updateJob' ? true : false;
           },
@@ -77,7 +82,7 @@ export class AddJobComponent implements OnInit{
     this.workModeInputFields = ['Select', 'Offline' , 'Online' , 'Hybrid'];
 
     if(this.updateJobForm){
-      this.jobListService.getJobById(this.jobIdToUpdate).subscribe({
+      this.getJobByIdSubscription = this.jobListService.getJobById(this.jobIdToUpdate).subscribe({
         next : (requestResult : RequestResult) => {
           this.addJobFormGroup.setValue(
             {
@@ -127,7 +132,7 @@ export class AddJobComponent implements OnInit{
       )
       
       if(this.updateJobForm){
-        this.employeerService.updatePostedJob(this.jobIdToUpdate, newJob).subscribe(
+        this.addNewJobSubscription = this.employeerService.updatePostedJob(this.jobIdToUpdate, newJob).subscribe(
           {
             next : (requestResult : RequestResult)=>{
               alert('Job Updated Successfull');
@@ -139,7 +144,7 @@ export class AddJobComponent implements OnInit{
         )
       }
       else{
-        this.employeerService.addNewJob(newJob).subscribe(
+        this.addNewJobSubscription = this.employeerService.addNewJob(newJob).subscribe(
           {
             next : (requestResult : RequestResult)=>{
               alert('Job Added Successfull');
@@ -158,5 +163,11 @@ export class AddJobComponent implements OnInit{
       this.addJobFormGroup.controls['employementType'].markAsDirty();
       this.addJobFormGroup.controls['workMode'].markAsDirty();
     }
+  }
+  ngOnDestroy(): void {
+    this.routeParamsSubscription?.unsubscribe();
+    this.routeUrlSubscription?.unsubscribe();
+    this.getJobByIdSubscription?.unsubscribe();
+    this.addNewJobSubscription?.unsubscribe();
   }
 }

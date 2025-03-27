@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { UserService } from '../../service/user.service';
 import { UserProfile } from '../../../../shared/entity/userProfile';
@@ -7,6 +7,7 @@ import { EmployeerCompany } from '../../../../shared/entity/employeerCompany';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 import { RequestResult } from '../../../../shared/types/types';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -15,10 +16,11 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
-export class RegisterComponent implements OnInit{
+export class RegisterComponent implements OnInit, OnDestroy{
   registerForm! : FormGroup;
   employeerCompanyFormGroup! : FormGroup;
   employeerRegistration : boolean = false;
+  registerSubscription! : Subscription;
   formInputFields : {id : string, formControlName : string, placeholder : string}[] = [
     {id : 'emailInput', formControlName : 'email', placeholder : 'E-mail'},
     {id : 'passwordInput', formControlName : 'password', placeholder : 'Password'},
@@ -130,7 +132,7 @@ export class RegisterComponent implements OnInit{
         }
       }
 
-      this.userService.register(user, employeerCompany).subscribe(
+      this.registerSubscription = this.userService.register(user, employeerCompany).subscribe(
         {
           next : (requestResult : RequestResult)=>{
             alert('Registration Successfull');
@@ -167,5 +169,9 @@ export class RegisterComponent implements OnInit{
         this.employeerCompanyFormGroup.controls['location'].markAsDirty();
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.registerSubscription?.unsubscribe();
   }
 }

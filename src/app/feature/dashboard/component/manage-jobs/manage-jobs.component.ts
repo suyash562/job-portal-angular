@@ -13,6 +13,7 @@ import { RequestResult } from '../../../../shared/types/types';
 export class ManageJobsComponent implements OnInit, OnDestroy{
   postedJobs! : Job[];
   getPostedJobsSubscription! : Subscription;
+  deletePostedJobSubscription! : Subscription;
 
   constructor(
     private employeerService : EmployeerService
@@ -30,12 +31,8 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
     })
   }
 
-  updateJob(jobId : number){
-    
-  }
- 
   deleteJob(jobId : number){
-    this.employeerService.deletePostedJob(jobId).subscribe({
+    this.deletePostedJobSubscription = this.employeerService.deletePostedJob(jobId).subscribe({
       next : (requestResult : RequestResult) => {
         alert('Job Deleted Successfully');
       },
@@ -47,5 +44,6 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
 
   ngOnDestroy(): void {
     this.getPostedJobsSubscription?.unsubscribe();
+    this.deletePostedJobSubscription?.unsubscribe();
   }
 }

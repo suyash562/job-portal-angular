@@ -8,7 +8,6 @@ import { ProfileComponent } from './component/profile/profile.component';
 import { AddJobComponent } from './component/add-job/add-job.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ManageJobsComponent } from './component/manage-jobs/manage-jobs.component';
-import { UpdateJobComponent } from './component/update-job/update-job.component';
 import { ApplicationComponent } from './component/application/application.component';
 
 
@@ -19,7 +18,6 @@ import { ApplicationComponent } from './component/application/application.compon
     ProfileComponent,
     AddJobComponent,
     ManageJobsComponent,
-    UpdateJobComponent,
     ApplicationComponent
   ],
   imports: [
