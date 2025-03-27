@@ -29,4 +29,8 @@ export class JobListService {
   getJobById(jobId : number){
     return this.httpClient.get<RequestResult>(`http://localhost:3200/job/${jobId}` ,{withCredentials : true});
   }
+
+  applyForJob(jobId : number){
+    return this.httpClient.get<RequestResult>(`http://localhost:3200/job/apply/${jobId}` ,{withCredentials : true});
+  }
 }

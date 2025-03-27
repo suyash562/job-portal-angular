@@ -1,1 +1,60 @@
-<p>job-description works!</p>
+<div *ngIf="job; else loading">
+    <div class="job-container">
+        <div class="job-title">{{job.title}}</div>
+        <div class="job-section">
+            <h3>Description</h3>
+            <p>{{job.description}}</p>
+        </div>
+        <div class="job-section">
+            <h3>Required Skills</h3>
+            <p>{{job.requiredSkills}}</p>
+        </div>
+        <div class="job-section">
+            <h3>Vacancies</h3>
+            <p>{{job.vacancies}}</p>
+        </div>
+        <div class="job-section">
+            <h3>Preferred Skills</h3>
+            <p>{{job.preferredSkills}}</p>
+        </div>
+        <div class="job-section">
+            <h3>Employment Type</h3>
+            <p>{{job.employementType}}</p>
+        </div>
+        <div class="job-section">
+            <h3>Work Mode</h3>
+            <p>{{job.workMode}}</p>
+        </div>
+        <div class="job-section">
+            <h3>Salary Range</h3>
+            <p>{{job.salaryRange}}</p>
+        </div>
+        <div class="job-section">
+            <h3>Facilities</h3>
+            <p>{{job.facilities}}</p>
+        </div>
+        <div class="job-section">
+            <h3>Experience Level</h3>
+            <p>{{job.experienceLevel}}</p>
+        </div>
+        <div class="job-section">
+            <h3>Work Location</h3>
+            <p>{{job.workLocation}}</p>
+        </div>
+        <div class="job-section">
+            <h3>Deadline for Applying</h3>
+            <p>{{job.deadlineForApplying.toString().split('T')[0]}}</p>
+        </div>
+        <div class="job-section">
+            <h3>Posting Date</h3>
+            <p>{{job.postingDate.toString().split('T')[0]}}</p>
+        </div>
+        <div>
+            <button (click)="applyForJob(job.id)">Apply</button>
+        </div>
+    </div>
+</div>
+
+<ng-template #loading>
+    loading..
+</ng-template>

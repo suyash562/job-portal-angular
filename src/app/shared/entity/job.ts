@@ -1,4 +1,3 @@
-import { EmployeerCompany } from "./employeerCompany";
 import { User } from "./user";
 
 export class Job{
