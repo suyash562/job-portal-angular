@@ -49,7 +49,7 @@
             <h3>Posting Date</h3>
             <p>{{job.postingDate.toString().split('T')[0]}}</p>
         </div>
-        <div>
+        <div *ngIf="userRole !== 'employeer'">
             <button (click)="applyForJob(job.id)">Apply</button>
         </div>
     </div>

@@ -34,8 +34,6 @@ export class JobListComponent implements OnInit{
 
   loadDescriptionPage(job : Job){
     this.jobListService.emitSelectedJobFromSubject(job);
-    console.log('value emitted');
-    
     this.router.navigate(['jobs','description'])
   }
 

@@ -9,13 +9,13 @@
         <p class="work-mode">Work Mode: <span>{{job.workMode}}</span></p>
         <p class="deadline">Deadline for Applying: <span>{{job.deadlineForApplying.toString().split('T')[0]}}</span></p>
     </div>
+
+    <div id="pagination-options">
+        <button (click)="loadPreviousPage()" [disabled]="page === 1"><</button>
+        <button (click)="loadNextPage()" [disabled]="jobs.length === 0">></button>
+    </div>
 </div>
 
 <ng-template #loading>
     <p>Loading</p>
 </ng-template>
-
-<div id="pagination-options">
-    <button (click)="loadPreviousPage()"><</button>
-    <button (click)="loadNextPage()">></button>
-</div>
