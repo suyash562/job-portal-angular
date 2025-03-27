@@ -6,6 +6,7 @@ import { User } from '../../../../shared/entity/user';
 import { EmployeerCompany } from '../../../../shared/entity/employeerCompany';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 import { RequestResult } from '../../../../shared/types/types';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -31,7 +32,8 @@ export class RegisterComponent implements OnInit{
 
   constructor(
     private userService : UserService,
-    private customFormValidators : CustomFormValidators
+    private customFormValidators : CustomFormValidators,
+    private router : Router
   ){}
 
   ngOnInit(): void {
@@ -113,6 +115,7 @@ export class RegisterComponent implements OnInit{
         role : this.employeerRegistration ? 'employeer' : 'user',
         user : undefined,
         employeerCompany : undefined,
+        profile : undefined
       }
       let employeerCompany! : EmployeerCompany;
       if(this.employeerRegistration){
@@ -131,6 +134,7 @@ export class RegisterComponent implements OnInit{
         {
           next : (requestResult : RequestResult)=>{
             alert('Registration Successfull');
+            this.router.navigate(['/user']);
           },
           error : (err)=>{
             console.log(err);

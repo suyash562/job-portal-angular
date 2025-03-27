@@ -4,6 +4,7 @@ import { DashboardParentComponent } from './component/dashboard-parent/dashboard
 import { ProfileComponent } from './component/profile/profile.component';
 import { AddJobComponent } from './component/add-job/add-job.component';
 import { ManageJobsComponent } from './component/manage-jobs/manage-jobs.component';
+import { ApplicationComponent } from './component/application/application.component';
 
 const routes: Routes = [
   {path : '', redirectTo : 'component', pathMatch : 'full'},
@@ -13,6 +14,7 @@ const routes: Routes = [
     {path : 'addJob', component : AddJobComponent},
     {path : 'manageJobs', component : ManageJobsComponent},
     {path : 'updateJob/:jobId', component : AddJobComponent},
+    {path : 'application', component : ApplicationComponent},
   ]},
 ];
 

@@ -16,6 +16,7 @@ import { JobListService } from '../../../job-list/service/jobList/job-list.servi
 export class AddJobComponent implements OnInit{
   jobIdToUpdate! : number;
   updateJobForm! : boolean;
+  currentDate : string = new Date().toISOString().split('T')[0];
   addJobFormGroup! : FormGroup;
   formInputFields! : {id : string, inputType : string, formControlName : string, placeholder : string}[];
   employementTypeInputFields! : string[];
@@ -57,7 +58,6 @@ export class AddJobComponent implements OnInit{
         experienceLevel  : new FormControl('', [this.customFormValidators.requiredValidator, this.customFormValidators.validateNumber]),
         workLocation  : new FormControl('', [this.customFormValidators.defaultValidator]),
         deadlineForApplying  : new FormControl('', [this.customFormValidators.defaultValidator]),
-        postingDate  : new FormControl('', [this.customFormValidators.defaultValidator]),
       }
     );
 
@@ -71,8 +71,6 @@ export class AddJobComponent implements OnInit{
       {id : 'facilitiesInput', inputType : 'text' , formControlName : 'facilities', placeholder : 'Facilities'},
       {id : 'experienceLevelInput', inputType : 'number' , formControlName : 'experienceLevel', placeholder : 'Experience Level'},
       {id : 'workLocationInput', inputType : 'text' , formControlName : 'workLocation', placeholder : 'Work Location'},
-      {id : 'deadlineForApplyingInput', inputType : 'date' , formControlName : 'deadlineForApplying', placeholder : ''},
-      {id : 'postingDateInput', inputType : 'date' , formControlName : 'postingDate', placeholder : ''},
     ];
 
     this.employementTypeInputFields = ['Select', "Full Time" , "Part Time"];
@@ -95,7 +93,6 @@ export class AddJobComponent implements OnInit{
               experienceLevel : requestResult.value.experienceLevel,
               workLocation : requestResult.value.workLocation,
               deadlineForApplying : requestResult.value.deadlineForApplying.toString().split('T')[0],
-              postingDate : requestResult.value.postingDate.toString().split('T')[0],
             }
           )
         },
@@ -126,7 +123,7 @@ export class AddJobComponent implements OnInit{
         this.addJobFormGroup.controls['experienceLevel'].value,
         this.addJobFormGroup.controls['workLocation'].value,
         this.addJobFormGroup.controls['deadlineForApplying'].value,
-        this.addJobFormGroup.controls['postingDate'].value,
+        new Date()
       )
       
       if(this.updateJobForm){

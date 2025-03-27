@@ -2,9 +2,11 @@
 <form [formGroup]="addJobFormGroup" (ngSubmit)="submitForm()">
 
     <div *ngFor="let inputField of formInputFields">
-            <input id={{inputField.id}} type={{inputField.inputType}} formControlName={{inputField.formControlName}} placeholder={{inputField.placeholder}} />
-            <small>{{getErrorMessage(inputField.formControlName)}}</small>
+        <input id={{inputField.id}} type={{inputField.inputType}} formControlName={{inputField.formControlName}} placeholder={{inputField.placeholder}} />
+        <small>{{getErrorMessage(inputField.formControlName)}}</small>
     </div>
+    <input id="deadlineForApplyingInput" type="date" [min]="currentDate" formControlName="deadlineForApplying"/>
+    <small>{{getErrorMessage('deadlineForApplying')}}</small>
 
     <div id="employementTypeSelectDiv">
         <div id="employementTypeTitleDiv">

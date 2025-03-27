@@ -1,0 +1,26 @@
+<table>
+    <thead>
+        <tr>
+            <th>Job Position</th>
+            <th>Applicant Name</th>
+            <th>E-mail</th>
+            <th>Contact Numbers</th>
+            <th>Applied Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let application of applications">
+            <tr>
+                <td>{{application.job.title}}</td>
+                <td>{{application.user.profile?.firstName +' '+ application.user.profile?.lastName}}</td>
+                <td>{{application.user.email}}</td>
+                <td>{{application.user.profile?.phoneNumber}}</td>
+                <td>{{application.applyDate.toString().split('T')[0]}}</td>
+                <td class="actions">
+                    <button>View</button>
+                </td>
+            </tr>
+        </ng-container>
+    </tbody>
+</table>
