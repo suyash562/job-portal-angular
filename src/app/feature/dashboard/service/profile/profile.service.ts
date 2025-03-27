@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { UserProfile } from '../../../../shared/entity/userProfile';
 import { RequestResult } from '../../../../shared/types/types';
 
 @Injectable({

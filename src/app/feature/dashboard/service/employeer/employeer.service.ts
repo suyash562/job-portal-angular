@@ -13,22 +13,18 @@ export class EmployeerService {
   ) { }
 
   addNewJob(job : Job){
-    return this.httpClient.post<RequestResult>("http://localhost:3200/employeer/addJob", {job : job}, {withCredentials : true});
+    return this.httpClient.post<RequestResult>("http://localhost:3200/job/addJob", {job : job}, {withCredentials : true});
   }
 
   getAllPostedJobs(){
-    return this.httpClient.get<RequestResult>("http://localhost:3200/employeer/jobs", {withCredentials : true});
-  }
-  
-  getJobById(jobId : number){
-    return this.httpClient.get<RequestResult>(`http://localhost:3200/employeer/job/${jobId}` ,{withCredentials : true});
+    return this.httpClient.get<RequestResult>("http://localhost:3200/job/employeer", {withCredentials : true});
   }
   
   updatePostedJob(jobIdToUpdate : number, updatedJob : Job){
-    return this.httpClient.put<RequestResult>("http://localhost:3200/employeer/updateJob", {jobIdToUpdate : jobIdToUpdate, updatedJob : updatedJob}, {withCredentials : true});
+    return this.httpClient.put<RequestResult>("http://localhost:3200/job/updateJob", {jobIdToUpdate : jobIdToUpdate, updatedJob : updatedJob}, {withCredentials : true});
   }
   
   deletePostedJob(jobId : number){
-    return this.httpClient.delete<RequestResult>(`http://localhost:3200/employeer/deleteJob/${jobId}`, {withCredentials : true});
+    return this.httpClient.delete<RequestResult>(`http://localhost:3200/job/deleteJob/${jobId}`, {withCredentials : true});
   }
 }

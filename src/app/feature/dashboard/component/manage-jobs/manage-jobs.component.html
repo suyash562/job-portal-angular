@@ -1,12 +1,12 @@
 <table>
     <thead>
         <tr>
-            <th>Job Title</th>
+            <th>Job Position</th>
             <th>Vacancies</th>
             <th>Employment Type</th>
             <th>Work Mode</th>
             <th>Salary Range</th>
-            <th>Posting Date</th>
+            <th>Posted On</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -18,9 +18,9 @@
                 <td>{{job.employementType}}</td>
                 <td>{{job.workMode}}</td>
                 <td>{{job.salaryRange}}</td>
-                <td>{{job.postingDate}}</td>
+                <td>{{job.postingDate.toString().split('T')[0]}}</td>
                 <td class="actions">
-                    <a [routerLink]="['/dashboard/component/updateJob']" [queryParams]="{'jobId' : job.id}">Update</a>
+                    <a [routerLink]="['/dashboard/component/updateJob',job.id]">Update</a>
                     <button (click)="deleteJob(job.id)">Delete</button>
                 </td>
             </tr>

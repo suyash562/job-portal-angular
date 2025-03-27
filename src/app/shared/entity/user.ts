@@ -1,8 +1,10 @@
+import { EmployeerCompany } from "./employeerCompany";
 
 export class User{
     email : string;
     password : string;
     role  : 'user' | 'employeer' | 'admin';
+    employeerCompany : EmployeerCompany | undefined;
 
     constructor(
         email : string,

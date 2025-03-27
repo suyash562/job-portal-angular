@@ -1,3 +1,5 @@
+import { EmployeerCompany } from "./employeerCompany";
+import { User } from "./user";
 
 export class Job{
     id! : number;
@@ -14,6 +16,7 @@ export class Job{
     workLocation : string;
     deadlineForApplying : Date;
     postingDate : Date;
+    employeer : User | undefined;
 
     constructor(
         title : string,

@@ -12,7 +12,7 @@ const routes: Routes = [
     {path : 'userProfile', component : ProfileComponent},
     {path : 'addJob', component : AddJobComponent},
     {path : 'manageJobs', component : ManageJobsComponent},
-    {path : 'updateJob', component : AddJobComponent},
+    {path : 'updateJob/:jobId', component : AddJobComponent},
   ]},
 ];
 

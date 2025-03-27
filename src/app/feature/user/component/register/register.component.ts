@@ -112,6 +112,7 @@ export class RegisterComponent implements OnInit{
         resume : !this.employeerRegistration ? this.registerForm.controls['resume'].value : null,
         role : this.employeerRegistration ? 'employeer' : 'user',
         user : undefined,
+        employeerCompany : undefined,
       }
       let employeerCompany! : EmployeerCompany;
       if(this.employeerRegistration){

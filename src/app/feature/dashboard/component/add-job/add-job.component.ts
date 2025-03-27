@@ -5,6 +5,7 @@ import { Job } from '../../../../shared/entity/job';
 import { EmployeerService } from '../../service/employeer/employeer.service';
 import { RequestResult } from '../../../../shared/types/types';
 import { ActivatedRoute } from '@angular/router';
+import { JobListService } from '../../../job-list/service/jobList/job-list.service';
 
 @Component({
   selector: 'app-add-job',
@@ -14,6 +15,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AddJobComponent implements OnInit{
   jobIdToUpdate! : number;
+  updateJobForm! : boolean;
   addJobFormGroup! : FormGroup;
   formInputFields! : {id : string, inputType : string, formControlName : string, placeholder : string}[];
   employementTypeInputFields! : string[];
@@ -22,13 +24,22 @@ export class AddJobComponent implements OnInit{
   constructor(
     private customFormValidators : CustomFormValidators,
     private employeerService : EmployeerService,
+    private jobListService : JobListService,
     private activatedRoute : ActivatedRoute
   ){}
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe({
+    this.activatedRoute.params.subscribe({
       next : (param : any) => {
         this.jobIdToUpdate = param.jobId;
+        this.activatedRoute.url.subscribe({
+          next : (val) => {
+              this.updateJobForm = val[0].path === 'updateJob' ? true : false;
+          },
+          error : (err) => {
+            console.log(err);
+          }
+        })
       }
     })
 
@@ -67,8 +78,8 @@ export class AddJobComponent implements OnInit{
     this.employementTypeInputFields = ['Select', "Full Time" , "Part Time"];
     this.workModeInputFields = ['Select', 'Offline' , 'Online' , 'Hybrid'];
 
-    if(this.jobIdToUpdate){
-      this.employeerService.getJobById(this.jobIdToUpdate).subscribe({
+    if(this.updateJobForm){
+      this.jobListService.getJobById(this.jobIdToUpdate).subscribe({
         next : (requestResult : RequestResult) => {
           this.addJobFormGroup.setValue(
             {
@@ -83,8 +94,8 @@ export class AddJobComponent implements OnInit{
               facilities : requestResult.value.facilities,
               experienceLevel : requestResult.value.experienceLevel,
               workLocation : requestResult.value.workLocation,
-              deadlineForApplying : requestResult.value.deadlineForApplying,
-              postingDate : requestResult.value.postingDate,
+              deadlineForApplying : requestResult.value.deadlineForApplying.toString().split('T')[0],
+              postingDate : requestResult.value.postingDate.toString().split('T')[0],
             }
           )
         },
@@ -118,7 +129,7 @@ export class AddJobComponent implements OnInit{
         this.addJobFormGroup.controls['postingDate'].value,
       )
       
-      if(this.jobIdToUpdate){
+      if(this.updateJobForm){
         this.employeerService.updatePostedJob(this.jobIdToUpdate, newJob).subscribe(
           {
             next : (requestResult : RequestResult)=>{
