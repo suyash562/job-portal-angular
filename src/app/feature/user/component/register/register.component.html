@@ -5,15 +5,17 @@
 
     <div *ngFor="let inputField of formInputFields">
         <ng-container *ngIf=" inputField.formControlName === 'resume' ? !employeerRegistration : true">
-            <input id={{inputField.id}} formControlName={{inputField.formControlName}} placeholder={{inputField.placeholder}} />
+            <input id={{inputField.id}} [type]="inputField.type" formControlName={{inputField.formControlName}} placeholder={{inputField.placeholder}}/>
             <small>{{getErrorMessage(inputField.formControlName)}}</small>
         </ng-container>
     </div>
+    
+    <input type="file" (change)="getResumeFieldValue($event)"/>
+    <small>{{getErrorMessage('resume')}}</small>
 
     <ng-container *ngIf="phoneNumbers.length === 1; else removeContactTemplate">
         <button type="button" (click)="addNewContact()">+</button>
     </ng-container>
-
     <ng-template #removeContactTemplate>
         <button type="button" (click)="removeContact()">-</button>
     </ng-template>
@@ -30,6 +32,7 @@
         </div>
     </div>
 
+    
     <ng-container *ngIf="employeerRegistration">
         <div formGroupName="employeerCompany">
             <div>

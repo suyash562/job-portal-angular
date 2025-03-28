@@ -12,7 +12,7 @@
 
     <div id="pagination-options">
         <button (click)="loadPreviousPage()" [disabled]="page === 1"><</button>
-        <button (click)="loadNextPage()" [disabled]="jobs.length === 0">></button>
+        <button (click)="loadNextPage()" [disabled]="jobs.length < limit">></button>
     </div>
 </div>
 

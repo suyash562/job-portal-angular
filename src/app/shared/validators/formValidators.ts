@@ -70,4 +70,19 @@ export class CustomFormValidators{
         return null;
     }
 
+    validateResume(control : AbstractControl) : ValidationErrors | null{
+        console.log(control.value);
+        
+        if(control.value === ''){
+            return {error : '* Required'};
+        }
+        const fileSplit : string[] = (control.value.name as string).split('.');
+        if(fileSplit[fileSplit.length-1] !== 'pdf'){
+            return {error : 'Upload only pdf files'};
+        }
+        if(control.value.size > 10 * 1024 *1024){
+            return {error : 'Maximum size of file must be 10 MB'};
+        }
+        return null;
+    }
 }

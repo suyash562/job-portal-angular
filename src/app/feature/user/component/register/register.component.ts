@@ -1,9 +1,6 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { UserService } from '../../service/user.service';
-import { UserProfile } from '../../../../shared/entity/userProfile';
-import { User } from '../../../../shared/entity/user';
-import { EmployeerCompany } from '../../../../shared/entity/employeerCompany';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 import { RequestResult } from '../../../../shared/types/types';
 import { Router } from '@angular/router';
@@ -20,18 +17,18 @@ export class RegisterComponent implements OnInit, OnDestroy{
   registerForm! : FormGroup;
   employeerCompanyFormGroup! : FormGroup;
   employeerRegistration : boolean = false;
+  resumeFileSelected : boolean = false;
   registerSubscription! : Subscription;
-  formInputFields : {id : string, formControlName : string, placeholder : string}[] = [
-    {id : 'emailInput', formControlName : 'email', placeholder : 'E-mail'},
-    {id : 'passwordInput', formControlName : 'password', placeholder : 'Password'},
-    {id : 'confirmPasswordInput', formControlName : 'confirmPassword', placeholder : 'Confirm Password'},
-    {id : 'firstNameInput', formControlName : 'firstName', placeholder : 'First Name'},
-    {id : 'lastNameInput', formControlName : 'lastName', placeholder : 'Last Name'},
-    {id : 'addressInput', formControlName : 'address', placeholder : 'Address'},
-    {id : 'resumeInput', formControlName : 'resume', placeholder : 'Resume'},
+  formInputFields : {id : string, type : string, formControlName : string, placeholder : string}[] = [
+    {id : 'emailInput', type : 'text', formControlName : 'email', placeholder : 'E-mail'},
+    {id : 'passwordInput', type : 'text', formControlName : 'password', placeholder : 'Password'},
+    {id : 'confirmPasswordInput', type : 'text', formControlName : 'confirmPassword', placeholder : 'Confirm Password'},
+    {id : 'firstNameInput', type : 'text', formControlName : 'firstName', placeholder : 'First Name'},
+    {id : 'lastNameInput', type : 'text', formControlName : 'lastName', placeholder : 'Last Name'},
+    {id : 'addressInput', type : 'text', formControlName : 'address', placeholder : 'Address'},
   ];
   industryFieldOptions = ['Select','Agriculture', 'Automotive', 'Banking and Finance', 'Construction', 'Consumer Goods', 'Education', 'Energy', 'Entertainment', 'Healthcare', 'Information Technology', 'Manufacturing', 'Media', 'Real Estate', 'Retail', 'Telecommunications', 'Transportation', 'Travel and Tourism'];
-
+  
   constructor(
     private userService : UserService,
     private customFormValidators : CustomFormValidators,
@@ -52,7 +49,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
           ]
         ),
         address : new FormControl('', [this.customFormValidators.defaultValidator]),
-        resume  : new FormControl('', [this.customFormValidators.defaultValidator]),
+        resume  : new FormControl('', [this.customFormValidators.validateResume])
       }
     );
     this.employeerCompanyFormGroup = new FormGroup(
@@ -79,7 +76,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
   
   disableEmployeerRegistration(){
     this.employeerRegistration = false;
-    this.registerForm.controls['resume'].addValidators(this.customFormValidators.defaultValidator);
+    this.registerForm.controls['resume'].addValidators(this.customFormValidators.requiredValidator);
     this.registerForm.removeControl('employeerCompany');
   }
 
@@ -103,36 +100,36 @@ export class RegisterComponent implements OnInit, OnDestroy{
     return this.phoneNumbers[contactControlName].dirty && this.phoneNumbers[contactControlName].errors ? this.phoneNumbers[contactControlName].getError('error') : ''
   }
 
-  submitForm(){
-    if(!this.registerForm.invalid){
+  getResumeFieldValue(event: any) {
+    if (event.target.files && event.target.files[0]) {
+      this.registerForm.patchValue({
+        resume: event.target.files[0]
+      });
+      this.registerForm.controls['resume'].markAsDirty();
+    }
+  }
 
-      const user : User & UserProfile = {
-        email : this.registerForm.get('email')!.value,
-        password : this.registerForm.controls['password'].value,
-        address : this.registerForm.controls['address'].value,
-        firstName : this.registerForm.controls['firstName'].value,
-        lastName : this.registerForm.controls['lastName'].value,
-        phoneNumber : this.phoneNumbers[0].value + (this.phoneNumbers[1] ? ' '+ this.phoneNumbers[1].value : ''),
-        resume : !this.employeerRegistration ? this.registerForm.controls['resume'].value : null,
-        role : this.employeerRegistration ? 'employeer' : 'user',
-        user : undefined,
-        employeerCompany : undefined,
-        profile : undefined
+
+  submitForm(){
+    
+    if(!this.registerForm.invalid){
+      if(this.registerForm.get('password')?.value !== this.registerForm.get('confirmPassword')?.value){
+        this.registerForm.get('confirmPassword')?.setErrors({error : 'Confirm password must match provided password'});
+        return;
       }
-      let employeerCompany! : EmployeerCompany;
+
+      let formData = new FormData();
+
+      for (const key of Object.keys(this.registerForm.value)) {
+        formData.set(key, this.registerForm.value[key]);
+      }
       if(this.employeerRegistration){
-        employeerCompany  = {
-          name: this.employeerCompanyFormGroup.controls['companyName'].value,
-          description: this.employeerCompanyFormGroup.controls['description'].value,
-          industry: this.employeerCompanyFormGroup.controls['industry'].value,
-          companySize: this.employeerCompanyFormGroup.controls['companySize'].value,
-          website: this.employeerCompanyFormGroup.controls['website'].value,
-          location: this.employeerCompanyFormGroup.controls['location'].value,
-          averageRating: 0
+        for (const key of Object.keys(this.employeerCompanyFormGroup.value)) {
+          formData.set(key, this.employeerCompanyFormGroup.value[key]);
         }
       }
-
-      this.registerSubscription = this.userService.register(user, employeerCompany).subscribe(
+      
+      this.registerSubscription = this.userService.register(formData).subscribe(
         {
           next : (requestResult : RequestResult)=>{
             alert('Registration Successfull');
@@ -156,10 +153,12 @@ export class RegisterComponent implements OnInit, OnDestroy{
       this.registerForm.get('address')?.markAsDirty();
       this.registerForm.get('resume')?.markAsDirty();
       this.phoneNumbers[0].markAsDirty();
-      this.phoneNumbers[1]?.markAsDirty();    
+      this.phoneNumbers[1]?.markAsDirty();  
+
       if(this.registerForm.get('password')?.value !== this.registerForm.get('confirmPassword')?.value){
         this.registerForm.get('confirmPassword')?.setErrors({error : 'Confirm password must match provided password'});
       }
+
       if(this.employeerRegistration){
         this.employeerCompanyFormGroup.controls['companyName'].markAsDirty();
         this.employeerCompanyFormGroup.controls['description'].markAsDirty();

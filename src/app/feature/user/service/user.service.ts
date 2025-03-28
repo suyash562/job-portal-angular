@@ -1,10 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { UserProfile } from '../../../shared/entity/userProfile';
 import { User } from '../../../shared/entity/user';
 import { EmployeerCompany } from '../../../shared/entity/employeerCompany';
 import { RequestResult } from '../../../shared/types/types';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +25,8 @@ export class UserService {
     this.isUserLoggedIn.next(status);
   }
 
-  register(user : User & UserProfile, employeerCompany : EmployeerCompany){    
-    return this.httpClient.post<RequestResult>("http://localhost:3200/user/register",{user : user, employeerCompany : employeerCompany});
+  register(formData : FormData){        
+    return this.httpClient.post<RequestResult>("http://localhost:3200/user/register", formData);
   }
 
   login(user : Partial<User>){

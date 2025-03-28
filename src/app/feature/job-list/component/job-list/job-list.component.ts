@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 export class JobListComponent implements OnInit, OnDestroy{
   jobs! : Job[];
   page : number =  1;
-  limit : number = 5;
+  limit : number = 2;
   getAllJobsSubscription! : Subscription;
 
   constructor(
