@@ -1,4 +1,4 @@
-<table>
+<!-- <table>
     <thead>
         <tr>
             <th>Job Position</th>
@@ -23,4 +23,8 @@
             </tr>
         </ng-container>
     </tbody>
-</table>
+</table> -->
+
+<ng-container *ngIf="applicationData.length != 0">
+    <app-table [tableData]="applicationData" [tableDataKey]="applicationDataKey" [tableHead]="applicationDataTitle" [actions]="actions"></app-table>
+</ng-container>

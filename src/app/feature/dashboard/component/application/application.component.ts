@@ -11,17 +11,35 @@ import { Subscription } from 'rxjs';
   styleUrl: './application.component.css'
 })
 export class ApplicationComponent implements OnInit, OnDestroy{
-  applications! : Application[];
   getApplicationsOfUserSubscription! : Subscription;
+  applicationDataTitle : string[] = ['Job Position', 'Applicant Name', 'E-mail', 'Contact Numbers', 'Applied Date','Actions'];
+  applicationData : any[] = [];
+  applicationDataKey : string[] = ['title', 'applicantName', 'applicantEmail', 'contactNumber', 'appliedDate'];
+  actions : string[] = ['View'];
   
   constructor(
-    private employeerService : EmployeerService
+    private employeerService : EmployeerService,
   ){}
 
   ngOnInit(): void {
-    this.employeerService.getApplicationsOfUser().subscribe({
+
+    this.getApplicationsOfUserSubscription = this.employeerService.getApplicationsOfUser().subscribe({
       next : (result : RequestResult) => {
-        this.applications = result.value;
+        result.value.forEach((application : Application) => {
+          this.applicationData.push(
+            {
+              id : application.id,
+              title : application.job.title,
+              applicantName : application.user.profile?.firstName +' '+ application.user.profile?.lastName,
+              applicantEmail : application.user.email,
+              contactNumber : application.user.profile?.phoneNumber,
+              appliedDate : application.applyDate.toString().split('T')[0],
+            }
+          );
+        });          
+      },
+      error : (err) => {
+        console.log(err);
       }
     })
   }

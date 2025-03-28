@@ -31,4 +31,8 @@ export class EmployeerService {
   getApplicationsOfUser(){
     return this.httpClient.get<RequestResult>(`http://localhost:3200/application/employeer`, {withCredentials : true});
   }
+
+  getCurrentUserApplication(){
+    return this.httpClient.get<RequestResult>(`http://localhost:3200/application/user`, {withCredentials : true});
+  }
 }

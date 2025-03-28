@@ -1,0 +1,23 @@
+<table>
+    <thead>
+        <tr>
+            <ng-container *ngFor="let title of tableHead">
+                <th>{{title}}</th>
+            </ng-container>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let dataObject of tableDataObject">
+            <tr>
+                <ng-container *ngFor="let title of applicationDataKey">
+                    <td>{{dataObject[title]}}</td>
+                </ng-container>
+                <td class="actions">
+                <ng-container *ngFor="let action of actions">
+                    <button (click)="actionClick(action, dataObject['id'])">{{action}}</button>
+                </ng-container>
+                </td> 
+            </tr>
+        </ng-container>
+    </tbody>
+</table>

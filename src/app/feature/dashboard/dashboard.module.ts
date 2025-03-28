@@ -9,6 +9,10 @@ import { AddJobComponent } from './component/add-job/add-job.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ManageJobsComponent } from './component/manage-jobs/manage-jobs.component';
 import { ApplicationComponent } from './component/application/application.component';
+import { ViewJobComponent } from './component/view-job/view-job/view-job.component';
+import { SharedModule } from '../../shared/shared.module';
+import { CurrentUserApplicationComponent } from './component/current-user-application/current-user-application.component';
+
 
 
 @NgModule({
@@ -18,12 +22,15 @@ import { ApplicationComponent } from './component/application/application.compon
     ProfileComponent,
     AddJobComponent,
     ManageJobsComponent,
-    ApplicationComponent
+    ApplicationComponent,
+    ViewJobComponent,
+    CurrentUserApplicationComponent
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class DashboardModule { }

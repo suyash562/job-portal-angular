@@ -4,12 +4,16 @@ import { CommonModule } from '@angular/common';
 import { SharedRoutingModule } from './shared-routing.module';
 import { HeaderComponent } from './component/header/header.component';
 import { FilterOptionsComponent } from './component/filter-options/filter-options.component';
+import { JobDescriptionComponentComponent } from './component/job-description-component/job-description-component.component';
+import { TableComponent } from './component/table/table.component';
 
 
 @NgModule({
   declarations: [
     HeaderComponent,
-    FilterOptionsComponent
+    FilterOptionsComponent,
+    JobDescriptionComponentComponent,
+    TableComponent
   ],
   imports: [
     CommonModule,
@@ -17,7 +21,9 @@ import { FilterOptionsComponent } from './component/filter-options/filter-option
   ],
   exports : [
     HeaderComponent,
-    FilterOptionsComponent
+    FilterOptionsComponent,
+    JobDescriptionComponentComponent,
+    TableComponent
   ]
 })
 export class SharedModule { }
