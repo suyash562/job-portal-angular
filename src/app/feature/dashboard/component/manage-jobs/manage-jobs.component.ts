@@ -79,6 +79,8 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
     this.deletePostedJobSubscription = this.employeerService.deletePostedJob(jobId).subscribe({
       next : (requestResult : RequestResult) => {
         alert('Job Deleted Successfully');
+        const jobIndex = this.postedJobsData.findIndex((job) => job.id == jobId);
+        this.postedJobsData.splice(jobIndex, 1);
       },
       error : (requestResult : RequestResult) => {
         console.log(requestResult);

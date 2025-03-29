@@ -62,7 +62,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
         facilities  : new FormControl('', [this.customFormValidators.defaultValidator]),
         experienceLevel  : new FormControl('', [this.customFormValidators.requiredValidator, this.customFormValidators.validateNumber]),
         workLocation  : new FormControl('', [this.customFormValidators.defaultValidator]),
-        deadlineForApplying  : new FormControl('', [this.customFormValidators.defaultValidator]),
+        deadlineForApplying  : new FormControl('', []),
       }
     );
 
@@ -149,6 +149,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
           {
             next : (requestResult : RequestResult)=>{
               alert('Job Added Successfull');
+              this.addJobFormGroup.reset();
             },
             error : (requestResult : RequestResult)=>{
               alert(requestResult.message);

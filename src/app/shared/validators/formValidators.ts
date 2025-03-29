@@ -10,7 +10,7 @@ export class CustomFormValidators{
         if(control.value === '' || control.value === 'Select'){
             return {error : '* Required'};
         }
-        else if((control.value as string).startsWith(' ') || (control.value as string).endsWith(' ')){
+        else if((control.value as string)?.startsWith(' ') || (control.value as string)?.endsWith(' ')){
             return {error : 'Cannot contain leading or trailing space'};
         }
         return null;
