@@ -17,3 +17,7 @@ th {
     padding: 5px 10px;
     cursor: pointer;
 }
+
+.applicationDeadlinePassed{
+    background-color: rgb(231, 46, 46);
+}

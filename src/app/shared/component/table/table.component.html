@@ -8,7 +8,7 @@
     </thead>
     <tbody>
         <ng-container *ngFor="let dataObject of tableDataObject">
-            <tr>
+            <tr [ngClass]="getClassForTableData(dataObject)">
                 <ng-container *ngFor="let title of applicationDataKey">
                     <td>{{dataObject[title]}}</td>
                 </ng-container>

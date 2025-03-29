@@ -6,7 +6,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   templateUrl: './table.component.html',
   styleUrl: './table.component.css'
 })
-export class TableComponent implements OnInit{
+export class TableComponent{
+  @Input('userRole') userRole! : string | null;
   @Input('tableHead') tableHead! : string[];
   @Input('tableData') tableDataObject! : any[];
   @Input('removedApplicationsId') removedApplicationsId! : number[];
@@ -14,10 +15,18 @@ export class TableComponent implements OnInit{
   @Input('actions') actions! : string[];
   @Output() actionPerformed : EventEmitter<{actionType : string, dataObjectId : number}> = new EventEmitter();
   
-  ngOnInit(): void {}
-
   actionClick(actionType : string, dataObjectId : number){
     this.actionPerformed.emit({actionType : actionType, dataObjectId : dataObjectId});
   }
 
+  getClassForTableData(dataObject : any){
+    if(this.userRole === 'employeer'){
+      const deadlineForApplying : number = Date.parse(dataObject['deadlineForApplying']);
+      const currentDate = Date.parse(new Date().toISOString().split('T')[0]);
+      if(deadlineForApplying < currentDate){
+        return 'applicationDeadlinePassed';
+      }
+    }
+    return '';
+  }
 }

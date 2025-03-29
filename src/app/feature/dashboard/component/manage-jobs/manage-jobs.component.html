@@ -1,4 +1,6 @@
 
+<span>Application Deadline Passed - </span>
+<div id="colorBox"></div>
 <ng-container *ngIf="postedJobsData.length != 0">
-    <app-table [tableData]="postedJobsData" [tableDataKey]="postedJobsDataKey" [tableHead]="postedJobsTitle" [actions]="actions" (actionPerformed)="performSpecifiedAction($event)"></app-table>
+    <app-table [userRole]="userRole" [tableData]="postedJobsData" [tableDataKey]="postedJobsDataKey" [tableHead]="postedJobsTitle" [actions]="actions" (actionPerformed)="performSpecifiedAction($event)"></app-table>
 </ng-container>

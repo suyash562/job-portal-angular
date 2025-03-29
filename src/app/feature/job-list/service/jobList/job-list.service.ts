@@ -39,7 +39,6 @@ export class JobListService {
     return jobs.filter((job) => {
         
       const company = event.company ? (job.employeer!.employeerCompany!.name === event.company) : false;
-      console.log(event.company, job.employeer!.employeerCompany!.name);
       const workMode = event.workMode ? (job.workMode === event.workMode) : false;
       const employementType = event.employementType ? (job.employementType === event.employementType) : false;
       

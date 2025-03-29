@@ -4,6 +4,7 @@ import { Job } from '../../../../shared/entity/job';
 import { Subscription } from 'rxjs';
 import { RequestResult } from '../../../../shared/types/types';
 import { Router } from '@angular/router';
+import { UserService } from '../../../user/service/user.service';
 
 @Component({
   selector: 'app-manage-jobs',
@@ -12,6 +13,7 @@ import { Router } from '@angular/router';
   styleUrl: './manage-jobs.component.css'
 })
 export class ManageJobsComponent implements OnInit, OnDestroy{
+  userRole! : string | null;
   getPostedJobsSubscription! : Subscription;
   deletePostedJobSubscription! : Subscription;
   postedJobsData : any[] = [];
@@ -22,6 +24,7 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
     'Work Mode',
     'Salary Range',
     'Posted On',
+    'Deadline For Applying',
     'Actions'
   ];
   postedJobsDataKey : string[] = [
@@ -30,7 +33,8 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
     'employementType',
     'workMode',
     'salaryRange',
-    'postingDate'
+    'postingDate',
+    'deadlineForApplying',
   ];
   actions : string[] = [
     'View',
@@ -40,10 +44,12 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
 
   constructor(
     private employeerService : EmployeerService,
+    private userService : UserService,
     private router : Router
   ){}
 
   ngOnInit(): void {
+    this.userRole = this.userService.getUserRole();
     this.getPostedJobsSubscription = this.employeerService.getAllPostedJobs().subscribe({
       next : (result : RequestResult) => {
         result.value.forEach((job : Job) => {
@@ -56,6 +62,7 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
               workMode : job.workMode,
               salaryRange : job.salaryRange,
               postingDate : job.postingDate.toString().split('T')[0],
+              deadlineForApplying : job.deadlineForApplying.toString().split('T')[0],
             }
           );
         });       
