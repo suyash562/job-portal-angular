@@ -16,6 +16,7 @@ export class Job{
     deadlineForApplying : Date;
     postingDate : Date;
     employeer : User | undefined;
+    isActive : boolean;
 
     constructor(
         title : string,
@@ -31,6 +32,7 @@ export class Job{
         workLocation : string,
         deadlineForApplying : Date,
         postingDate : Date,
+        isActive : boolean
     ){
         this.title = title;
         this.description = description;
@@ -45,5 +47,6 @@ export class Job{
         this.deadlineForApplying = deadlineForApplying;
         this.workLocation = workLocation;
         this.postingDate = postingDate;
+        this.isActive = isActive;
     }
 }

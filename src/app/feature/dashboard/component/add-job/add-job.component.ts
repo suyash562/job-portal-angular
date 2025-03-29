@@ -128,7 +128,8 @@ export class AddJobComponent implements OnInit, OnDestroy{
         this.addJobFormGroup.controls['experienceLevel'].value,
         this.addJobFormGroup.controls['workLocation'].value,
         this.addJobFormGroup.controls['deadlineForApplying'].value,
-        new Date()
+        new Date(),
+        true
       )
       
       if(this.updateJobForm){

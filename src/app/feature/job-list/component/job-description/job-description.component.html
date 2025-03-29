@@ -1,5 +1,5 @@
-<div *ngIf="job; else loading">
-    <app-job-description-component [job]="job" [userRole]="userRole" (applyForJobEventEmitter)="applyForJob($event)"></app-job-description-component>
+<div *ngIf="job && userAppliedJobs; else loading">
+    <app-job-description-component [job]="job" [userRole]="userRole" [userAppliedJobs]="userAppliedJobs" (applyForJobEventEmitter)="applyForJob($event)"></app-job-description-component>
 </div>
 
 <ng-template #loading>

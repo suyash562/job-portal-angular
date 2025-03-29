@@ -9,9 +9,10 @@
             <small>{{getErrorMessage(inputField.formControlName)}}</small>
         </ng-container>
     </div>
-    
-    <input type="file" (change)="getResumeFieldValue($event)"/>
-    <small>{{getErrorMessage('resume')}}</small>
+    <ng-container *ngIf="!employeerRegistration">
+        <input type="file" (change)="getResumeFieldValue($event)"/>
+        <small>{{getErrorMessage('resume')}}</small>
+    </ng-container>
 
     <ng-container *ngIf="phoneNumbers.length === 1; else removeContactTemplate">
         <button type="button" (click)="addNewContact()">+</button>

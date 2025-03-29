@@ -13,6 +13,7 @@ import { Application } from '../../../../shared/entity/application';
 export class CurrentUserApplicationComponent {
   getApplicationsOfUserSubscription! : Subscription;
   applicationData : any[] = [];
+  removedApplicationsId : number[] = [];
   applicationDataTitle : string[] = [
     'Job Position',
     'Employement Type',
@@ -42,6 +43,9 @@ export class CurrentUserApplicationComponent {
         next : (result : RequestResult) => {
           
           result.value.forEach((application : Application) => {
+            if(!application.isActive){
+              this.removedApplicationsId.push(application.id);
+            }
             this.applicationData.push(
               {
                 id : application.id,

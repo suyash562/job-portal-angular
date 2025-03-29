@@ -13,9 +13,14 @@
                     <td>{{dataObject[title]}}</td>
                 </ng-container>
                 <td class="actions">
-                <ng-container *ngFor="let action of actions">
-                    <button (click)="actionClick(action, dataObject['id'])">{{action}}</button>
-                </ng-container>
+                    <ng-container *ngFor="let action of actions">
+                        <ng-container *ngIf="action === 'View' && removedApplicationsId?.includes(dataObject['id']); else actionButton">
+                            <button>Not Available</button>
+                        </ng-container>
+                        <ng-template #actionButton>
+                            <button (click)="actionClick(action, dataObject['id'])">{{action}}</button>
+                        </ng-template>
+                    </ng-container>
                 </td> 
             </tr>
         </ng-container>

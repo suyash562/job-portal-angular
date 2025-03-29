@@ -121,8 +121,11 @@ export class RegisterComponent implements OnInit, OnDestroy{
       let formData = new FormData();
 
       for (const key of Object.keys(this.registerForm.value)) {
-        formData.set(key, this.registerForm.value[key]);
+        if(key !== 'employeerCompany'){
+          formData.set(key, this.registerForm.value[key]);
+        }
       }
+      formData.set('role',this.employeerRegistration ? 'employeer' : 'user');
       if(this.employeerRegistration){
         for (const key of Object.keys(this.employeerCompanyFormGroup.value)) {
           formData.set(key, this.employeerCompanyFormGroup.value[key]);

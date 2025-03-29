@@ -9,6 +9,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class TableComponent implements OnInit{
   @Input('tableHead') tableHead! : string[];
   @Input('tableData') tableDataObject! : any[];
+  @Input('removedApplicationsId') removedApplicationsId! : number[];
   @Input('tableDataKey') applicationDataKey! : any[];
   @Input('actions') actions! : string[];
   @Output() actionPerformed : EventEmitter<{actionType : string, dataObjectId : number}> = new EventEmitter();

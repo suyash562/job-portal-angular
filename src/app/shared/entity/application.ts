@@ -6,6 +6,7 @@ export class Application{
     id! : number;
     applyDate : Date;
     status : 'Pending' | 'Interview' | 'Accepted' | 'Rejected';
+    isActive! : boolean;
     user! : User;
     job! : Job;
 

@@ -49,6 +49,11 @@
         <p>{{job.postingDate.toString().split('T')[0]}}</p>
     </div>
     <div *ngIf="userRole !== 'employeer'">
-        <button (click)="applyForJob(job.id)">Apply</button>
+        <ng-container *ngIf="userAppliedJobs.includes(job.id); else applyForJobButton">
+            <button disabled>Already Applied !</button>
+        </ng-container>
+        <ng-template #applyForJobButton>
+            <button (click)="applyForJob(job.id)">Apply</button>
+        </ng-template>
     </div>
 </div>

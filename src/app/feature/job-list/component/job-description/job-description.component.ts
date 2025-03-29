@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { RequestResult } from '../../../../shared/types/types';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../../user/service/user.service';
+import { EmployeerService } from '../../../dashboard/service/employeer/employeer.service';
+import { Application } from '../../../../shared/entity/application';
 
 @Component({
   selector: 'app-job-description',
@@ -15,17 +17,20 @@ import { UserService } from '../../../user/service/user.service';
 export class JobDescriptionComponent implements OnInit, OnDestroy{
   job! : Job;
   userRole! : string | null;
+  userAppliedJobs! : number[];
   selectedJobSubscription! : Subscription;
+  userAppliedJobsSubscription! : Subscription;
   applyForJobSubscription! : Subscription;
 
   constructor(
     private jobListService : JobListService,
+    private employeerService : EmployeerService,
     private router : Router,
     private userService : UserService
   ){}
 
   ngOnInit(): void {
-    this.userRole = this.userService.getUserRole();
+    this.userRole = this.userService.getUserRole();    
 
     this.selectedJobSubscription = this.jobListService.selectedJobObservable.subscribe({
       next : (value : Job) => {
@@ -37,7 +42,27 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
       error : (err) => {
         console.log(err);
       }
-    })
+    });
+
+    if(this.userRole === 'user'){
+      this.userAppliedJobsSubscription = this.employeerService.getCurrentUserApplication().subscribe({
+        next : (result : RequestResult) => {
+          if(result.value){
+            this.userAppliedJobs = [];
+            result.value.forEach((application : Application) => {
+              this.userAppliedJobs.push(application.job.id);
+            });
+          }
+        },
+        error : (err) => {
+          console.log(err);
+        }
+      })
+    }
+    else{
+      this.userAppliedJobs = [];
+    }
+
   }
 
   applyForJob(jobId : number){
@@ -62,8 +87,9 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.selectedJobSubscription?.unsubscribe();
+    this.selectedJobSubscription.unsubscribe();
     this.applyForJobSubscription?.unsubscribe();
+    this.userAppliedJobsSubscription?.unsubscribe();
   }
 
 }
