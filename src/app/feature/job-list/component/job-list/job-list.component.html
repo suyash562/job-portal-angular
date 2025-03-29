@@ -1,7 +1,7 @@
-<app-filter-options></app-filter-options>
+<app-filter-options [companyNamesList]="companies" (filterEvent)="filterJobsList($event)" (clearFilterEvent)="clearFilters()"></app-filter-options>
 
-<div *ngIf="jobs; else loading">
-    <div class="job-list-item" *ngFor="let job of jobs" (click)="loadDescriptionPage(job)">
+<div *ngIf="filteredJobs; else loading">
+    <div class="job-list-item" *ngFor="let job of filteredJobs" (click)="loadDescriptionPage(job)">
         <h2 class="job-position">{{job.title}}</h2>
         <p class="company">Company: <span>{{job.employeer?.employeerCompany?.name}}</span></p>
         <p class="vacancies">Vacancies: <span>{{job.vacancies}}</span></p>
@@ -12,7 +12,7 @@
 
     <div id="pagination-options">
         <button (click)="loadPreviousPage()" [disabled]="page === 1"><</button>
-        <button (click)="loadNextPage()" [disabled]="jobs.length < limit">></button>
+        <button (click)="loadNextPage()" [disabled]="filteredJobs.length < limit">></button>
     </div>
 </div>
 

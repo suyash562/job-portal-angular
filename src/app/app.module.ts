@@ -4,7 +4,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
-import {CookieService} from 'ngx-cookie-service';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeng/themes/aura';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,17 @@ import {CookieService} from 'ngx-cookie-service';
     SharedModule,
     HttpClientModule,
   ],
-  providers: [CookieService],
+  providers: [
+    provideAnimationsAsync(),
+    providePrimeNG({
+        theme: {
+            preset: Aura,
+            options : {
+              darkModeSelector: false || 'none'
+            }
+        }
+    })
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

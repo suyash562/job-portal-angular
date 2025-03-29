@@ -34,7 +34,40 @@ export class JobListService {
     return this.httpClient.get<RequestResult>(`http://localhost:3200/application/apply/${jobId}` ,{withCredentials : true});
   }
 
-  // getUserAppliedJobIdJob(){
-  //   return this.httpClient.get<RequestResult>(`http://localhost:3200/job/userAppliedJobs` ,{withCredentials : true});
-  // }
+  filterJobsBasedOnOptions(event : any, jobs : Job[]){
+
+    return jobs.filter((job) => {
+        
+      const company = event.company ? (job.employeer!.employeerCompany!.name === event.company) : false;
+      console.log(event.company, job.employeer!.employeerCompany!.name);
+      const workMode = event.workMode ? (job.workMode === event.workMode) : false;
+      const employementType = event.employementType ? (job.employementType === event.employementType) : false;
+      
+      if(event.workMode && event.employementType && event.company){
+        return workMode && employementType && company;
+      }
+      else if(event.workMode && event.employementType){
+        return workMode && employementType;
+      }
+      else if(event.employementType && event.company){
+        return employementType && company;
+      }
+      else if(event.workMode && event.company){
+        return workMode && company;
+      }
+     
+      return workMode || employementType || company;
+    });
+  }
+
+  getCompanies(jobs : Job[]){
+    const companies : string[] = [];
+    jobs.forEach((job) => {
+      let companyName = job.employeer?.employeerCompany?.name;
+      if(companyName && !companies.includes(companyName)){
+        companies.push(companyName);
+      }
+    });
+    return companies;
+  }
 }

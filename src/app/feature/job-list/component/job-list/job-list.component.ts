@@ -13,8 +13,10 @@ import { Subscription } from 'rxjs';
 })
 export class JobListComponent implements OnInit, OnDestroy{
   jobs! : Job[];
+  companies! : string[];
+  filteredJobs! : Job[];
   page : number =  1;
-  limit : number = 2;
+  limit : number = 5;
   getAllJobsSubscription! : Subscription;
 
   constructor(
@@ -30,8 +32,28 @@ export class JobListComponent implements OnInit, OnDestroy{
     this.getAllJobsSubscription = this.jobListService.getAllJobs(this.page, this.limit).subscribe({
       next : (result : RequestResult) => {
         this.jobs = result.value;     
+        this.filteredJobs = this.jobs;
+        this.companies = this.jobListService.getCompanies(this.jobs);        
       }
     })
+  }
+
+  filterJobsList(event : any) {
+    if(event.workMode || event.employementType || event.company){
+      this.filteredJobs = this.jobListService.filterJobsBasedOnOptions(event, this.jobs);
+    }
+    if(event.sort){
+      this.filteredJobs = this.filteredJobs.sort((job1 , job2) => {
+        if(event.sort === 'A-Z'){
+          return job1.title < job2.title ? -1 : 1;
+        }
+        return job1.title < job2.title ? 1 : -1;
+      });      
+    }
+  }
+
+  clearFilters(){
+    this.filteredJobs = this.jobs;
   }
 
   loadDescriptionPage(job : Job){

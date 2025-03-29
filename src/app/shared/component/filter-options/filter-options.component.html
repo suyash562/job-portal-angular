@@ -1,1 +1,20 @@
-<p>filter-options works!</p>
+
+<div class="options-div">
+    <p-autocomplete placeholder="Search for companies" [suggestions]="matchedCompanyNames" [formControl]="selectedCompanyName" (onSelect)="onCompanySelected()" (completeMethod)="getSuggestions($event)" />
+
+    <div class="filter-div">
+        <p class="text-surface-900 dark:text-surface-800">Work Mode </p>
+        <p-select class="w-full md:w-48" [options]="workModeOptions" [(ngModel)]="selectedworkMode" optionLabel="option" placeholder="Default" (onChange)="filterOptionSelected()" />
+    </div>
+    <div class="filter-div">
+        <p class="text-surface-900 dark:text-surface-800">Employement Type </p>
+        <p-select class="w-full md:w-48" [options]="employementTypeOptions" [(ngModel)]="selectedemployementType" optionLabel="option" placeholder="Default" (onChange)="filterOptionSelected()" />
+    </div>
+    <div class="filter-div">
+        <p class="text-surface-900 dark:text-surface-800">Sort </p>
+        <p-select class="w-full md:w-48" [options]="sortOptions" [(ngModel)]="selectedSort" optionLabel="option" placeholder="Default" (onChange)="filterOptionSelected()" />
+    </div>
+    <div class="clear-filter-div">
+        <p-button label="Clear Filters" severity="contrast" (onClick)="clearFilters()"></p-button>
+    </div>
+</div>
