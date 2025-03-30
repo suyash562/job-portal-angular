@@ -1,4 +1,4 @@
-<table>
+<!-- <table>
     <thead>
         <tr>
             <ng-container *ngFor="let title of tableHead">
@@ -25,4 +25,53 @@
             </tr>
         </ng-container>
     </tbody>
-</table>
+</table> -->
+
+
+<div id="tableOptions">
+    <ng-template [ngIf]="userRole === 'employeer'">
+        <div id="tableMetadata">
+            <span>Application Deadline Passed</span>
+            <p-badge value="" badgeSize="small" severity="danger" />
+        </div>
+    </ng-template>
+</div>
+<div class="card">
+    <p-table
+        [value]="tableDataObject"   
+    >
+        <ng-template #header>
+            <tr>
+                <ng-container *ngFor="let title of tableHead">
+                    <ng-template [ngIf]="title === 'Posted On' || title === 'Deadline For Applying'" [ngIfElse]="defaultTableHead">
+                        <th *ngIf="title === 'Posted On'" pSortableColumn="postingDate"> {{title}}  <p-sortIcon field="postingDate"/> </th>
+                        <th *ngIf="title === 'Deadline For Applying'" pSortableColumn="deadlineForApplying"> {{title}}  <p-sortIcon field="deadlineForApplying"/> </th>
+                    </ng-template>
+
+                    <ng-template #defaultTableHead>
+                        <th>{{title}}</th>
+                    </ng-template>
+                </ng-container>
+            </tr>
+        </ng-template>
+        <ng-template #body let-dataObject>
+            <!-- <ng-container *ngFor="let dataObject of tableDataObject"> -->
+                <tr [ngClass]="getClassForTableData(dataObject)">
+                    <ng-container *ngFor="let title of applicationDataKey">
+                        <td>{{dataObject[title]}}</td>
+                    </ng-container>
+                    <td class="actions">
+                        <ng-container *ngFor="let action of actions">
+                            <ng-container *ngIf="action === 'View' && userRole === 'user' && removedApplicationsId?.includes(dataObject['id']); else actionButton">
+                                <button>Not Available</button>
+                            </ng-container>
+                            <ng-template #actionButton>
+                                <p-button severity="info" (click)="actionClick(action, dataObject['id'])">{{action}}</p-button>
+                            </ng-template>
+                        </ng-container>
+                    </td> 
+                </tr>
+            <!-- </ng-container> -->
+        </ng-template>
+    </p-table>
+</div>

@@ -17,7 +17,7 @@ export class EmployeerService {
   }
 
   getAllPostedJobs(){
-    return this.httpClient.get<RequestResult>("http://localhost:3200/job/employeer", {withCredentials : true});
+    return this.httpClient.get<RequestResult>(`http://localhost:3200/job/employeer`, {withCredentials : true});
   }
   
   updatePostedJob(jobIdToUpdate : number, updatedJob : Job){

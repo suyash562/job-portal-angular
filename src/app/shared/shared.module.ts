@@ -11,7 +11,8 @@ import { SelectModule } from 'primeng/select';
 import { SelectButton } from 'primeng/selectbutton';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
-
+import { TableModule } from 'primeng/table';
+import { BadgeModule } from 'primeng/badge';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,8 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     FormsModule,
     ReactiveFormsModule,
     AutoCompleteModule,
+    TableModule,
+    BadgeModule
   ],
   exports : [
     HeaderComponent,

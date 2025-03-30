@@ -14,6 +14,7 @@ export class TableComponent{
   @Input('tableDataKey') applicationDataKey! : any[];
   @Input('actions') actions! : string[];
   @Output() actionPerformed : EventEmitter<{actionType : string, dataObjectId : number}> = new EventEmitter();
+  @Output() loadNextJobs : EventEmitter<{page : number, limit : number}> = new EventEmitter();
   
   actionClick(actionType : string, dataObjectId : number){
     this.actionPerformed.emit({actionType : actionType, dataObjectId : dataObjectId});
@@ -29,4 +30,5 @@ export class TableComponent{
     }
     return '';
   }
+  
 }

@@ -19,5 +19,27 @@ th {
 }
 
 .applicationDeadlinePassed{
+    color: red;
+}
+
+#tableOptions{
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    background-color: white;
+}
+
+#tableMetadata{
+    margin-right: 10px;
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#colorBox{
+    width: 15px;
+    height: 15px;
+    display: inline-block;
     background-color: rgb(231, 46, 46);
 }

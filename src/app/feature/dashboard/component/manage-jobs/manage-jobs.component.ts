@@ -50,7 +50,11 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.userRole = this.userService.getUserRole();
-    this.getPostedJobsSubscription = this.employeerService.getAllPostedJobs().subscribe({
+    this.getAllPostedJobs();
+  }
+
+  getAllPostedJobs(){
+    this.getPostedJobsSubscription  = this.getPostedJobsSubscription = this.employeerService.getAllPostedJobs().subscribe({
       next : (result : RequestResult) => {
         result.value.forEach((job : Job) => {
           this.postedJobsData.push(
