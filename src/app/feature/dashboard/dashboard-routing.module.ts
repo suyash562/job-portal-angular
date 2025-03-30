@@ -7,6 +7,7 @@ import { ManageJobsComponent } from './component/manage-jobs/manage-jobs.compone
 import { ApplicationComponent } from './component/application/application.component';
 import { ViewJobComponent } from './component/view-job/view-job/view-job.component';
 import { CurrentUserApplicationComponent } from './component/current-user-application/current-user-application.component';
+import { ViewSelectedApplicationComponent } from './component/view-selected-application/view-selected-application.component';
 
 const routes: Routes = [
   {path : '', redirectTo : 'component', pathMatch : 'full'},
@@ -16,9 +17,10 @@ const routes: Routes = [
     {path : 'addJob', component : AddJobComponent},
     {path : 'manageJobs', component : ManageJobsComponent},
     {path : 'updateJob/:jobId', component : AddJobComponent},
-    {path : 'application', component : ApplicationComponent},
+    {path : 'applications', component : ApplicationComponent},
     {path : 'current-user-application', component : CurrentUserApplicationComponent},
     {path : 'viewJob/:jobId', component : ViewJobComponent},
+    {path : 'userApplication/:applicationId', component : ViewSelectedApplicationComponent},
   ]},
 ];
 

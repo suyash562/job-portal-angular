@@ -1,0 +1,26 @@
+
+.parent-div{
+    display: flex;
+    justify-content: center;
+    margin: 4rem;
+}
+
+.application-field {
+    margin-bottom: 10px;
+}
+
+.application-field label {
+    font-weight: bold;
+    display: inline-block;
+    width: 150px;
+}
+
+.application-field span {
+    display: inline-block;
+    margin-left: 8px;
+}
+
+.close-button-div{
+    display: flex;
+    justify-content: end;
+}

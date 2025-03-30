@@ -19,6 +19,7 @@
     "@angular/platform-browser-dynamic": "^19.1.0",
     "@angular/router": "^19.1.0",
     "@primeng/themes": "^19.0.10",
+    "ng2-pdf-viewer": "^10.4.0",
     "ngx-cookie-service": "^19.1.2",
     "primeng": "^19.0.10",
     "rxjs": "~7.8.0",

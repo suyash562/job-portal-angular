@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EmployeerService } from '../../service/employeer/employeer.service';
 import { Application } from '../../../../shared/entity/application';
 import { RequestResult } from '../../../../shared/types/types';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { ApplicationService } from '../../service/appliaction/application.service';
 
 @Component({
   selector: 'app-application',
@@ -18,12 +19,13 @@ export class ApplicationComponent implements OnInit, OnDestroy{
   actions : string[] = ['View'];
   
   constructor(
-    private employeerService : EmployeerService,
+    private applicationService : ApplicationService,
+    private router : Router
   ){}
 
   ngOnInit(): void {
 
-    this.getApplicationsOfUserSubscription = this.employeerService.getApplicationsOfUser().subscribe({
+    this.getApplicationsOfUserSubscription = this.applicationService.getApplicationsOfUser().subscribe({
       next : (result : RequestResult) => {
         result.value.forEach((application : Application) => {
           this.applicationData.push(
@@ -42,6 +44,16 @@ export class ApplicationComponent implements OnInit, OnDestroy{
         console.log(err);
       }
     })
+  }
+
+  viewSelectedApplication(applicationId : number){
+    this.router.navigate(['dashboard','component','userApplication',applicationId]);
+  }
+
+  performSpecifiedAction(event : {actionType : string, dataObjectId : number}){
+    if(event.actionType == 'View'){
+      this.viewSelectedApplication(event.dataObjectId);
+    }
   }
 
   ngOnDestroy(): void {

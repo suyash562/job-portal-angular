@@ -12,8 +12,11 @@ import { ApplicationComponent } from './component/application/application.compon
 import { ViewJobComponent } from './component/view-job/view-job/view-job.component';
 import { SharedModule } from '../../shared/shared.module';
 import { CurrentUserApplicationComponent } from './component/current-user-application/current-user-application.component';
-
-
+import { ViewSelectedApplicationComponent } from './component/view-selected-application/view-selected-application.component';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
+import { BadgeModule } from 'primeng/badge';
 
 @NgModule({
   declarations: [
@@ -24,13 +27,18 @@ import { CurrentUserApplicationComponent } from './component/current-user-applic
     ManageJobsComponent,
     ApplicationComponent,
     ViewJobComponent,
-    CurrentUserApplicationComponent
+    CurrentUserApplicationComponent,
+    ViewSelectedApplicationComponent,
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    PdfViewerModule,
+    CardModule,
+    ButtonModule,
+    BadgeModule
   ]
 })
 export class DashboardModule { }

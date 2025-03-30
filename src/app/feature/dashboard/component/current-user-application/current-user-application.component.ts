@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { EmployeerService } from '../../service/employeer/employeer.service';
 import { RequestResult } from '../../../../shared/types/types';
 import { Application } from '../../../../shared/entity/application';
+import { ApplicationService } from '../../service/appliaction/application.service';
 
 @Component({
   selector: 'app-current-user-application',
@@ -34,12 +34,12 @@ export class CurrentUserApplicationComponent {
   actions : string[] = ['View'];
     
     constructor(
-      private employeerService : EmployeerService,
+      private applicationService : ApplicationService,
     ){}
   
     ngOnInit(): void {
   
-      this.getApplicationsOfUserSubscription = this.employeerService.getCurrentUserApplication().subscribe({
+      this.getApplicationsOfUserSubscription = this.applicationService.getCurrentUserApplication().subscribe({
         next : (result : RequestResult) => {
           
           result.value.forEach((application : Application) => {

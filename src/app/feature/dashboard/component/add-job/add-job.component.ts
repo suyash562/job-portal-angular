@@ -2,11 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 import { Job } from '../../../../shared/entity/job';
-import { EmployeerService } from '../../service/employeer/employeer.service';
 import { RequestResult } from '../../../../shared/types/types';
 import { ActivatedRoute } from '@angular/router';
 import { JobListService } from '../../../job-list/service/jobList/job-list.service';
 import { Subscription } from 'rxjs';
+import { JobsService } from '../../service/jobs/jobs.service';
 
 @Component({
   selector: 'app-add-job',
@@ -29,7 +29,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
 
   constructor(
     private customFormValidators : CustomFormValidators,
-    private employeerService : EmployeerService,
+    private jobsService : JobsService,
     private jobListService : JobListService,
     private activatedRoute : ActivatedRoute
   ){}
@@ -133,7 +133,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
       )
       
       if(this.updateJobForm){
-        this.addNewJobSubscription = this.employeerService.updatePostedJob(this.jobIdToUpdate, newJob).subscribe(
+        this.addNewJobSubscription = this.jobsService.updatePostedJob(this.jobIdToUpdate, newJob).subscribe(
           {
             next : (requestResult : RequestResult)=>{
               alert('Job Updated Successfull');
@@ -145,7 +145,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
         )
       }
       else{
-        this.addNewJobSubscription = this.employeerService.addNewJob(newJob).subscribe(
+        this.addNewJobSubscription = this.jobsService.addNewJob(newJob).subscribe(
           {
             next : (requestResult : RequestResult)=>{
               alert('Job Added Successfull');

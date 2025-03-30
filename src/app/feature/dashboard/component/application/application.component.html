@@ -26,5 +26,5 @@
 </table> -->
 
 <ng-container *ngIf="applicationData.length != 0">
-    <app-table [tableData]="applicationData" [tableDataKey]="applicationDataKey" [tableHead]="applicationDataTitle" [actions]="actions"></app-table>
+    <app-table [tableData]="applicationData" [tableDataKey]="applicationDataKey" [tableHead]="applicationDataTitle" [actions]="actions" (actionPerformed)="performSpecifiedAction($event)"></app-table>
 </ng-container>

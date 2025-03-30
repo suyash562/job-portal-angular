@@ -6,7 +6,7 @@ import { RequestResult } from '../../../../shared/types/types';
 @Injectable({
   providedIn: 'root'
 })
-export class EmployeerService {
+export class JobsService {
 
   constructor(
     private httpClient : HttpClient
@@ -26,13 +26,5 @@ export class EmployeerService {
   
   deletePostedJob(jobId : number){
     return this.httpClient.delete<RequestResult>(`http://localhost:3200/job/deleteJob/${jobId}`, {withCredentials : true});
-  }
-  
-  getApplicationsOfUser(){
-    return this.httpClient.get<RequestResult>(`http://localhost:3200/application/employeer`, {withCredentials : true});
-  }
-
-  getCurrentUserApplication(){
-    return this.httpClient.get<RequestResult>(`http://localhost:3200/application/user`, {withCredentials : true});
   }
 }

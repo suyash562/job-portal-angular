@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EmployeerService } from '../../service/employeer/employeer.service';
 import { Job } from '../../../../shared/entity/job';
 import { Subscription } from 'rxjs';
 import { RequestResult } from '../../../../shared/types/types';
 import { Router } from '@angular/router';
 import { UserService } from '../../../user/service/user.service';
+import { JobsService } from '../../service/jobs/jobs.service';
 
 @Component({
   selector: 'app-manage-jobs',
@@ -43,7 +43,7 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
   ];
 
   constructor(
-    private employeerService : EmployeerService,
+    private jobsService : JobsService,
     private userService : UserService,
     private router : Router
   ){}
@@ -54,7 +54,7 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
   }
 
   getAllPostedJobs(){
-    this.getPostedJobsSubscription  = this.getPostedJobsSubscription = this.employeerService.getAllPostedJobs().subscribe({
+    this.getPostedJobsSubscription  = this.getPostedJobsSubscription = this.jobsService.getAllPostedJobs().subscribe({
       next : (result : RequestResult) => {
         result.value.forEach((job : Job) => {
           this.postedJobsData.push(
@@ -87,7 +87,7 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
   }
 
   deleteJob(jobId : number){
-    this.deletePostedJobSubscription = this.employeerService.deletePostedJob(jobId).subscribe({
+    this.deletePostedJobSubscription = this.jobsService.deletePostedJob(jobId).subscribe({
       next : (requestResult : RequestResult) => {
         alert('Job Deleted Successfully');
         const jobIndex = this.postedJobsData.findIndex((job) => job.id == jobId);

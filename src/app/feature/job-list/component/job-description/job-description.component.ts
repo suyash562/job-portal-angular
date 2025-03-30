@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 import { RequestResult } from '../../../../shared/types/types';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../../user/service/user.service';
-import { EmployeerService } from '../../../dashboard/service/employeer/employeer.service';
 import { Application } from '../../../../shared/entity/application';
+import { ApplicationService } from '../../../dashboard/service/appliaction/application.service';
 
 @Component({
   selector: 'app-job-description',
@@ -24,7 +24,7 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
 
   constructor(
     private jobListService : JobListService,
-    private employeerService : EmployeerService,
+    private applicationService : ApplicationService,
     private router : Router,
     private userService : UserService
   ){}
@@ -45,7 +45,7 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
     });
 
     if(this.userRole === 'user'){
-      this.userAppliedJobsSubscription = this.employeerService.getCurrentUserApplication().subscribe({
+      this.userAppliedJobsSubscription = this.applicationService.getCurrentUserApplication().subscribe({
         next : (result : RequestResult) => {
           if(result.value){
             this.userAppliedJobs = [];
