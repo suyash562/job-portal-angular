@@ -14,6 +14,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { CurrentUserApplicationComponent } from './component/current-user-application/current-user-application.component';
 import { ViewSelectedApplicationComponent } from './component/view-selected-application/view-selected-application.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
@@ -36,6 +37,7 @@ import { BadgeModule } from 'primeng/badge';
     ReactiveFormsModule,
     SharedModule,
     PdfViewerModule,
+    NgxExtendedPdfViewerModule,
     CardModule,
     ButtonModule,
     BadgeModule

@@ -1,85 +1,48 @@
-<!-- <div class="parent-div" *ngIf="application; else loading">
-    <div class="application-div" *ngIf="!displayResume; else resumeDiv">
-        <div class="application-field">
-            <label>Name:</label>
-            <span>{{application.user.profile?.firstName + ' ' + application.user.profile?.lastName}}</span>
-        </div>
-        <div class="application-field">
-            <label>E-mail:</label>
-            <span>{{application.user.email}}</span>
-        </div>
-        <div class="application-field">
-            <label>Contact Number:</label>
-            <span>{{application.user.profile?.phoneNumber}}</span>
-        </div>
-        <div class="application-field">
-            <label>Address:</label>
-            <span>{{application.user.profile?.address}}</span>
-        </div>
-        <div class="application-field">
-            <label>Applied Date:</label>
-            <span>{{application.applyDate.toString().split('T')[0]}}</span>
-        </div>
-        <div class="application-field">
-            <label>Resume:</label>
-            <button (click)="showResume()">View</button>
-        </div>
-    </div>
-    
-    <ng-template #resumeDiv>
-        <div class="pdf-viewer">
-            <pdf-viewer [src]="resumeFileData"
-            
-            [render-text]="true"
-            [original-size]="false"
-            style="width: 600px; height: 500px"
-            ></pdf-viewer>
-        </div>
-    </ng-template>
-</div> -->
-<div class="parent-div" *ngIf="application; else loading">
-<p-card [style]="{ width: '40rem', overflow: 'hidden' }">
-    <ng-template #title>Application </ng-template>
-    <ng-template #subtitle> {{application.user.profile?.firstName + ' ' + application.user.profile?.lastName}} </ng-template>
-    
-    <div class="application-div" *ngIf="!displayResume; else resumeDiv">
-        <div class="application-field">
-            <label>E-mail:</label>
-            <span>{{application.user.email}}</span>
-        </div>
-        <div class="application-field">
-            <label>Contact Number:</label>
-            <span>{{application.user.profile?.phoneNumber}}</span>
-        </div>
-        <div class="application-field">
-            <label>Address:</label>
-            <span>{{application.user.profile?.address}}</span>
-        </div>
-        <div class="application-field">
-            <label>Applied Date:</label>
-            <span>{{application.applyDate.toString().split('T')[0]}}</span>
-        </div>
-        <div class="application-field">
-            <label>Resume:</label>
-            <button (click)="showResume()">View</button>
-        </div>
-    </div>
 
-    <ng-template #resumeDiv>
-        <div class="close-button-div">
-            <p-button icon="pi pi-times" (onClick)="showResume()" severity="info" [rounded]="true" [outlined]="true" size="small"/>
+<div class="parent-div" *ngIf="application; else loading">
+
+    <p-card [style]="{ width: '50rem', overflow: 'hidden' }">
+        <ng-template #title>Application </ng-template>
+        <ng-template #subtitle> {{application.user.profile?.firstName + ' ' + application.user.profile?.lastName}} </ng-template>
+        
+        <div class="application-div" *ngIf="!displayResume; else resumeComponent">
+            <div class="application-field">
+                <label>E-mail:</label>
+                <span>{{application.user.email}}</span>
+            </div>
+            <div class="application-field">
+                <label>Contact Number:</label>
+                <span>{{application.user.profile?.phoneNumber}}</span>
+            </div>
+            <div class="application-field">
+                <label>Address:</label>
+                <span>{{application.user.profile?.address}}</span>
+            </div>
+            <div class="application-field">
+                <label>Applied Date:</label>
+                <span>{{application.applyDate.toString().split('T')[0]}}</span>
+            </div>
+            <div class="application-field">
+                <label>Resume:</label>
+                <p-button severity="contrast" (click)="showResume()">View</p-button>
+            </div>
         </div>
-        <div class="pdf-viewer">
+
+        <ng-template #resumeComponent>
+            <div class="close-button-div">
+                <p-button icon="pi pi-times" (onClick)="displayResume = false" severity="info" [rounded]="true" [outlined]="true" size="small"/>
+            </div>
             <pdf-viewer [src]="resumeFileData"
-            [render-text]="true"
-            [original-size]="false"
-            (after-load-complete)="callBackFn($event)"
-            style="width: 600px; height: 500px"
+                    [render-text]="true"
+                    [original-size]="false"
+                    [zoom]="1"
+                    style="width: 750px; height: 500px"
             ></pdf-viewer>
-        </div>
-    </ng-template>
-</p-card>
+        </ng-template>       
+
+    </p-card>
 </div>
+ 
 <ng-template #loading>
     loading...
 </ng-template>
