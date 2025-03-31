@@ -1,9 +1,17 @@
-
+<p-toast />
+<p-confirmdialog [style]="{'font-family' : 'Calibri'}"/>
 <div class="parent-div" *ngIf="application; else loading">
 
     <p-card [style]="{ width: '50rem', overflow: 'hidden' }">
-        <ng-template #title>Application </ng-template>
-        <ng-template #subtitle> {{application.user.profile?.firstName + ' ' + application.user.profile?.lastName}} </ng-template>
+        <ng-template #title>
+            <div class="p-card-title">
+                {{application.user.profile?.firstName + ' ' + application.user.profile?.lastName}} 
+                <ng-container *ngIf="displayResume">
+                    <p-button icon="pi pi-times" (onClick)="displayResume = false" severity="contrast" [rounded]="true" [outlined]="true" size="small"/>
+                </ng-container>
+            </div>
+        </ng-template>
+        <ng-template #subtitle></ng-template>
         
         <div class="application-div" *ngIf="!displayResume; else resumeComponent">
             <div class="application-field">
@@ -24,14 +32,20 @@
             </div>
             <div class="application-field">
                 <label>Resume:</label>
-                <p-button severity="contrast" (click)="showResume()">View</p-button>
+                <p-button severity="contrast" size="small" (click)="showResume()">View</p-button>
+            </div>
+            <div class="application-field">
+                <label>Actions:</label>
+                <p-button class="action-button" severity="info" size="small" (click)="scheduleInterview()">Schedule Interview</p-button>
+                <p-button class="action-button" severity="success" size="small" (click)="acceptApplicationDialogue()">Accept</p-button>
+                <p-button class="action-button" severity="danger" size="small" (click)="rejectApplicationDialogue()">Reject </p-button>
             </div>
         </div>
 
         <ng-template #resumeComponent>
-            <div class="close-button-div">
-                <p-button icon="pi pi-times" (onClick)="displayResume = false" severity="info" [rounded]="true" [outlined]="true" size="small"/>
-            </div>
+            <!-- <div class="close-button-div">
+                <p-button icon="pi pi-times" (onClick)="displayResume = false" severity="contrast" [rounded]="true" [outlined]="true" size="small"/>
+            </div> -->
             <pdf-viewer [src]="resumeFileData"
                     [render-text]="true"
                     [original-size]="false"

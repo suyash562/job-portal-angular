@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardParentComponent } from './component/dashboard-parent/dashboard-parent.component';
 import { SidebarComponent } from './component/sidebar/sidebar.component';
@@ -18,6 +17,9 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,13 @@ import { BadgeModule } from 'primeng/badge';
     NgxExtendedPdfViewerModule,
     CardModule,
     ButtonModule,
-    BadgeModule
+    BadgeModule,
+    ConfirmDialogModule,
+    ToastModule
+  ],
+  providers : [
+    ConfirmationService,
+    MessageService
   ]
 })
 export class DashboardModule { }

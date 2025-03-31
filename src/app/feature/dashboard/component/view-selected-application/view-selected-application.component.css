@@ -20,7 +20,11 @@
     margin-left: 8px;
 }
 
-.close-button-div{
+.p-card-title{
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+}
+
+.action-button{
+    margin-right: 8px;
 }

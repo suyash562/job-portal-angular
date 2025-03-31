@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { ApplicationService } from '../../service/appliaction/application.service';
 import { Application } from '../../../../shared/entity/application';
 import { RequestResult } from '../../../../shared/types/types';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 
 @Component({
@@ -25,6 +26,8 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
   constructor(
     private activatedRoute : ActivatedRoute,
     private applicationService : ApplicationService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
   ){}
 
   ngOnInit(): void {
@@ -70,6 +73,72 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
       this.resumeFileData = new Uint8Array(arrayBuffer);
       this.displayResume = true;
     });    
+  }
+
+  displayConfirmationDialogue(header : string, message : string, action : Function){
+    this.confirmationService.confirm({
+      message: message,
+      header: header,
+      closable: true,
+      closeOnEscape: true,
+      icon: 'pi pi-exclamation-triangle',
+      rejectButtonProps: {
+          label: 'Cancel',
+          severity: 'contrast',
+          outlined: true,
+      },
+      acceptButtonProps: {
+          label: 'Ok',
+          severity: 'contrast',
+      },
+      accept: () => {
+          action();
+      },
+    });
+  }
+  
+  acceptApplicationDialogue(){
+    this.displayConfirmationDialogue('Accept Application', 'Are you sure you want to accept this application ?', this.acceptApplication.bind(this));
+  }
+  
+  rejectApplicationDialogue(){
+    this.displayConfirmationDialogue('Reject Application', 'Are you sure you want to reject this application ?', this.rejectApplication.bind(this));
+  }
+
+  scheduleInterview(){
+
+  }
+
+  acceptApplication(){
+    this.applicationService.updateApplicationStatus(this.application.id, 'Accepted').subscribe({
+      next : (result : RequestResult) => {
+        if(result.value){
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Application has been accepted' });
+        }
+        else{
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to accept the application' });
+        }
+      },
+      error : (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  rejectApplication(){
+    this.applicationService.updateApplicationStatus(this.application.id, 'Rejected').subscribe({
+      next : (result : RequestResult) => {
+        if(result.value){
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Application has been rejected' });
+        }
+        else{
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to reject the application' });
+        }
+      },
+      error : (err) => {
+        console.log(err);
+      }
+    })
   }
 
   ngOnDestroy(): void {
