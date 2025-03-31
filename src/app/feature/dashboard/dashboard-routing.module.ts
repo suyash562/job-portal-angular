@@ -8,6 +8,7 @@ import { ApplicationComponent } from './component/application/application.compon
 import { ViewJobComponent } from './component/view-job/view-job/view-job.component';
 import { CurrentUserApplicationComponent } from './component/current-user-application/current-user-application.component';
 import { ViewSelectedApplicationComponent } from './component/view-selected-application/view-selected-application.component';
+import { ScheduleInterviewComponent } from './component/schedule-interview/schedule-interview.component';
 
 const routes: Routes = [
   {path : '', redirectTo : 'component', pathMatch : 'full'},
@@ -21,6 +22,7 @@ const routes: Routes = [
     {path : 'current-user-application', component : CurrentUserApplicationComponent},
     {path : 'viewJob/:jobId', component : ViewJobComponent},
     {path : 'userApplication/:applicationId', component : ViewSelectedApplicationComponent},
+    {path : 'schedule-interview/:applicationId', component : ScheduleInterviewComponent},
   ]},
 ];
 

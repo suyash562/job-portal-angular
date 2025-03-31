@@ -13,9 +13,9 @@ import { ApplicationService } from '../../service/appliaction/application.servic
 })
 export class ApplicationComponent implements OnInit, OnDestroy{
   getApplicationsOfUserSubscription! : Subscription;
-  applicationDataTitle : string[] = ['Job Position', 'Applicant Name', 'E-mail', 'Contact Numbers', 'Applied Date','Actions'];
+  applicationDataTitle : string[] = ['Job Position', 'Applicant Name', 'E-mail', 'Contact Numbers', 'Applied Date','Status', 'Actions'];
   applicationData : any[] = [];
-  applicationDataKey : string[] = ['title', 'applicantName', 'applicantEmail', 'contactNumber', 'appliedDate'];
+  applicationDataKey : string[] = ['title', 'applicantName', 'applicantEmail', 'contactNumber', 'appliedDate', 'status'];
   actions : string[] = ['View'];
   
   constructor(
@@ -36,6 +36,7 @@ export class ApplicationComponent implements OnInit, OnDestroy{
               applicantEmail : application.user.email,
               contactNumber : application.user.profile?.phoneNumber,
               appliedDate : application.applyDate.toString().split('T')[0],
+              status : application.status,
             }
           );
         });          

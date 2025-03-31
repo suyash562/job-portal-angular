@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { RequestResult } from '../../../../shared/types/types';
 import { Application } from '../../../../shared/entity/application';
 import { ApplicationService } from '../../service/appliaction/application.service';
+import { UserService } from '../../../user/service/user.service';
 
 @Component({
   selector: 'app-current-user-application',
@@ -12,6 +13,7 @@ import { ApplicationService } from '../../service/appliaction/application.servic
 })
 export class CurrentUserApplicationComponent {
   getApplicationsOfUserSubscription! : Subscription;
+  userRole! : string | null;
   applicationData : any[] = [];
   removedApplicationsId : number[] = [];
   applicationDataTitle : string[] = [
@@ -35,10 +37,11 @@ export class CurrentUserApplicationComponent {
     
     constructor(
       private applicationService : ApplicationService,
+      private userService : UserService,
     ){}
   
     ngOnInit(): void {
-  
+      this.userRole = this.userService.getUserRole();
       this.getApplicationsOfUserSubscription = this.applicationService.getCurrentUserApplication().subscribe({
         next : (result : RequestResult) => {
           

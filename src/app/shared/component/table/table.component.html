@@ -27,7 +27,19 @@
     </tbody>
 </table> -->
 
-
+<div class="card flex justify-center">
+    <p-dialog header="Not Available" [modal]="true" [(visible)]="pDialogueBoxEnabled" [style]="{ width: '25rem' }">
+        <div class="flex-center">
+            <i class="pi pi-info-circle" style="font-size: 3rem;"></i>
+        </div>
+        <div class="flex items-center gap-4 mb-4">
+            <span class="font-bold whitespace-nowrap" style="font-size: large;">This job post has been removed by the employeer and not available anymore</span >
+        </div>
+        <ng-template #footer>
+            <p-button label="Okay" severity="contrast" (onClick)="pDialogueBoxEnabled = false"/>
+        </ng-template>
+    </p-dialog>
+</div>
 <div id="tableOptions">
     <ng-template [ngIf]="userRole === 'employeer'">
         <div id="tableMetadata">
@@ -37,9 +49,7 @@
     </ng-template>
 </div>
 <div class="card">
-    <p-table
-        [value]="tableDataObject"   
-    >
+    <p-table [value]="tableDataObject">
         <ng-template #header>
             <tr>
                 <ng-container *ngFor="let title of tableHead">
@@ -55,23 +65,21 @@
             </tr>
         </ng-template>
         <ng-template #body let-dataObject>
-            <!-- <ng-container *ngFor="let dataObject of tableDataObject"> -->
                 <tr [ngClass]="getClassForTableData(dataObject)">
                     <ng-container *ngFor="let title of applicationDataKey">
-                        <td>{{dataObject[title]}}</td>
+                        <td [ngStyle]="title === 'status' && dataObject[title] != 'Pending' ? getStyleForStatusField(dataObject[title]) : null">{{dataObject[title]}}</td>
                     </ng-container>
                     <td class="actions">
                         <ng-container *ngFor="let action of actions">
                             <ng-container *ngIf="action === 'View' && userRole === 'user' && removedApplicationsId?.includes(dataObject['id']); else actionButton">
-                                <button>Not Available</button>
+                                <p-button severity="contrast" size="small" (onClick)="pDialogueBoxEnabled = true">Not Available</p-button>
                             </ng-container>
                             <ng-template #actionButton>
-                                <p-button severity="info" (click)="actionClick(action, dataObject['id'])">{{action}}</p-button>
+                                <p-button severity="info" size="small" (click)="actionClick(action, dataObject['id'])">{{action}}</p-button>
                             </ng-template>
                         </ng-container>
                     </td> 
                 </tr>
-            <!-- </ng-container> -->
         </ng-template>
     </p-table>
 </div>

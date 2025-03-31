@@ -1,0 +1,77 @@
+
+<p-toast />
+<div class="parent-div">
+
+    <div [style]="{ width: '50rem'}">
+
+        <div class="input-field">
+            <span>Interview Type</span>
+            <div class="inputFloatLabel">
+                <p-floatlabel variant="on" >
+                    <p-select [options]="interviewScheduleOptions" [(ngModel)]="interviewType" (onChange)="interviewTypeChange()" optionLabel="type" placeholder="Interview Method" class="w-full md:w-56" />
+                </p-floatlabel>
+            </div>
+        </div>
+
+        <form (ngSubmit)="onSubmit()" [formGroup]="scheduleInterviewForm" class="card flex justify-center">
+            
+            <div class="input-field" *ngIf="interviewType.type === 'Offline'; else meetingLink">
+                <span>Location</span>
+                <div class="inputFloatLabel">
+                    <p-floatlabel variant="on" >
+                        <input formControlName="interviewAddress" pInputText id="address" autocomplete="off" />
+                        <label for="address">Location</label>
+                    </p-floatlabel>
+                    <small>{{getErrorMessage('interviewAddress')}}</small>
+                </div>
+            </div>
+            <ng-template #meetingLink>
+                <div class="input-field">
+                    <span>Meeting Link</span>
+                    <div class="inputFloatLabel">
+                        <p-floatlabel variant="on" >
+                            <input formControlName="meetingLink" pInputText id="meetingLink" autocomplete="off" />
+                            <label for="meetingLink">Meeting Link</label>
+                        </p-floatlabel>
+                        <small>{{getErrorMessage('meetingLink')}}</small>
+                    </div>
+                </div>
+            </ng-template>
+            <div class="input-field">
+                <span>Date</span>
+                <div class="inputFloatLabel">
+                    <p-floatlabel variant="on">
+                        <p-datepicker formControlName="interviewDate"  [minDate]="minDate" id="date" [readonlyInput]="true" />
+                        <label for="date">Interview Date</label>
+                    </p-floatlabel>
+                    <small>{{getErrorMessage('interviewDate')}}</small>
+                </div>
+            </div>
+            <div class="input-field">
+                <span>Time</span>
+                <div class="inputFloatLabel">
+                    <p-floatlabel variant="on">
+                        <input type="time" formControlName="interviewTime" pInputText id="time" autocomplete="off" />
+                    </p-floatlabel>
+                    <small>{{getErrorMessage('interviewTime')}}</small>   
+                </div>
+            </div>
+            <div class="input-field">
+                <span>Instructions</span>
+                <div class="inputFloatLabel">
+                    <p-iftalabel>
+                        <textarea rows="5" cols="60" pTextarea id="instructions" formControlName="instructions" ></textarea>
+                        <label for="instructions">Optional</label>
+                    </p-iftalabel>
+                    <small>{{getErrorMessage('instructions')}}</small> 
+                </div>
+            </div>
+            <div class="submitButton">
+                <p-button type="Submit" severity="help">Submit</p-button>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+ 

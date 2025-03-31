@@ -85,4 +85,12 @@ export class CustomFormValidators{
         }
         return null;
     }
+
+    validateDescription(control : AbstractControl) : ValidationErrors | null{
+        
+        if((control.value as string)?.startsWith(' ') || (control.value as string)?.endsWith(' ')){
+            return {error : 'Cannot contain leading or trailing space'};
+        }
+        return null;
+    }
 }

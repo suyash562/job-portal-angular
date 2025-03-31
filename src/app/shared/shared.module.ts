@@ -13,6 +13,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { TableModule } from 'primeng/table';
 import { BadgeModule } from 'primeng/badge';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MessageService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -32,13 +35,18 @@ import { BadgeModule } from 'primeng/badge';
     ReactiveFormsModule,
     AutoCompleteModule,
     TableModule,
-    BadgeModule
+    BadgeModule,
+    ConfirmDialogModule,
+    DialogModule
   ],
   exports : [
     HeaderComponent,
     FilterOptionsComponent,
     JobDescriptionComponentComponent,
     TableComponent
+  ],
+  providers : [
+    MessageService
   ]
 })
 export class SharedModule { }

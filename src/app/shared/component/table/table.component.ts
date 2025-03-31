@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-table',
@@ -7,6 +7,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrl: './table.component.css'
 })
 export class TableComponent{
+  pDialogueBoxEnabled : boolean = false;
   @Input('userRole') userRole! : string | null;
   @Input('tableHead') tableHead! : string[];
   @Input('tableData') tableDataObject! : any[];
@@ -15,7 +16,8 @@ export class TableComponent{
   @Input('actions') actions! : string[];
   @Output() actionPerformed : EventEmitter<{actionType : string, dataObjectId : number}> = new EventEmitter();
   @Output() loadNextJobs : EventEmitter<{page : number, limit : number}> = new EventEmitter();
-  
+
+
   actionClick(actionType : string, dataObjectId : number){
     this.actionPerformed.emit({actionType : actionType, dataObjectId : dataObjectId});
   }
@@ -31,4 +33,14 @@ export class TableComponent{
     return '';
   }
   
+  getStyleForStatusField(status : string){
+    if(status === 'Accepted'){
+      return  { color : 'green', 'font-weight' : 'bold'};
+    }  
+    else if(status === 'Rejected'){
+      return  { color : 'red', 'font-weight' : 'bold'};
+    }
+    return null;
+  }
+
 }

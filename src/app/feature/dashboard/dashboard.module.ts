@@ -5,7 +5,7 @@ import { DashboardParentComponent } from './component/dashboard-parent/dashboard
 import { SidebarComponent } from './component/sidebar/sidebar.component';
 import { ProfileComponent } from './component/profile/profile.component';
 import { AddJobComponent } from './component/add-job/add-job.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ManageJobsComponent } from './component/manage-jobs/manage-jobs.component';
 import { ApplicationComponent } from './component/application/application.component';
 import { ViewJobComponent } from './component/view-job/view-job/view-job.component';
@@ -20,6 +20,13 @@ import { BadgeModule } from 'primeng/badge';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ScheduleInterviewComponent } from './component/schedule-interview/schedule-interview.component';
+import { SelectModule } from 'primeng/select';
+import { InputTextModule } from 'primeng/inputtext';
+import { FloatLabel } from 'primeng/floatlabel';
+import { DatePickerModule } from 'primeng/datepicker';
+import { TextareaModule } from 'primeng/textarea';
+import { IftaLabelModule } from 'primeng/iftalabel';
 
 @NgModule({
   declarations: [
@@ -32,11 +39,13 @@ import { ToastModule } from 'primeng/toast';
     ViewJobComponent,
     CurrentUserApplicationComponent,
     ViewSelectedApplicationComponent,
+    ScheduleInterviewComponent,
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     SharedModule,
     PdfViewerModule,
     NgxExtendedPdfViewerModule,
@@ -44,7 +53,13 @@ import { ToastModule } from 'primeng/toast';
     ButtonModule,
     BadgeModule,
     ConfirmDialogModule,
-    ToastModule
+    ToastModule,
+    SelectModule,
+    InputTextModule,
+    FloatLabel,
+    DatePickerModule,
+    TextareaModule,
+    IftaLabelModule,
   ],
   providers : [
     ConfirmationService,

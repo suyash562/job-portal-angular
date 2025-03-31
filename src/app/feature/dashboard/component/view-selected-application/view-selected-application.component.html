@@ -1,5 +1,5 @@
 <p-toast />
-<p-confirmdialog [style]="{'font-family' : 'Calibri'}"/>
+<p-confirmdialog />
 <div class="parent-div" *ngIf="application; else loading">
 
     <p-card [style]="{ width: '50rem', overflow: 'hidden' }">
@@ -34,18 +34,21 @@
                 <label>Resume:</label>
                 <p-button severity="contrast" size="small" (click)="showResume()">View</p-button>
             </div>
-            <div class="application-field">
+            <div class="application-field" *ngIf="application.status === 'Pending'; else statusAlreadyUpdated">
                 <label>Actions:</label>
-                <p-button class="action-button" severity="info" size="small" (click)="scheduleInterview()">Schedule Interview</p-button>
+                <p-button class="action-button" severity="info" size="small" [routerLink]="['/dashboard','component','schedule-interview',applicationId]">Schedule Interview</p-button>
                 <p-button class="action-button" severity="success" size="small" (click)="acceptApplicationDialogue()">Accept</p-button>
                 <p-button class="action-button" severity="danger" size="small" (click)="rejectApplicationDialogue()">Reject </p-button>
             </div>
+            <ng-template #statusAlreadyUpdated>
+                <div class="application-field">
+                    <label>Application Status:</label>
+                    <span [ngStyle]=" {color : application.status === 'Accepted' ? 'green' : 'red', 'font-weight': 'bold'}">{{application.status}}</span>
+                </div>
+            </ng-template>
         </div>
 
         <ng-template #resumeComponent>
-            <!-- <div class="close-button-div">
-                <p-button icon="pi pi-times" (onClick)="displayResume = false" severity="contrast" [rounded]="true" [outlined]="true" size="small"/>
-            </div> -->
             <pdf-viewer [src]="resumeFileData"
                     [render-text]="true"
                     [original-size]="false"
@@ -55,6 +58,7 @@
         </ng-template>       
 
     </p-card>
+    
 </div>
  
 <ng-template #loading>

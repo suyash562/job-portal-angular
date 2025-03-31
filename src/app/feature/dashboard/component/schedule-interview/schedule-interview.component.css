@@ -1,0 +1,25 @@
+.parent-div{
+    display: flex;
+    justify-content: center;
+    margin: 4rem;
+    height: 100%;
+}
+.inputFloatLabel{
+    display: inline-block;
+}
+
+.input-field{
+    display: grid;
+    grid-template-columns: 120px 300px;
+    margin: 10px;
+}
+.submitButton{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+small {
+    color: red;
+    display: block;
+}
