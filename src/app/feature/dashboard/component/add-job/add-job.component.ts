@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { JobListService } from '../../../job-list/service/jobList/job-list.service';
 import { Subscription } from 'rxjs';
 import { JobsService } from '../../service/jobs/jobs.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-add-job',
@@ -17,11 +18,12 @@ import { JobsService } from '../../service/jobs/jobs.service';
 export class AddJobComponent implements OnInit, OnDestroy{
   jobIdToUpdate! : number;
   updateJobForm! : boolean;
-  currentDate : string = new Date().toISOString().split('T')[0];
+  currentDate : Date = new Date();
   addJobFormGroup! : FormGroup;
   formInputFields! : {id : string, inputType : string, formControlName : string, placeholder : string}[];
-  employementTypeInputFields! : string[];
-  workModeInputFields! : string[];
+  employementTypeOptions! : any[];
+  workModeOptions! : any[];
+  jobToUpdate! : any;
   routeParamsSubscription! : Subscription;
   routeUrlSubscription! : Subscription;
   getJobByIdSubscription! : Subscription;
@@ -31,7 +33,8 @@ export class AddJobComponent implements OnInit, OnDestroy{
     private customFormValidators : CustomFormValidators,
     private jobsService : JobsService,
     private jobListService : JobListService,
-    private activatedRoute : ActivatedRoute
+    private activatedRoute : ActivatedRoute,
+    private messageService: MessageService
   ){}
 
   ngOnInit(): void {
@@ -56,18 +59,18 @@ export class AddJobComponent implements OnInit, OnDestroy{
         requiredSkills : new FormControl('', [this.customFormValidators.defaultValidator]),
         vacancies : new FormControl('', [this.customFormValidators.requiredValidator, this.customFormValidators.validateNumber]),
         preferredSkills  : new FormControl('', [this.customFormValidators.defaultValidator]),
-        employementType : new FormControl('', [this.customFormValidators.defaultValidator]),
-        workMode  : new FormControl('', [this.customFormValidators.defaultValidator]),
+        employementType : new FormControl(null, [this.customFormValidators.requiredValidator]),
+        workMode  : new FormControl('', [this.customFormValidators.requiredValidator]),
         salaryRange  : new FormControl('', [this.customFormValidators.defaultValidator]),
         facilities  : new FormControl('', [this.customFormValidators.defaultValidator]),
         experienceLevel  : new FormControl('', [this.customFormValidators.requiredValidator, this.customFormValidators.validateNumber]),
         workLocation  : new FormControl('', [this.customFormValidators.defaultValidator]),
-        deadlineForApplying  : new FormControl('', []),
+        deadlineForApplying  : new FormControl('', [this.customFormValidators.requiredValidator]),
       }
     );
 
     this.formInputFields = [
-      {id : 'titleInput', inputType : 'text' , formControlName : 'title', placeholder : 'Job Title'},
+      {id : 'titleInput', inputType : 'text' , formControlName : 'title', placeholder : 'Job Position'},
       {id : 'descriptionInput', inputType : 'text' , formControlName : 'description', placeholder : 'Job Description'},
       {id : 'requiredSkillsInput', inputType : 'text' , formControlName : 'requiredSkills', placeholder : 'Required Skills'},
       {id : 'vacanciesInput', inputType : 'number' , formControlName : 'vacancies', placeholder : 'Number of Vacancies'},
@@ -78,12 +81,22 @@ export class AddJobComponent implements OnInit, OnDestroy{
       {id : 'workLocationInput', inputType : 'text' , formControlName : 'workLocation', placeholder : 'Work Location'},
     ];
 
-    this.employementTypeInputFields = ['Select', "Full Time" , "Part Time"];
-    this.workModeInputFields = ['Select', 'Offline' , 'Online' , 'Hybrid'];
+    this.employementTypeOptions = [
+      {name :  "Full Time"},
+      {name : "Part Time"}
+    ];
 
+    this.workModeOptions = [
+      {name :  "Offline"},
+      {name : "Online"},
+      {name : "Hybrid"}
+    ];
+  
     if(this.updateJobForm){
       this.getJobByIdSubscription = this.jobListService.getJobById(this.jobIdToUpdate).subscribe({
         next : (requestResult : RequestResult) => {
+          this.jobToUpdate = requestResult.value;
+          this.jobToUpdate.deadlineForApplying = new Date(requestResult.value.deadlineForApplying)
           this.addJobFormGroup.setValue(
             {
               title : requestResult.value.title,
@@ -91,15 +104,15 @@ export class AddJobComponent implements OnInit, OnDestroy{
               requiredSkills : requestResult.value.requiredSkills,
               vacancies : requestResult.value.vacancies,
               preferredSkills : requestResult.value.preferredSkills,
-              employementType : requestResult.value.employementType,
-              workMode : requestResult.value.workMode,
+              employementType : {name : requestResult.value.employementType},
+              workMode : {name : requestResult.value.workMode},
               salaryRange : requestResult.value.salaryRange,
               facilities : requestResult.value.facilities,
               experienceLevel : requestResult.value.experienceLevel,
               workLocation : requestResult.value.workLocation,
-              deadlineForApplying : requestResult.value.deadlineForApplying.toString().split('T')[0],
+              deadlineForApplying : new Date(requestResult.value.deadlineForApplying),
             }
-          )
+          );  
         },
         error : (requestResult : RequestResult) => {
           console.log(requestResult.message);
@@ -113,6 +126,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
   }
 
   submitForm(){
+    
     if(!this.addJobFormGroup.invalid){
     
       const newJob : Job = new Job(
@@ -121,8 +135,8 @@ export class AddJobComponent implements OnInit, OnDestroy{
         this.addJobFormGroup.controls['requiredSkills'].value,
         this.addJobFormGroup.controls['vacancies'].value,
         this.addJobFormGroup.controls['preferredSkills'].value,
-        this.addJobFormGroup.controls['employementType'].value,
-        this.addJobFormGroup.controls['workMode'].value,
+        this.addJobFormGroup.controls['employementType'].value.name,
+        this.addJobFormGroup.controls['workMode'].value.name,
         this.addJobFormGroup.controls['salaryRange'].value,
         this.addJobFormGroup.controls['facilities'].value,
         this.addJobFormGroup.controls['experienceLevel'].value,
@@ -133,26 +147,43 @@ export class AddJobComponent implements OnInit, OnDestroy{
       )
       
       if(this.updateJobForm){
-        this.addNewJobSubscription = this.jobsService.updatePostedJob(this.jobIdToUpdate, newJob).subscribe(
-          {
-            next : (requestResult : RequestResult)=>{
-              alert('Job Updated Successfull');
-            },
-            error : (err)=>{
-              alert(err.error.message);
+        if(this.isFormChanged()){
+          
+          this.addNewJobSubscription = this.jobsService.updatePostedJob(this.jobIdToUpdate, newJob).subscribe(
+            {
+              next : (requestResult : RequestResult)=>{
+                if(requestResult.value){
+                  this.jobToUpdate = newJob;
+                  this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Job has been updated successfully' });
+                }
+                else{
+                  this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update the job post' });
+                }
+              },
+              error : (err)=>{
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update the job post' });
+              }
             }
-          }
-        )
+          )
+        }
+        else{
+          this.messageService.add({ severity: 'info', summary: 'Updated', detail: 'The job post is already updated' });
+        }
       }
       else{
         this.addNewJobSubscription = this.jobsService.addNewJob(newJob).subscribe(
           {
             next : (requestResult : RequestResult)=>{
-              alert('Job Added Successfull');
-              this.addJobFormGroup.reset();
+              if(requestResult.value){
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Job has been posted successfully' });
+                this.addJobFormGroup.reset();
+              }
+              else{
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to post the job' });
+              }
             },
             error : (requestResult : RequestResult)=>{
-              alert(requestResult.message);
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to post the job' });
             }
           }
         )
@@ -162,10 +193,27 @@ export class AddJobComponent implements OnInit, OnDestroy{
       this.formInputFields.forEach(inputField => {
         this.addJobFormGroup.get(inputField.formControlName)?.markAsDirty();
       });
+      this.addJobFormGroup.controls['deadlineForApplying'].markAsDirty();
       this.addJobFormGroup.controls['employementType'].markAsDirty();
       this.addJobFormGroup.controls['workMode'].markAsDirty();
     }
   }
+
+  isFormChanged(){
+    for(const key in this.addJobFormGroup.value){
+      if( key != 'deadlineForApplying' && typeof(this.addJobFormGroup.controls[key].value) === 'string' && this.addJobFormGroup.controls[key].value != this.jobToUpdate[key]){
+        return true;
+      }
+    }
+    if((this.addJobFormGroup.controls['deadlineForApplying'].value as Date).toISOString().split('T')[0] != (this.jobToUpdate['deadlineForApplying'] as Date).toISOString().split('T')[0]){
+      return true;
+    }
+    if(this.addJobFormGroup.controls['workMode'].value.name != this.jobToUpdate['workMode'] || this.addJobFormGroup.controls['employementType'].value.name != this.jobToUpdate['employementType']){
+      return true;
+    }
+    return false;
+  }
+
   ngOnDestroy(): void {
     this.routeParamsSubscription?.unsubscribe();
     this.routeUrlSubscription?.unsubscribe();

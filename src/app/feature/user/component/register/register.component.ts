@@ -27,7 +27,23 @@ export class RegisterComponent implements OnInit, OnDestroy{
     {id : 'lastNameInput', type : 'text', formControlName : 'lastName', placeholder : 'Last Name'},
     {id : 'addressInput', type : 'text', formControlName : 'address', placeholder : 'Address'},
   ];
-  industryFieldOptions = ['Select','Agriculture', 'Automotive', 'Banking and Finance', 'Construction', 'Consumer Goods', 'Education', 'Energy', 'Entertainment', 'Healthcare', 'Information Technology', 'Manufacturing', 'Media', 'Real Estate', 'Retail', 'Telecommunications', 'Transportation', 'Travel and Tourism'];
+  industryFieldOptions = [
+    {name : 'Automotive', code: 'NY'},
+    {name : 'Banking and Finance'},
+    {name : 'Construction'},
+    {name : 'Consumer Goods'},
+    {name : 'Education'},
+    {name : 'Energy'},
+    {name : 'Entertainment'},
+    {name : 'Healthcare'},
+    {name : 'Information Technology'},
+    {name : 'Manufacturing'},
+    {name : 'Media'},
+    {name : 'Real Estate'},
+    {name : 'Retail'},
+    {name : 'Telecommunications'},
+    {name : 'Transportation'},
+  ];
   
   constructor(
     private userService : UserService,
@@ -56,7 +72,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
       {
         companyName    : new FormControl('', [this.customFormValidators.defaultValidator]),
         description : new FormControl('', [this.customFormValidators.defaultValidator]),
-        industry : new FormControl('', [this.customFormValidators.defaultValidator]),
+        industry : new FormControl<{name : string} | null>(null, [this.customFormValidators.requiredValidator]),
         companySize : new FormControl('', [this.customFormValidators.requiredValidator]),
         website  : new FormControl('', [this.customFormValidators.validateUrl, this.customFormValidators.defaultValidator]),
         location : new FormControl('', [this.customFormValidators.defaultValidator]),
@@ -128,7 +144,12 @@ export class RegisterComponent implements OnInit, OnDestroy{
       formData.set('role',this.employeerRegistration ? 'employeer' : 'user');
       if(this.employeerRegistration){
         for (const key of Object.keys(this.employeerCompanyFormGroup.value)) {
-          formData.set(key, this.employeerCompanyFormGroup.value[key]);
+          if(key === 'industry'){
+            formData.set(key, this.employeerCompanyFormGroup.value[key].name);
+          }
+          else{
+            formData.set(key, this.employeerCompanyFormGroup.value[key]);
+          }
         }
       }
       

@@ -1,59 +1,75 @@
 <div class="job-container">
-    <div class="job-title">{{job.title}}</div>
-    <div class="job-section">
-        <h3>Description</h3>
-        <p>{{job.description}}</p>
-    </div>
-    <div class="job-section">
-        <h3>Required Skills</h3>
-        <p>{{job.requiredSkills}}</p>
-    </div>
-    <div class="job-section">
-        <h3>Vacancies</h3>
-        <p>{{job.vacancies}}</p>
-    </div>
-    <div class="job-section">
-        <h3>Preferred Skills</h3>
-        <p>{{job.preferredSkills}}</p>
-    </div>
-    <div class="job-section">
-        <h3>Employment Type</h3>
-        <p>{{job.employementType}}</p>
-    </div>
-    <div class="job-section">
-        <h3>Work Mode</h3>
-        <p>{{job.workMode}}</p>
-    </div>
-    <div class="job-section">
-        <h3>Salary Range</h3>
-        <p>{{job.salaryRange}}</p>
-    </div>
-    <div class="job-section">
-        <h3>Facilities</h3>
-        <p>{{job.facilities}}</p>
-    </div>
-    <div class="job-section">
-        <h3>Experience Level</h3>
-        <p>{{job.experienceLevel}}</p>
-    </div>
-    <div class="job-section">
-        <h3>Work Location</h3>
-        <p>{{job.workLocation}}</p>
-    </div>
-    <div class="job-section">
-        <h3>Deadline for Applying</h3>
-        <p>{{job.deadlineForApplying.toString().split('T')[0]}}</p>
-    </div>
-    <div class="job-section">
-        <h3>Posting Date</h3>
-        <p>{{job.postingDate.toString().split('T')[0]}}</p>
-    </div>
-    <div *ngIf="userRole !== 'employeer'">
-        <ng-container *ngIf="userAppliedJobs.includes(job.id); else applyForJobButton">
-            <button disabled>Already Applied !</button>
-        </ng-container>
-        <ng-template #applyForJobButton>
-            <button (click)="applyForJob(job.id)">Apply</button>
+
+    <p-card class="p-card">
+        <ng-template #header>
+            <div class="job-title">
+                Job Title : {{job.title}}
+            </div>
         </ng-template>
-    </div>
+        <ng-template #title>
+            <div style="text-align: center;">
+                Company : {{job.employeer?.employeerCompany?.name}} 
+            </div>
+        </ng-template>
+        <ng-template #subtitle>
+            <div style="text-align: center;">
+                Posted on : {{job.postingDate.toString().split('T')[0]}}
+            </div>
+        </ng-template>
+
+        <div class="field">
+            <h4>Description</h4>
+            <p>{{job.description}}</p>
+        </div>
+        <div class="field">
+            <h4>Required Skills</h4>
+            <p>{{job.requiredSkills}}</p>
+        </div>
+        <div class="field">
+            <h4>Vacancies</h4>
+            <p>{{job.vacancies}}</p>
+        </div>
+        <div class="field">
+            <h4>Preferred Skills</h4>
+            <p>{{job.preferredSkills}}</p>
+        </div>
+        <div class="field">
+            <h4>Employment Type</h4>
+            <p>{{job.employementType}}</p>
+        </div>
+        <div class="field">
+            <h4>Work Mode</h4>
+            <p>{{job.workMode}}</p>
+        </div>
+        <div class="field">
+            <h4>Salary Range</h4>
+            <p>{{job.salaryRange}}</p>
+        </div>
+        <div class="field">
+            <h4>Facilities</h4>
+            <p>{{job.facilities}}</p>
+        </div>
+        <div class="field">
+            <h4>Experience Level</h4>
+            <p>{{job.experienceLevel}}</p>
+        </div>
+        <div class="field">
+            <h4>Work Location</h4>
+            <p>{{job.workLocation}}</p>
+        </div>
+        <div class="field">
+            <h4>Deadline for Applying</h4>
+            <p>{{job.deadlineForApplying.toString().split('T')[0]}}</p>
+        </div>
+
+        <div id="button-div" *ngIf="userRole !== 'employeer'">
+            <ng-container *ngIf="userAppliedJobs.includes(job.id); else applyForJobButton">
+                <p-button severity="info" disabled>Already Applied !</p-button>
+            </ng-container>
+            <ng-template #applyForJobButton>
+                <p-button severity="info" (click)="applyForJob(job.id)">Apply</p-button>
+            </ng-template>
+        </div>
+    </p-card>
+
 </div>

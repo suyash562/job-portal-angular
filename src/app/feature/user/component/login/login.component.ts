@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.loginForm = new FormGroup(
       {
         email : new FormControl('', [this.customFormValidators.validateEmail, this.customFormValidators.defaultValidator]),
-        password : new FormControl('', [this.customFormValidators.validatePassword, this.customFormValidators.defaultValidator]),
+        password : new FormControl('', [this.customFormValidators.defaultValidator]),
       }
     );
   }

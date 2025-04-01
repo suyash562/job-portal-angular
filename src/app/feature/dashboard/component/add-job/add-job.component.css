@@ -10,31 +10,21 @@ form {
     background-color: #f9f9f9;
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    margin: 15px 0 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-button {
-    background-color: #4c7aaf;
-    color: white;
-    padding: 10px 20px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #4556a0;
-}
-
 small {
     color: red;
     display: block;
 }
 
+.input-field{
+    display: grid;
+    align-items: center;
+    grid-template-columns: 150px 300px;
+    margin: 10px;
+}
+
+#submit-button{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}

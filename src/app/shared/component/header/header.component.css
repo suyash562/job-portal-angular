@@ -5,6 +5,7 @@ header {
     align-items: center;
     padding: 20px 30px;
     background-color: #f8f9fa;
+    border-bottom: 1px solid #ccc;
 }
 
 header h1 {
@@ -14,6 +15,7 @@ header h1 {
 
 header nav {
     display: flex;
+    align-items: center;
     gap: 30px;
 }
 

@@ -4,6 +4,8 @@
     align-items: center;
     padding-left: 8%;
     padding-right: 10%;
+    margin-top: 10px;
+    margin-bottom: 10px
 }
 .sort-div{
     display: flex;

@@ -1,24 +1,15 @@
-
-form {
-    max-width: 600px;
-    margin: auto;
-    margin-top: 4rem;
-    margin-bottom: 4rem;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f9f9f9;
+.parent-div{
+    display: flex;
+    justify-content: center;
+    margin: 4rem;
+    height: 100%;
 }
 #employeeRegistrationButton{
     float: right;
 }
-input {
-    width: 100%;
-    padding: 10px;
+
+#employeerCompanyDiv div, #contact input {
     margin: 15px 0 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
 }
 
 button {
@@ -38,12 +29,6 @@ button:hover {
 small {
     color: red;
     display: block;
-    /* margin-top: -10px; */
-    /* margin-bottom: 10px; */
-}
-
-#emailInputDiv, #passwordInputDiv, #confirmPasswordInputDiv, #firstNameDiv, #lastNameDiv, #addressDiv, #resumeDiv {
-    margin-bottom: 20px;
 }
 
 #contactDiv{
@@ -53,6 +38,10 @@ small {
 
 #contact{
     width: 45%;
+}
+
+#contact p{
+    margin-bottom: 2px;
 }
 
 #industryAndCompanySizeDiv{
@@ -65,4 +54,16 @@ small {
     align-items: center;
     justify-content: space-between;
     width: 50%;
+}
+
+.input-field{
+    display: grid;
+    align-items: center;
+    grid-template-columns: 150px 300px;
+    margin: 10px;
+}
+
+#submit-button-div{
+    display: flex;
+    justify-content: center;
 }

@@ -1,28 +1,28 @@
 .job-container {
     max-width: 800px;
     margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
+    padding: 2rem;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.p-card{
+    border: 1px solid #abb7ce;
+    padding: 2rem;
 }
 .job-title {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 10px;
+    text-align: center;
 }
-.job-section {
-    margin-bottom: 20px;
+
+.field h4{
+    margin-bottom: 6px;
 }
-.job-section h3 {
-    margin-bottom: 5px;
-    font-size: 18px;
-    color: #333;
+.field p{
+    margin-top: 6px;
 }
-.job-section p {
-    margin: 0;
-    color: #555;
-}
-button{
-    padding: 8px;
+
+#button-div{
+    display: flex;
+    justify-content: center;
 }

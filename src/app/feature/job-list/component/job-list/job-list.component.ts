@@ -16,7 +16,7 @@ export class JobListComponent implements OnInit, OnDestroy{
   companies! : string[];
   filteredJobs! : Job[];
   page : number =  1;
-  limit : number = 5;
+  limit : number = 3;
   getAllJobsSubscription! : Subscription;
 
   constructor(

@@ -24,6 +24,8 @@ th {
 
 #tableOptions{
     display: flex;
+    padding-top: 12px;
+    padding-bottom: 12px;
     align-items: center;
     justify-content: right;
     background-color: white;

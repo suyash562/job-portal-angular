@@ -1,18 +1,25 @@
 <app-filter-options [companyNamesList]="companies" (filterEvent)="filterJobsList($event)" (clearFilterEvent)="clearFilters()"></app-filter-options>
 
-<div *ngIf="filteredJobs; else loading">
+
+<div id="parent-div" *ngIf="filteredJobs; else loading">
     <div class="job-list-item" *ngFor="let job of filteredJobs" (click)="loadDescriptionPage(job)">
-        <h2 class="job-position">{{job.title}}</h2>
-        <p class="company">Company: <span>{{job.employeer?.employeerCompany?.name}}</span></p>
-        <p class="vacancies">Vacancies: <span>{{job.vacancies}}</span></p>
-        <p class="employment-type">Employment Type: <span>{{job.employementType}}</span></p>
-        <p class="work-mode">Work Mode: <span>{{job.workMode}}</span></p>
-        <p class="deadline">Deadline for Applying: <span>{{job.deadlineForApplying.toString().split('T')[0]}}</span></p>
+        <p-card>
+            <ng-template #title>
+                <p class="job-position">{{job.title}}</p>
+            </ng-template>
+            <ng-template #subtitle>
+                <p class="company">{{job.employeer?.employeerCompany?.name}}</p>
+            </ng-template>
+            <p class="vacancies">Vacancies : <span>{{job.vacancies}}</span></p>
+            <p class="employment-type">Employment Type : <span>{{job.employementType}}</span></p>
+            <p class="work-mode">Work Mode : <span>{{job.workMode}}</span></p>
+            <p class="deadline">Deadline for Applying : <span>{{job.deadlineForApplying.toString().split('T')[0]}}</span></p>
+        </p-card>
     </div>
 
     <div id="pagination-options">
-        <button (click)="loadPreviousPage()" [disabled]="page === 1"><</button>
-        <button (click)="loadNextPage()" [disabled]="filteredJobs.length < limit">></button>
+        <p-button icon="pi pi-angle-left" severity="contrast" [outlined]="true" (click)="loadPreviousPage()" [disabled]="page === 1"></p-button>
+        <p-button icon="pi pi-angle-right" severity="contrast" [outlined]="true" (click)="loadNextPage()" [disabled]="filteredJobs.length < limit"></p-button>
     </div>
 </div>
 

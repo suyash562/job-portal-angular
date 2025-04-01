@@ -5,6 +5,7 @@ import { RequestResult } from '../../../../shared/types/types';
 import { Router } from '@angular/router';
 import { UserService } from '../../../user/service/user.service';
 import { JobsService } from '../../service/jobs/jobs.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-manage-jobs',
@@ -45,7 +46,9 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
   constructor(
     private jobsService : JobsService,
     private userService : UserService,
-    private router : Router
+    private router : Router,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService
   ){}
 
   ngOnInit(): void {
@@ -87,16 +90,35 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
   }
 
   deleteJob(jobId : number){
-    this.deletePostedJobSubscription = this.jobsService.deletePostedJob(jobId).subscribe({
-      next : (requestResult : RequestResult) => {
-        alert('Job Deleted Successfully');
-        const jobIndex = this.postedJobsData.findIndex((job) => job.id == jobId);
-        this.postedJobsData.splice(jobIndex, 1);
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this job post ?',
+      header: 'Delete',
+      closable: true,
+      closeOnEscape: true,
+      icon: 'pi pi-info-circle',
+      rejectButtonProps: {
+          label: 'Cancel',
+          severity: 'contrast',
+          outlined: true,
       },
-      error : (requestResult : RequestResult) => {
-        console.log(requestResult);
-      }
-    })
+      acceptButtonProps: {
+          label: 'Ok',
+          severity: 'contrast',
+      },
+      accept: () => {
+        this.deletePostedJobSubscription = this.jobsService.deletePostedJob(jobId).subscribe({
+          next : (requestResult : RequestResult) => {
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Job Post Deleted Successfully' });
+            const jobIndex = this.postedJobsData.findIndex((job) => job.id == jobId);
+            this.postedJobsData.splice(jobIndex, 1);
+          },
+          error : (requestResult : RequestResult) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete job post' });
+          }
+        })
+      },
+    });
+
   }
 
   performSpecifiedAction(event : {actionType : string, dataObjectId : number}){

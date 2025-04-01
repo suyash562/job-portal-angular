@@ -1,21 +1,23 @@
 
 <form [formGroup]="loginForm" (ngSubmit)="submitForm()">
-    <div id="emailInputDiv">
-        <div >
-            <input id="emailInput" formControlName="email" placeholder="E-mail" />
-            <small>{{getErrorMessage('email')}}</small>
+    <div class="input-container">
+        <div id="emailInputDiv">
+            <div class="width-100">
+                <input class="width-100" id="emailInput" pInputText formControlName="email" placeholder="E-mail" />
+                <small>{{getErrorMessage('email')}}</small>
+            </div>
         </div>
-    </div>
-    <div id="passwordInputDiv">
-        <div>
-            <input id="passwordInput" formControlName="password" placeholder="Password"/>
-            <small>{{getErrorMessage('password')}}</small>
+        <div id="passwordInputDiv">
+            <div>
+                <p-password id="passwordInput" formControlName="password" placeholder="Password" [toggleMask]="true" [feedback]="false" />
+                <small>{{getErrorMessage('password')}}</small>
+            </div>
         </div>
     </div>
     <div id="submitContainer">
         <div id="submitOptionsDiv">
             <a [routerLink]="['/user/forgotPassword']">Forgot Password</a>
-            <button type="submit">Submit</button>
+            <p-button type="submit" raised="true" severity="help">Submit</p-button>
         </div>
     </div>
 </form>
