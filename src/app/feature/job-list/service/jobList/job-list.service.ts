@@ -9,6 +9,7 @@ import { Job } from '../../../../shared/entity/job';
 })
 export class JobListService {
   selectedJobFromListSubject : BehaviorSubject<any> = new BehaviorSubject(undefined);  
+  isRedirectedFromDashboardSubject : BehaviorSubject<boolean> = new BehaviorSubject(false);  
 
   constructor(
     private httpClient : HttpClient
@@ -18,8 +19,16 @@ export class JobListService {
     return this.selectedJobFromListSubject.asObservable();
   }
 
+  get isRedirectedFromDashboardObservable(){
+    return this.isRedirectedFromDashboardSubject.asObservable();
+  }
+
   emitSelectedJobFromSubject(job : Job){
     this.selectedJobFromListSubject.next(job);
+  }
+
+  emitIsRedirectedFromDashboardSubject(isRedirected : boolean){
+    this.isRedirectedFromDashboardSubject.next(isRedirected);
   }
 
   getAllJobs(page : number, limit : number){

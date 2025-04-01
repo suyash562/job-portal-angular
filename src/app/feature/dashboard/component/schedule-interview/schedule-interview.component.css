@@ -13,6 +13,7 @@
     grid-template-columns: 120px 300px;
     margin: 10px;
 }
+
 .submitButton{
     display: flex;
     justify-content: center;

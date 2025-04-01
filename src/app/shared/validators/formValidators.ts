@@ -71,7 +71,7 @@ export class CustomFormValidators{
     }
 
     validateResume(control : AbstractControl) : ValidationErrors | null{
-        if(control.value === ''){
+        if(!control.value || control.value === ''){
             return {error : '* Required'};
         }
         const fileSplit : string[] = (control.value.name as string).split('.');

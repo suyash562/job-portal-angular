@@ -1,6 +1,6 @@
 <app-filter-options [companyNamesList]="companies" (filterEvent)="filterJobsList($event)" (clearFilterEvent)="clearFilters()"></app-filter-options>
 
-
+<p-confirmdialog />
 <div id="parent-div" *ngIf="filteredJobs; else loading">
     <div class="job-list-item" *ngFor="let job of filteredJobs" (click)="loadDescriptionPage(job)">
         <p-card>

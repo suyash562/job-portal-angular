@@ -19,7 +19,7 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
   activatedRouteSubcription! : Subscription;
   getApplicationByIdSubcription! : Subscription;
   getResumeByIdSubcription! : Subscription;
-  getApplicantResumeSubcription! : Subscription;
+  getScheduledInterviewsSubcription! : Subscription;
   updateApplicationStatusSubcription! : Subscription;
   displayResume : boolean = false;
   applicationId! : number;
@@ -69,7 +69,7 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
   }
 
   getScheduledInterviews(){
-    this.getApplicantResumeSubcription = this.interviewService.getScheduledInterviews(this.applicationId).subscribe({
+    this.getScheduledInterviewsSubcription = this.interviewService.getScheduledInterviews(this.applicationId).subscribe({
       next : (result : RequestResult) => {
         if(result.value){
           this.scheduledInterviews = result.value;
@@ -177,7 +177,7 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
     this.getApplicationByIdSubcription?.unsubscribe();
     this.getResumeByIdSubcription?.unsubscribe();
     this.activatedRouteSubcription?.unsubscribe();
-    this.getApplicantResumeSubcription?.unsubscribe();
+    this.getScheduledInterviewsSubcription?.unsubscribe();
     this.updateApplicationStatusSubcription?.unsubscribe();
   }
 

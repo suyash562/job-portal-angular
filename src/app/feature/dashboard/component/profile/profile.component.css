@@ -1,0 +1,64 @@
+.parent-div{
+    display: flex;
+    justify-content: center;
+}
+
+#profile-div{
+    width: 50%;
+    margin-top: 4rem;
+}
+
+#profile-avatar{
+    display: flex;
+    justify-content: center;
+}
+
+#profile-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 4rem;
+    padding-right: 2rem;
+    margin-top: 2rem;
+}
+
+.info-field{
+    display: grid;
+    grid-template-columns: 150px 300px;
+    margin: 5px;
+}
+
+.info-field p{
+    margin: 0px;
+}
+
+.title-font{
+    font-weight: bold;
+    color: rgb(44, 44, 44);
+}
+
+.info-field-value{
+    color: rgb(61, 60, 60);
+}
+
+#update-button{
+    float: right;
+}
+
+#resume-container{
+    display: flex;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    justify-content: center;
+}
+
+#resume-div{
+    padding: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+#close-button-div{
+    display: flex;
+    justify-content: end;
+}

@@ -14,4 +14,10 @@ export class ProfileService {
   getUserProfile(){
     return this.httpClient.get<RequestResult>("http://localhost:3200/user/userProfile",{withCredentials : true});
   }
+  
+  getUserResume(){
+    return this.httpClient.get("http://localhost:3200/user/resume",  {responseType : 'blob', withCredentials : true});
+  }
+
+
 }

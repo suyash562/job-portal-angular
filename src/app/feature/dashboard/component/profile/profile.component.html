@@ -1,13 +1,60 @@
 
-<div *ngIf="userProfile">
-    <p>Name : </p>
-    <p>{{userProfile.firstName+' '+userProfile.lastName}}</p>
-    <p>Contact Number : </p>
-    <p>{{userProfile.phoneNumber}}</p>
-    <p>Address : </p>
-    <p>{{userProfile.address}}</p>
-    <div *ngIf="userProfile.user?.role === 'user'">
-        <p>Resume : </p>
-        <p>{{userProfile.resume}}</p>
+<div class="parent-div">
+
+    <div id="profile-div" *ngIf="userProfile;">
+        <div>
+            <p-button severity="contrast" id="update-button">Update</p-button>
+        </div>
+
+        <div id="profile-avatar">
+            <p-avatar icon="pi pi-user" class="mr-2" size="xlarge" shape="circle" />
+        </div>
+            
+
+        <div id="profile-info">
+            <div class="info-field">
+                <p class="title-font">Email</p>
+                <p class="info-field-value">{{userProfile.user?.email}}</p>
+            </div>
+            <div class="info-field">
+                <p class="title-font">Name</p>
+                <p class="info-field-value">{{userProfile.firstName+' '+userProfile.lastName}}</p>
+            </div>
+            <div class="info-field">
+                <p class="title-font">Contact Number</p>
+                <p class="info-field-value">{{userProfile.phoneNumber}}</p>
+            </div>
+            <div class="info-field">
+                <p class="title-font">Address</p>
+                <p class="info-field-value">{{userProfile.address}}</p>
+            </div>
+            
+            <div *ngIf="userProfile.user?.role === 'user'">
+                <div class="info-field">
+                    <div>
+                        <p class="title-font">Resume :</p>
+                        <p-button size="small" variant="outlined" severity="contrast" >+ Add Resume</p-button>
+                        <p-button size="small" variant="outlined" severity="contrast" (onClick)="uploadResume()">Upload</p-button>
+                    </div>
+                    <input type="file" (change)="getResumeFieldValue($event)"/>
+                    <small>{{resumeFieldError}}</small>
+                    <p-button size="small" variant="outlined" severity="danger" (click)="showResume('Resume 1')">Resume 1</p-button>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="displayResume" id="resume-container">
+    <div id="resume-div">
+        <div id="close-button-div">
+            <p-button severity="contrast" (onClick)="displayResume = false" icon="pi pi-times" rounded="true" type="outlined"></p-button>
+        </div>
+        <pdf-viewer [src]="resumeFileData"
+        [render-text]="true"
+        [original-size]="false"
+        [zoom]="1"
+        style="width: 750px; height: 500px"
+        ></pdf-viewer> 
     </div>
 </div>

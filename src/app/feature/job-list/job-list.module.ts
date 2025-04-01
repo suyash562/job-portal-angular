@@ -6,6 +6,8 @@ import { SharedModule } from "../../shared/shared.module";
 import { JobDescriptionComponent } from './component/job-description/job-description.component';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmationService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,11 @@ import { ButtonModule } from 'primeng/button';
     JobListRoutingModule,
     SharedModule,
     CardModule,
-    ButtonModule
-]
+    ButtonModule,
+    ConfirmDialogModule
+  ],
+  providers : [
+    ConfirmationService
+  ]
 })
 export class JobListModule { }

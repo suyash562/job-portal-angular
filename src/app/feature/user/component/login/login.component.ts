@@ -3,10 +3,11 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { UserService } from '../../service/user.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
 import { User } from '../../../../shared/entity/user';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 import { RequestResult } from '../../../../shared/types/types';
+import { JobListService } from '../../../job-list/service/jobList/job-list.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,8 @@ export class LoginComponent implements OnInit, OnDestroy{
   constructor(
     private userService : UserService,
     private router : Router,
+    private jobListService : JobListService,
+    private messageService: MessageService,
   ){}
 
   ngOnInit(): void {
@@ -50,14 +53,14 @@ export class LoginComponent implements OnInit, OnDestroy{
       this.loginSubscription = this.userService.login(user).subscribe(
         {
           next : (requestResult : RequestResult)=>{
-            alert('Login Successfull');
             sessionStorage.setItem('role', requestResult.value.role);
             this.userService.updateUserLoginStatus(true);
+            this.jobListService.emitIsRedirectedFromDashboardSubject(false);
             this.router.navigate(['/jobs']);
           },
-          error : (err)=>{
-            console.log(err.error);
-            alert('Login Failed');
+          error : (response)=>{
+            console.log(response);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: response.error.error, life: 3000 });
           }
         }
       )

@@ -27,6 +27,9 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { DatePickerModule } from 'primeng/datepicker';
 import { TextareaModule } from 'primeng/textarea';
 import { IftaLabelModule } from 'primeng/iftalabel';
+import { AvatarModule } from 'primeng/avatar';
+import { FileUploadModule } from 'primeng/fileupload';
+
 
 @NgModule({
   declarations: [
@@ -60,6 +63,8 @@ import { IftaLabelModule } from 'primeng/iftalabel';
     DatePickerModule,
     TextareaModule,
     IftaLabelModule,
+    AvatarModule,
+    FileUploadModule
   ],
   providers : [
     ConfirmationService,

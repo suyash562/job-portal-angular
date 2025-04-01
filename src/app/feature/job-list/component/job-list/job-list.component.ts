@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JobListService } from '../../service/jobList/job-list.service';
 import { RequestResult } from '../../../../shared/types/types';
 import { Job } from '../../../../shared/entity/job';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-job-list',
@@ -18,14 +19,44 @@ export class JobListComponent implements OnInit, OnDestroy{
   page : number =  1;
   limit : number = 3;
   getAllJobsSubscription! : Subscription;
+  isRedirectedFromDashboardSubscription! : Subscription;
 
   constructor(
     private jobListService : JobListService,
-    private router : Router
+    private router : Router,
+    private confirmationService : ConfirmationService
   ){}
   
   ngOnInit(): void {
     this.getJobs();
+
+    this.isRedirectedFromDashboardSubscription = this.jobListService.isRedirectedFromDashboardObservable.subscribe({
+      next : (isRedirected) => {
+        if(isRedirected){
+          this.confirmationService.confirm({
+            header: 'Log In',
+            message: 'Please Log In to proceed',
+            closable: true,
+            closeOnEscape: true,
+            icon: 'pi pi-info-circle',
+            rejectButtonProps: {
+              label: 'Cancel',
+              severity: 'secondary',
+              outlined: true,
+            },
+            acceptButtonProps: {
+                label: 'Okay',
+                severity : 'contrast'
+            },
+              accept: () => {
+              this.router.navigate(['/user/login']);
+            },
+            // reject: () => {},
+          });
+        }
+      }
+    })
+
   }
 
   getJobs(){
@@ -78,5 +109,6 @@ export class JobListComponent implements OnInit, OnDestroy{
 
   ngOnDestroy(): void {
     this.getAllJobsSubscription?.unsubscribe();
+    this.isRedirectedFromDashboardSubscription?.unsubscribe();
   }
 }

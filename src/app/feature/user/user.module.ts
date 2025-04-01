@@ -9,6 +9,9 @@ import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
 import { SelectModule } from 'primeng/select';
+import { Toast } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+
 
 @NgModule({
   declarations: [
@@ -23,7 +26,11 @@ import { SelectModule } from 'primeng/select';
     PasswordModule,
     ButtonModule,
     FloatLabel,
-    SelectModule
+    SelectModule,
+    Toast
+  ],
+  providers: [
+    MessageService
   ]
 })
 export class UserModule { }
