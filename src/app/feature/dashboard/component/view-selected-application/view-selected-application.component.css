@@ -2,6 +2,7 @@
 .parent-div{
     display: flex;
     justify-content: center;
+    flex-direction: column;
     margin: 4rem;
 }
 
@@ -29,3 +30,16 @@
     margin-right: 8px;
 }
 
+.scheduled-interviews-list{
+    margin-bottom: 15px;
+}
+
+.schedule-field{
+    margin-bottom: 4px;
+}
+
+.schedule-field label{
+    font-weight: bold;
+    display: inline-block;
+    width: 150px;
+}

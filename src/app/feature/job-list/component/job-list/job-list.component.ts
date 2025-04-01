@@ -33,7 +33,12 @@ export class JobListComponent implements OnInit, OnDestroy{
       next : (result : RequestResult) => {
         this.jobs = result.value;     
         this.filteredJobs = this.jobs;
+        
         this.companies = this.jobListService.getCompanies(this.jobs);        
+      },
+      error : (err) => {
+        console.log(err);
+        
       }
     })
   }

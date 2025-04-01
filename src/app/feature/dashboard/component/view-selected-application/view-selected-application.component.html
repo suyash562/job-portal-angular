@@ -34,7 +34,7 @@
                 <label>Resume:</label>
                 <p-button severity="contrast" size="small" (click)="showResume()">View</p-button>
             </div>
-            <div class="application-field" *ngIf="application.status === 'Pending'; else statusAlreadyUpdated">
+            <div class="application-field" *ngIf="application.status === 'Pending' || application.status === 'Interview'; else statusAlreadyUpdated">
                 <label>Actions:</label>
                 <p-button class="action-button" severity="info" size="small" [routerLink]="['/dashboard','component','schedule-interview',applicationId]">Schedule Interview</p-button>
                 <p-button class="action-button" severity="success" size="small" (click)="acceptApplicationDialogue()">Accept</p-button>
@@ -43,7 +43,7 @@
             <ng-template #statusAlreadyUpdated>
                 <div class="application-field">
                     <label>Application Status:</label>
-                    <span [ngStyle]=" {color : application.status === 'Accepted' ? 'green' : 'red', 'font-weight': 'bold'}">{{application.status}}</span>
+                    <span [ngStyle]="getStyleForStatusField(application.status)">{{application.status}}</span>
                 </div>
             </ng-template>
         </div>
@@ -59,6 +59,42 @@
 
     </p-card>
     
+    <div class="scheduled-interviews-container">
+        <h4>Scheduled Interviews</h4>
+        <ng-template #scheduledInterviewsList>
+            <div>
+                There aren't any scheduled interviews 
+            </div>
+        </ng-template>
+        <ng-container *ngIf="scheduledInterviews.length !== 0; else scheduledInterviewsList">
+        
+            <div class="scheduled-interviews-list" *ngFor="let schedule of scheduledInterviews" #scheduledInterviewsList>
+                <p-card class="schedule-div">
+                    <div class="schedule-field">
+                        <label>Interview Mode:</label>
+                        <span>{{schedule.interviewType}}</span>
+                    </div>
+                    <div class="schedule-field">
+                        <label>Interview Date:</label>
+                        <span>{{schedule.interviewDate.toString().split('T')[0 ]}}</span>
+                    </div>
+                    <div class="schedule-field">
+                        <label>Interview Time:</label>
+                        <span>{{schedule.interviewTime}}</span>
+                    </div>
+                    <div class="schedule-field">
+                        <label>{{schedule.address != '' ? 'Address:' : 'Meeting Url'}}</label>
+                        <span>{{schedule.address != '' ? schedule.address : schedule.meetingUrl}}</span>
+                    </div>
+                    <div class="schedule-field">
+                        <label>Instructions:</label>
+                        <span>{{schedule.instructions != '' ? schedule.instructions :'None'}}</span>
+                    </div>
+                </p-card>
+            </div>
+            
+        </ng-container>
+    </div>
 </div>
  
 <ng-template #loading>

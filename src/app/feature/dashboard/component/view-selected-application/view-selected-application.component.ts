@@ -5,6 +5,8 @@ import { ApplicationService } from '../../service/appliaction/application.servic
 import { Application } from '../../../../shared/entity/application';
 import { RequestResult } from '../../../../shared/types/types';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { InterviewSchedule } from '../../../../shared/entity/interviewSchedule';
+import { InterviewService } from '../../service/interview/interview.service';
 
 
 @Component({
@@ -17,15 +19,19 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
   activatedRouteSubcription! : Subscription;
   getApplicationByIdSubcription! : Subscription;
   getResumeByIdSubcription! : Subscription;
+  getApplicantResumeSubcription! : Subscription;
+  updateApplicationStatusSubcription! : Subscription;
   displayResume : boolean = false;
   applicationId! : number;
   application! : Application;
   resumeDataBlob! : Blob;
   resumeFileData! : Uint8Array;
+  scheduledInterviews! : InterviewSchedule[];
 
   constructor(
     private activatedRoute : ActivatedRoute,
     private applicationService : ApplicationService,
+    private interviewService : InterviewService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService
   ){}
@@ -35,24 +41,42 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
       next : (value) => {
         if(value['applicationId'] && parseInt(value['applicationId'])){
           this.applicationId = value['applicationId'];
-          this.getApplicationByIdSubcription = this.applicationService.getApplicationById(value['applicationId']).subscribe({
-            next : (result : RequestResult) => {
-              if(result.value){
-                this.application = result.value;
-                this.getApplicantResume();
-              }
-              else{
-                console.log(result.message);
-              }
-            },
-            error : (err) => {
-              console.log(err);
-            }
-          })
+          this.getApplicationById(value['applicationId']);
         }
         else{
           console.log(('Job Id not found'));
         }
+      }
+    })
+  }
+
+  getApplicationById(applicationId : number){
+    this.getApplicationByIdSubcription = this.applicationService.getApplicationById(applicationId).subscribe({
+      next : (result : RequestResult) => {
+        if(result.value){
+          this.application = result.value;
+          this.getApplicantResume();
+          this.getScheduledInterviews();
+        }
+        else{
+          console.log(result.message);
+        }
+      },
+      error : (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  getScheduledInterviews(){
+    this.getApplicantResumeSubcription = this.interviewService.getScheduledInterviews(this.applicationId).subscribe({
+      next : (result : RequestResult) => {
+        if(result.value){
+          this.scheduledInterviews = result.value;
+        }
+      },
+      error : (err) => {
+        console.log(err);
       }
     })
   }
@@ -105,14 +129,11 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
     this.displayConfirmationDialogue('Reject Application', 'Are you sure you want to reject this application ?', this.rejectApplication.bind(this));
   }
 
-  scheduleInterview(){
-
-  }
-
   acceptApplication(){
-    this.applicationService.updateApplicationStatus(this.application.id, 'Accepted').subscribe({
+    this.updateApplicationStatusSubcription = this.applicationService.updateApplicationStatus(this.application.id, 'Accepted').subscribe({
       next : (result : RequestResult) => {
         if(result.value){
+          this.application.status = 'Accepted';
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Application has been accepted' });
         }
         else{
@@ -126,9 +147,10 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
   }
 
   rejectApplication(){
-    this.applicationService.updateApplicationStatus(this.application.id, 'Rejected').subscribe({
+    this.updateApplicationStatusSubcription = this.applicationService.updateApplicationStatus(this.application.id, 'Rejected').subscribe({
       next : (result : RequestResult) => {
         if(result.value){
+          this.application.status = 'Rejected';
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Application has been rejected' });
         }
         else{
@@ -141,10 +163,22 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
     })
   }
 
+  getStyleForStatusField(status : string){
+    if(status === 'Accepted'){
+      return  { color : 'green', 'font-weight' : 'bold'};
+    }  
+    else if(status === 'Rejected'){
+      return  { color : 'red', 'font-weight' : 'bold'};
+    }
+    return null;
+  }
+
   ngOnDestroy(): void {
     this.getApplicationByIdSubcription?.unsubscribe();
     this.getResumeByIdSubcription?.unsubscribe();
     this.activatedRouteSubcription?.unsubscribe();
+    this.getApplicantResumeSubcription?.unsubscribe();
+    this.updateApplicationStatusSubcription?.unsubscribe();
   }
 
 }

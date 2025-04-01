@@ -40,6 +40,9 @@ export class TableComponent{
     else if(status === 'Rejected'){
       return  { color : 'red', 'font-weight' : 'bold'};
     }
+    else if(status === 'Interview'){
+      return  { color : 'rgb(25, 162, 216)', 'font-weight' : 'bold'};
+    }
     return null;
   }
 

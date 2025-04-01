@@ -5,6 +5,9 @@
         <a [routerLink]="['dashboard']">Dashboard</a>
 
         <ng-container *ngIf="isUserLoggedIn; else userLoggedIn">
+            <p-overlaybadge size="small" value="0">
+                <i class="pi pi-bell" style="font-size: 1.4rem"></i>
+            </p-overlaybadge>
             <button (click)="logout()">Logout</button>
         </ng-container>
 

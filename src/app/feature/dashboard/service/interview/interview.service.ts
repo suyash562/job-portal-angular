@@ -15,4 +15,8 @@ export class InterviewService {
   addInterviewSchedule(applicationId : number, interviewSchedule : InterviewSchedule){
     return this.httpClient.post<RequestResult>(`http://localhost:3200/interview/add`, {applicationId : applicationId, interviewSchedule : interviewSchedule},{withCredentials : true});
   }
+
+  getScheduledInterviews(applicationId : number){
+    return this.httpClient.get<RequestResult>(`http://localhost:3200/interview/applicantSchedules/${applicationId}`,{withCredentials : true});
+  }
 }

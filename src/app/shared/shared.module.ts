@@ -16,6 +16,7 @@ import { BadgeModule } from 'primeng/badge';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { DialogModule } from 'primeng/dialog';
     TableModule,
     BadgeModule,
     ConfirmDialogModule,
-    DialogModule
+    DialogModule,
+    OverlayBadgeModule
   ],
   exports : [
     HeaderComponent,
