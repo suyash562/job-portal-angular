@@ -132,7 +132,25 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
       }
     }
     else{
-      alert('Please login to apply for a job');
+      this.confirmationService.confirm({
+        header: 'Log In',
+        message: 'Please Log In to apply for a job',
+        closable: true,
+        closeOnEscape: true,
+        icon: 'pi pi-info-circle',
+        rejectButtonProps: {
+          label: 'Cancel',
+          severity: 'secondary',
+          outlined: true,
+        },
+        acceptButtonProps: {
+          label: 'Okay',
+          severity : 'contrast'
+        },
+        accept: () => {
+          this.router.navigate(['/user/login']);
+        },
+      });
     }
   }
 

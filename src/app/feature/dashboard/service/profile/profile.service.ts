@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { RequestResult } from '../../../../shared/types/types';
+import { UserProfile } from '../../../../shared/entity/userProfile';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,10 @@ export class ProfileService {
 
   getUserProfile(){
     return this.httpClient.get<RequestResult>("http://localhost:3200/user/userProfile",{withCredentials : true});
+  }
+  
+  updateUserProfile(userProfile : Partial<UserProfile>, profileId : number){
+    return this.httpClient.post<RequestResult>("http://localhost:3200/user/userProfile/update", {profileId : profileId, userProfile : userProfile} , {withCredentials : true});
   }
   
   getUserResume(resumeNumber : any){

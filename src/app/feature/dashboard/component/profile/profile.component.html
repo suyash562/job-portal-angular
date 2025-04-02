@@ -1,60 +1,109 @@
 
 <p-toast />
+<p-confirmdialog />
 <div class="parent-div">
 
     <div id="profile-div" *ngIf="userProfile;">
         <div>
-            <p-button severity="contrast" id="update-button">Update Profile</p-button>
+            <p-button severity="contrast" id="update-button" (onClick)="enableProfileUpdate()">Update Profile</p-button>
         </div>
 
         <div id="profile-avatar">
             <p-avatar icon="pi pi-user" class="mr-2" size="xlarge" shape="circle" />
         </div>
             
-
         <div id="profile-info">
-            <div class="info-field">
-                <p class="title-font">Email</p>
-                <p class="info-field-value">{{userProfile.user?.email}}</p>
-            </div>
-            <div class="info-field">
-                <p class="title-font">Name</p>
-                <p class="info-field-value">{{userProfile.firstName+' '+userProfile.lastName}}</p>
-            </div>
-            <div class="info-field">
-                <p class="title-font">Contact Number</p>
-                <p class="info-field-value">{{userProfile.phoneNumber}}</p>
-            </div>
-            <div class="info-field">
-                <p class="title-font">Address</p>
-                <p class="info-field-value">{{userProfile.address}}</p>
-            </div>
-            
-            <div *ngIf="userProfile.user?.role === 'user'">
+
+            <div *ngIf="!updateProfile; else formDiv">
                 <div class="info-field">
-                    <div id="resume-title">
-                        <p class="title-font">Resume </p>
-                        <p-button size="small" variant="outlined" severity="contrast" (onClick)="addNewResumeEnable ? addNewResumeEnable = false : addNewResume()">{{addNewResumeEnable ? 'Cancel' : '+ Add New Resume'}}</p-button>
-                    </div>
-                    <div>
-                        <div *ngIf="addNewResumeEnable; else showResumeButtonDiv">
-                            <div>
-                                <input type="file" (change)="getResumeFieldValue($event)"/>
-                                <p-button size="small" variant="outlined" severity="contrast" (onClick)="uploadResume()">Upload</p-button>
-                            </div>
-                            <small>{{resumeFieldError}}</small>
+                    <p class="title-font">Email</p>
+                    <p class="info-field-value">{{userProfile.user?.email}}</p>
+                </div>
+                <div class="info-field">
+                    <p class="title-font">Name</p>
+                    <p class="info-field-value">{{userProfile.firstName+' '+userProfile.lastName}}</p>
+                </div>
+                <div class="info-field">
+                    <p class="title-font">Contact Number</p>
+                    <p class="info-field-value">{{userProfile.phoneNumber.split(',')[0]+' '+(userProfile.phoneNumber.split(',')[1] ?? '')}}</p>
+                </div>
+                <div class="info-field">
+                    <p class="title-font">Address</p>
+                    <p class="info-field-value">{{userProfile.address}}</p>
+                </div>
+
+                <div *ngIf="userProfile.user?.role === 'user'">
+
+                    <div class="info-field">
+                        <div id="resume-title">
+                            <p class="title-font">Resume </p>
+                            <p-button size="small" variant="outlined" severity="contrast" (onClick)="addNewResumeEnable ? addNewResumeEnable = false : addNewResume()">{{addNewResumeEnable ? 'Cancel' : '+ Add New Resume'}}</p-button>
                         </div>
-                        <ng-template #showResumeButtonDiv>
-                            <div id="view-Resume-button-div" *ngFor="let resume of resumeCountArray">
-                                <p-button size="small" variant="outlined" severity="info" (click)="getApplicantResume(resume.toString())">Resume {{resume}}</p-button>
-                                <p-button size="small" variant="outlined" severity="danger" (click)="deleteApplicantResume(resume)">Delete</p-button>
-                                <p-button size="small" severity="success" (onClick)="setResumeAsPrimary(resume)">Set as Primary</p-button>
-                                <span *ngIf="resume === userProfile.primaryResume">Primary</span>
+                        <div>
+                            <div *ngIf="addNewResumeEnable; else showResumeButtonDiv">
+                                <div>
+                                    <input type="file" (change)="getResumeFieldValue($event)"/>
+                                    <p-button size="small" severity="help" (onClick)="uploadResume()">Upload</p-button>
+                                </div>
+                                <small>{{resumeFieldError}}</small>
                             </div>
-                        </ng-template>
-                    </div>
-                </div> 
+                            <ng-template #showResumeButtonDiv>
+                                <div id="view-Resume-button-div" *ngFor="let resume of resumeCountArray">
+                                    <p-button size="small" variant="outlined" severity="info" (click)="getApplicantResume(resume.toString())">Resume {{resume}}</p-button>
+                                    <p-button size="small" variant="outlined" severity="danger" (click)="showDeleteResumeConfirmationDialogue(resume)">Delete</p-button>
+                                    <p-button size="small" severity="success" (onClick)="setResumeAsPrimary(resume)">Set as Primary</p-button>
+                                    <span *ngIf="resume === userProfile.primaryResume">Primary</span>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div> 
+                </div>
+
             </div>
+
+            <ng-template #formDiv>
+                <div>
+                    <form (ngSubmit)="updateProfileMethod()" [formGroup]="updateProfileForm">
+                        <div class="info-field">
+                            <p class="title-font">Name</p>
+                            <div style="display: flex;">
+                                <div class="flex-column">
+                                    <input pInputText id='firstName' type="text" formControlName='firstName' placeholder='Enter first name'/>
+                                    <small>{{getErrorMessage('firstName')}}</small>
+                                </div>
+                                <div class="flex-column">
+                                    <input pInputText id='lastName' type="text" formControlName='lastName' placeholder='Enter last name'/>
+                                    <small>{{getErrorMessage('lastName')}}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-field">
+                            <p class="title-font">Contact Number</p>
+                            <div formArrayName="phoneNumbers">
+                                <div id="contactDiv" style="display: flex;">
+                                    <ng-container *ngFor="let phoneNumber of phoneNumbers; let i = index">
+                                        <div id="contact">
+                                            <input pInputText type="number" formControlName="{{i}}" [placeholder]="`Contact ${i+1}`">
+                                            <small>{{getErrorMessageForContact(i)}}</small>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="info-field">
+                            <p class="title-font">Address</p>
+                            <div class="flex-column">
+                                <input pInputText id='address' type="text" formControlName='address' placeholder='Enter Address'/>
+                                <small>{{getErrorMessage('address')}}</small>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: center;">
+                            <p-button type="submit" severity="help" size="small">Update</p-button>
+                        </div>
+                    </form>
+                </div>
+            </ng-template>
+
         </div>
     </div>
 </div>

@@ -49,9 +49,12 @@ export class JobListComponent implements OnInit, OnDestroy{
                 severity : 'contrast'
             },
               accept: () => {
-              this.router.navigate(['/user/login']);
+                this.jobListService.emitIsRedirectedFromDashboardSubject(false);
+                this.router.navigate(['/user/login']);
             },
-            // reject: () => {},
+            reject: () => {
+              this.jobListService.emitIsRedirectedFromDashboardSubject(false);
+            },
           });
         }
       }
