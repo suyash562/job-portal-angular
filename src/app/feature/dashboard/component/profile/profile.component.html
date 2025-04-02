@@ -4,7 +4,7 @@
 
     <div id="profile-div" *ngIf="userProfile;">
         <div>
-            <p-button severity="contrast" id="update-button">Update</p-button>
+            <p-button severity="contrast" id="update-button">Update Profile</p-button>
         </div>
 
         <div id="profile-avatar">
@@ -32,12 +32,12 @@
             
             <div *ngIf="userProfile.user?.role === 'user'">
                 <div class="info-field">
-                    <div>
-                        <p class="title-font">Resume :</p>
-                        <p-button size="small" variant="outlined" severity="contrast" (onClick)="addNewResume = true">+ Add Resume</p-button>
+                    <div id="resume-title">
+                        <p class="title-font">Resume </p>
+                        <p-button size="small" variant="outlined" severity="contrast" (onClick)="addNewResumeEnable ? addNewResumeEnable = false : addNewResume()">{{addNewResumeEnable ? 'Cancel' : '+ Add New Resume'}}</p-button>
                     </div>
                     <div>
-                        <div *ngIf="addNewResume; else showResumeButtonDiv">
+                        <div *ngIf="addNewResumeEnable; else showResumeButtonDiv">
                             <div>
                                 <input type="file" (change)="getResumeFieldValue($event)"/>
                                 <p-button size="small" variant="outlined" severity="contrast" (onClick)="uploadResume()">Upload</p-button>
@@ -45,9 +45,11 @@
                             <small>{{resumeFieldError}}</small>
                         </div>
                         <ng-template #showResumeButtonDiv>
-                            <div *ngFor="let resume of resumeCountArray">
-                                <p-button size="small" variant="outlined" severity="danger" (click)="getApplicantResume(resume.toString())">Resume {{resume}}</p-button>
-                                <p-button size="small" severity="success">Set as Primary</p-button>
+                            <div id="view-Resume-button-div" *ngFor="let resume of resumeCountArray">
+                                <p-button size="small" variant="outlined" severity="info" (click)="getApplicantResume(resume.toString())">Resume {{resume}}</p-button>
+                                <p-button size="small" variant="outlined" severity="danger" (click)="deleteApplicantResume(resume)">Delete</p-button>
+                                <p-button size="small" severity="success" (onClick)="setResumeAsPrimary(resume)">Set as Primary</p-button>
+                                <span *ngIf="resume === userProfile.primaryResume">Primary</span>
                             </div>
                         </ng-template>
                     </div>

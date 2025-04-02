@@ -24,7 +24,7 @@
 
 .info-field{
     display: grid;
-    grid-template-columns: 150px 300px;
+    grid-template-columns: 160px 400px;
     margin: 5px;
 }
 
@@ -61,4 +61,16 @@
 #close-button-div{
     display: flex;
     justify-content: end;
+}
+
+#resume-title p{
+    margin-bottom: 12px;
+}
+
+#view-Resume-button-div{
+    margin-bottom: 12px;
+}
+
+#view-Resume-button-div > p-button{
+    margin-right: 8px;
 }

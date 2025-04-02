@@ -20,7 +20,15 @@ export class ProfileService {
   }
   
   uploadUserResume(formData : FormData){
-    return this.httpClient.post<RequestResult>("http://localhost:3200/user/upload/resume", formData, {withCredentials : true});
+    return this.httpClient.post<RequestResult>("http://localhost:3200/user/resume/upload", formData, {withCredentials : true});
+  }
+  
+  updatePrimaryResume(resumeNumber : number){
+    return this.httpClient.post<RequestResult>("http://localhost:3200/user/resume/updatePrimary", {resumeNumber : resumeNumber}, {withCredentials : true});
+  }
+  
+  deleteResume(resumeNumber : number){
+    return this.httpClient.post<RequestResult>("http://localhost:3200/user/resume/delete", {resumeNumber : resumeNumber}, {withCredentials : true});
   }
 
 

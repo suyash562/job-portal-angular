@@ -6,6 +6,7 @@ export class UserProfile{
     phoneNumber : string;
     address : string;
     resumeCount : number;
+    primaryResume : number;
     user : User | undefined;
 
     constructor(
@@ -13,12 +14,14 @@ export class UserProfile{
         lastName : string,
         phoneNumber : string,
         address : string,
-        resumeCount : number
+        resumeCount : number,
+        primaryResume : number
     ){
         this.firstName = firstName ,
         this.lastName = lastName ,
         this.phoneNumber = phoneNumber ,
         this.address = address ,
-        this.resumeCount = resumeCount 
+        this.resumeCount = resumeCount ,
+        this.primaryResume = primaryResume
     }
 }

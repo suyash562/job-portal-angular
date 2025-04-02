@@ -1,4 +1,6 @@
 <p-toast />
+<p-confirmdialog />
+
 <div *ngIf="job && userAppliedJobs; else loading">
     <app-job-description-component [job]="job" [userRole]="userRole" [userAppliedJobs]="userAppliedJobs" (applyForJobEventEmitter)="applyForJob($event)"></app-job-description-component>
 </div>

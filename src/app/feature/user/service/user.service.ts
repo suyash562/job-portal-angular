@@ -1,11 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { UserProfile } from '../../../shared/entity/userProfile';
 import { User } from '../../../shared/entity/user';
-import { EmployeerCompany } from '../../../shared/entity/employeerCompany';
 import { RequestResult } from '../../../shared/types/types';
-import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'

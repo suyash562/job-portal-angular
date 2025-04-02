@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
   newResume : any;
   resumeFieldError! : string;
   displayResume : boolean = false;
-  addNewResume : boolean = false;
+  addNewResumeEnable : boolean = false;
   resumeCountArray : number[] = [];
   resumeFileData! : Uint8Array;
   getUserProfileSubscription! : Subscription;
@@ -97,6 +97,15 @@ export class ProfileComponent implements OnInit, OnDestroy{
     }
   }
 
+  addNewResume(){
+    if(this.userProfile.resumeCount === 3){
+      this.messageService.add({ severity: 'info', summary: 'Limit Exceeded', detail: 'You can only upload maximum 3 resumes'});
+    }
+    else{
+      this.addNewResumeEnable = true;
+    }
+  }
+
   uploadResume(){    
     if(!this.isResumeValid()){
       return;
@@ -111,7 +120,8 @@ export class ProfileComponent implements OnInit, OnDestroy{
         if(requestResult.value){
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Resume uploaded successfully'});
           this.resumeCountArray.push(this.resumeCountArray.length+1);
-          this.addNewResume = false;
+          this.userProfile.primaryResume = this.userProfile.primaryResume === 0 ? 1 : this.userProfile.primaryResume;
+          this.addNewResumeEnable = false;
         }
         else{
           this.messageService.add({ severity: 'error', summary: 'Error', detail: requestResult.value });
@@ -140,6 +150,45 @@ export class ProfileComponent implements OnInit, OnDestroy{
     }
     this.resumeFieldError = '';
     return true;
+  }
+
+  setResumeAsPrimary(resumeNumber : number){
+    this.profileService.updatePrimaryResume(resumeNumber).subscribe({
+      next : (requestResult : RequestResult) => {
+        if(requestResult.value){
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Primary resume updated'});
+          this.userProfile.primaryResume = resumeNumber;
+        }
+        else{
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update primary resume'});
+        }
+      },
+      error : (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update primary resume'});
+      }
+    })
+  }
+
+  deleteApplicantResume(resumeNumber : number){
+    this.profileService.deleteResume(resumeNumber).subscribe({
+      next : (res : RequestResult) => {
+
+        if(res.value){
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Resume deleted successfully'});
+          this.resumeCountArray.pop();
+          if(this.resumeCountArray.length < this.userProfile.primaryResume){
+            this.userProfile.primaryResume = this.resumeCountArray.length;
+          }
+        }
+        else{
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to deleted resume'});
+        }
+      },
+      error : (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to deleted resume'});
+        console.log(err);
+      }
+    })
   }
 
   ngOnDestroy(): void {
