@@ -15,8 +15,12 @@ export class ProfileService {
     return this.httpClient.get<RequestResult>("http://localhost:3200/user/userProfile",{withCredentials : true});
   }
   
-  getUserResume(){
-    return this.httpClient.get("http://localhost:3200/user/resume",  {responseType : 'blob', withCredentials : true});
+  getUserResume(resumeNumber : any){
+    return this.httpClient.get(`http://localhost:3200/user/resume/${resumeNumber}`,  {responseType : 'blob', withCredentials : true});
+  }
+  
+  uploadUserResume(formData : FormData){
+    return this.httpClient.post<RequestResult>("http://localhost:3200/user/upload/resume", formData, {withCredentials : true});
   }
 
 

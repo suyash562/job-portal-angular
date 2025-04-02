@@ -8,6 +8,7 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { Toast } from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     SharedModule,
     CardModule,
     ButtonModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    Toast
   ],
   providers : [
     ConfirmationService

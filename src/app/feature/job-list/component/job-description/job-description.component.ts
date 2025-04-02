@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { UserService } from '../../../user/service/user.service';
 import { Application } from '../../../../shared/entity/application';
 import { ApplicationService } from '../../../dashboard/service/appliaction/application.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-job-description',
@@ -26,7 +27,8 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
     private jobListService : JobListService,
     private applicationService : ApplicationService,
     private router : Router,
-    private userService : UserService
+    private userService : UserService,
+    private messageService : MessageService
   ){}
 
   ngOnInit(): void {
@@ -70,14 +72,16 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
       this.applyForJobSubscription = this.jobListService.applyForJob(jobId).subscribe({
         next : (result : RequestResult) => {
           if(result.value){
-            alert('Applied Successfully')
+            this.userAppliedJobs.push(jobId);
+            // alert('Applied Successfully')
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Applied to Job Successfully', life: 3000 });
           }
           else{
-            console.log(result.message);
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
           }
         },
         error : (err) => {
-          console.log(err);
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to appply for Job', life: 3000 });
         }
       })
     }

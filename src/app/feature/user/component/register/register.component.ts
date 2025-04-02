@@ -5,6 +5,7 @@ import { CustomFormValidators } from '../../../../shared/validators/formValidato
 import { RequestResult } from '../../../../shared/types/types';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -48,7 +49,8 @@ export class RegisterComponent implements OnInit, OnDestroy{
   constructor(
     private userService : UserService,
     private customFormValidators : CustomFormValidators,
-    private router : Router
+    private router : Router,
+    private messageService: MessageService,
   ){}
 
   ngOnInit(): void {
@@ -87,6 +89,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
   enableEmployeerRegistration(){
     this.employeerRegistration = true;
     this.registerForm.controls['resume'].clearValidators();
+    this.registerForm.controls['resume'].reset();
     this.registerForm.addControl('employeerCompany', this.employeerCompanyFormGroup);
   }
   
@@ -125,10 +128,10 @@ export class RegisterComponent implements OnInit, OnDestroy{
     }
   }
 
-
   submitForm(){
     
     if(!this.registerForm.invalid){
+
       if(this.registerForm.get('password')?.value !== this.registerForm.get('confirmPassword')?.value){
         this.registerForm.get('confirmPassword')?.setErrors({error : 'Confirm password must match provided password'});
         return;
@@ -141,7 +144,9 @@ export class RegisterComponent implements OnInit, OnDestroy{
           formData.set(key, this.registerForm.value[key]);
         }
       }
+
       formData.set('role',this.employeerRegistration ? 'employeer' : 'user');
+
       if(this.employeerRegistration){
         for (const key of Object.keys(this.employeerCompanyFormGroup.value)) {
           if(key === 'industry'){
@@ -155,13 +160,12 @@ export class RegisterComponent implements OnInit, OnDestroy{
       
       this.registerSubscription = this.userService.register(formData).subscribe(
         {
-          next : (requestResult : RequestResult)=>{
-            alert('Registration Successfull');
+          next : (requestResult : RequestResult)=>{            
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registration Successfull', life: 3000 });
             this.router.navigate(['/user']);
           },
-          error : (err)=>{
-            console.log(err);
-            alert(err.error.error);
+          error : (response)=>{
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: response.error.error, life: 3000 });
           }
         }
       )

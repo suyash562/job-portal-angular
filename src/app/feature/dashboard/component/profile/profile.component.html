@@ -1,4 +1,5 @@
 
+<p-toast />
 <div class="parent-div">
 
     <div id="profile-div" *ngIf="userProfile;">
@@ -33,12 +34,23 @@
                 <div class="info-field">
                     <div>
                         <p class="title-font">Resume :</p>
-                        <p-button size="small" variant="outlined" severity="contrast" >+ Add Resume</p-button>
-                        <p-button size="small" variant="outlined" severity="contrast" (onClick)="uploadResume()">Upload</p-button>
+                        <p-button size="small" variant="outlined" severity="contrast" (onClick)="addNewResume = true">+ Add Resume</p-button>
                     </div>
-                    <input type="file" (change)="getResumeFieldValue($event)"/>
-                    <small>{{resumeFieldError}}</small>
-                    <p-button size="small" variant="outlined" severity="danger" (click)="showResume('Resume 1')">Resume 1</p-button>
+                    <div>
+                        <div *ngIf="addNewResume; else showResumeButtonDiv">
+                            <div>
+                                <input type="file" (change)="getResumeFieldValue($event)"/>
+                                <p-button size="small" variant="outlined" severity="contrast" (onClick)="uploadResume()">Upload</p-button>
+                            </div>
+                            <small>{{resumeFieldError}}</small>
+                        </div>
+                        <ng-template #showResumeButtonDiv>
+                            <div *ngFor="let resume of resumeCountArray">
+                                <p-button size="small" variant="outlined" severity="danger" (click)="getApplicantResume(resume.toString())">Resume {{resume}}</p-button>
+                                <p-button size="small" severity="success">Set as Primary</p-button>
+                            </div>
+                        </ng-template>
+                    </div>
                 </div> 
             </div>
         </div>
