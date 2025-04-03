@@ -3,50 +3,74 @@
 <div class="parent-div" *ngIf="application; else loading">
 
     <p-card [style]="{ width: '50rem', overflow: 'hidden' }">
+
         <ng-template #title>
+
             <div class="p-card-title">
-                {{application.user.profile?.firstName + ' ' + application.user.profile?.lastName}} 
-                <ng-container *ngIf="displayResume">
-                    <p-button icon="pi pi-times" (onClick)="displayResume = false" severity="contrast" [rounded]="true" [outlined]="true" size="small"/>
+                <ng-container *ngIf="userRole === 'employeer'; else jobTitleTemplate">
+                    {{application.user.profile?.firstName + ' ' + application.user.profile?.lastName}} 
+                    <ng-container *ngIf="displayResume">
+                        <p-button icon="pi pi-times" (onClick)="displayResume = false" severity="contrast" [rounded]="true" [outlined]="true" size="small"/>
+                    </ng-container>
                 </ng-container>
+                <ng-template #jobTitleTemplate>
+                    {{application.job.title}}
+                </ng-template>
             </div>
+            
         </ng-template>
+
         <ng-template #subtitle></ng-template>
         
-        <div class="application-div" *ngIf="!displayResume; else resumeComponent">
-            <div class="application-field">
-                <label>E-mail:</label>
-                <span>{{application.user.email}}</span>
-            </div>
-            <div class="application-field">
-                <label>Contact Number:</label>
-                <span>{{application.user.profile?.phoneNumber}}</span>
-            </div>
-            <div class="application-field">
-                <label>Address:</label>
-                <span>{{application.user.profile?.address}}</span>
-            </div>
-            <div class="application-field">
-                <label>Applied Date:</label>
-                <span>{{application.applyDate.toString().split('T')[0]}}</span>
-            </div>
-            <div class="application-field">
-                <label>Resume:</label>
-                <p-button severity="contrast" size="small" (click)="showResume()">View</p-button>
-            </div>
-            <div class="application-field" *ngIf="application.status === 'Pending' || application.status === 'Interview'; else statusAlreadyUpdated">
-                <label>Actions:</label>
-                <p-button class="action-button" severity="info" size="small" [routerLink]="['/dashboard','component','schedule-interview',applicationId]">Schedule Interview</p-button>
-                <p-button class="action-button" severity="success" size="small" (click)="acceptApplicationDialogue()">Accept</p-button>
-                <p-button class="action-button" severity="danger" size="small" (click)="rejectApplicationDialogue()">Reject </p-button>
-            </div>
-            <ng-template #statusAlreadyUpdated>
+        <div *ngIf="userRole === 'employeer'; else userApplicationDiv">
+            <div class="application-div" *ngIf="!displayResume; else resumeComponent">
                 <div class="application-field">
-                    <label>Application Status:</label>
-                    <span [ngStyle]="getStyleForStatusField(application.status)">{{application.status}}</span>
+                    <label>E-mail:</label>
+                    <span>{{application.user.email}}</span>
                 </div>
-            </ng-template>
+                <div class="application-field">
+                    <label>Contact Number:</label>
+                    <span>{{application.user.profile?.phoneNumber}}</span>
+                </div>
+                <div class="application-field">
+                    <label>Address:</label>
+                    <span>{{application.user.profile?.address}}</span>
+                </div>
+                <div class="application-field">
+                    <label>Applied Date:</label>
+                    <span>{{application.applyDate.toString().split('T')[0]}}</span>
+                </div>
+                <div class="application-field">
+                    <label>Resume:</label>
+                    <p-button severity="contrast" size="small" (click)="showResume()">View</p-button>
+                </div>
+                <div class="application-field" *ngIf="application.status === 'Pending' || application.status === 'Interview'; else statusAlreadyUpdated">
+                    <label>Actions:</label>
+                    <p-button class="action-button" severity="info" size="small" [routerLink]="['/dashboard','component','schedule-interview',applicationId]">Schedule Interview</p-button>
+                    <p-button class="action-button" severity="success" size="small" (click)="acceptApplicationDialogue()">Accept</p-button>
+                    <p-button class="action-button" severity="danger" size="small" (click)="rejectApplicationDialogue()">Reject </p-button>
+                </div>
+                <ng-template #statusAlreadyUpdated>
+                    <div class="application-field">
+                        <label>Application Status:</label>
+                        <span [ngStyle]="getStyleForStatusField(application.status)">{{application.status}}</span>
+                    </div>
+                </ng-template>
+            </div>
         </div>
+
+        <ng-template #userApplicationDiv>
+
+            <div class="application-field">
+                <label>Job Description</label>
+                <p-button severity="contrast" size="small" [routerLink]="['../..', 'viewJob', application.job.id]">View</p-button>
+            </div>
+            <div class="application-field">
+                <label>Application Status:</label>
+                <span [ngStyle]="getStyleForStatusField(application.status)">{{application.status}}</span>
+            </div>
+
+        </ng-template>
 
         <ng-template #resumeComponent>
             <pdf-viewer [src]="resumeFileData"
@@ -66,7 +90,7 @@
                 There aren't any scheduled interviews 
             </div>
         </ng-template>
-        <ng-container *ngIf="scheduledInterviews.length !== 0; else scheduledInterviewsList">
+        <ng-container *ngIf="scheduledInterviews?.length !== 0; else scheduledInterviewsList">
         
             <div class="scheduled-interviews-list" *ngFor="let schedule of scheduledInterviews" #scheduledInterviewsList>
                 <p-card class="schedule-div">

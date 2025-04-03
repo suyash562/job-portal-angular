@@ -27,4 +27,5 @@ export class JobsService {
   deletePostedJob(jobId : number){
     return this.httpClient.delete<RequestResult>(`http://localhost:3200/job/deleteJob/${jobId}`, {withCredentials : true});
   }
+ 
 }

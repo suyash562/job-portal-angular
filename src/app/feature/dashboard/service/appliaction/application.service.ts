@@ -26,7 +26,7 @@ export class ApplicationService {
   getApplicationById(applicationId : number){
     return this.httpClient.get<RequestResult>(`http://localhost:3200/application/${applicationId}`, {withCredentials : true} );
   }
-
+  
   updateApplicationStatus(applicationId : number, status : 'Accepted' | 'Rejected'){
     return this.httpClient.get<RequestResult>(`http://localhost:3200/application/${status}/${applicationId}`, {withCredentials : true} );
   }

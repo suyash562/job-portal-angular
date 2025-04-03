@@ -4,6 +4,7 @@ import { RequestResult } from '../../../../shared/types/types';
 import { Application } from '../../../../shared/entity/application';
 import { ApplicationService } from '../../service/appliaction/application.service';
 import { UserService } from '../../../user/service/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-current-user-application',
@@ -38,6 +39,7 @@ export class CurrentUserApplicationComponent {
     constructor(
       private applicationService : ApplicationService,
       private userService : UserService,
+      private router : Router,
     ){}
   
     ngOnInit(): void {
@@ -66,6 +68,16 @@ export class CurrentUserApplicationComponent {
           console.log(err);
         }
       })
+    }
+
+    viewApplication(applicationId : number){
+      this.router.navigate(['dashboard','component','userApplication',applicationId]);
+    }
+
+    performSpecifiedAction(event : {actionType : string, dataObjectId : number}){
+      if(event.actionType == 'View'){
+        this.viewApplication(event.dataObjectId);
+      }
     }
   
     ngOnDestroy(): void {

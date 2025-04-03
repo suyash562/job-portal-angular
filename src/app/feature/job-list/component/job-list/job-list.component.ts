@@ -15,10 +15,13 @@ import { ConfirmationService } from 'primeng/api';
 export class JobListComponent implements OnInit, OnDestroy{
   jobs! : Job[];
   totalJobsCount! : number;
+  totalJobsCountAfterFiltering! : number;
   companies! : string[];
   filteredJobs! : Job[];
   page : number =  1;
   limit : number = 2;
+  firstJobInListNumber! : number;
+  lastJobInListNumber! : number;
   getAllJobsSubscription! : Subscription;
   isRedirectedFromDashboardSubscription! : Subscription;
 
@@ -64,6 +67,7 @@ export class JobListComponent implements OnInit, OnDestroy{
     this.jobListService.getTotalNumberOfJobs().subscribe({
       next : (requestResult : RequestResult) => {
         this.totalJobsCount = requestResult.value;
+        this.totalJobsCountAfterFiltering = requestResult.value;
       },
       error : (err) => {
         console.log(err);
@@ -90,6 +94,7 @@ export class JobListComponent implements OnInit, OnDestroy{
   filterJobsList(event : any) {
     if(event.workMode || event.employementType || event.company){
       this.filteredJobs = this.jobListService.filterJobsBasedOnOptions(event, this.jobs);
+      this.totalJobsCountAfterFiltering = this.filteredJobs.length;
     }
     if(event.sort){
       this.filteredJobs = this.filteredJobs.sort((job1 , job2) => {
@@ -103,11 +108,21 @@ export class JobListComponent implements OnInit, OnDestroy{
 
   clearFilters(){
     this.filteredJobs = this.jobs;
+    this.totalJobsCountAfterFiltering = this.totalJobsCount;
   }
 
   loadDescriptionPage(job : Job){
     this.jobListService.emitSelectedJobFromSubject(job);
     this.router.navigate(['jobs','description'])
+  }
+
+  getFirstJobInListNumber(){
+    return this.totalJobsCountAfterFiltering === 0 ? 0 : (this.page * this.limit)-this.limit+1;
+  }
+
+  getLastJobInListNumber(){
+    // const maximumJobs = this.totalJobsCount < this.filteredJobs?.length ? this.totalJobsCount : this.filteredJobs?.length;
+    return (this.page * this.limit) < (this.totalJobsCountAfterFiltering) ? this.page * this.limit : (this.totalJobsCountAfterFiltering);
   }
 
   loadPreviousPage(){

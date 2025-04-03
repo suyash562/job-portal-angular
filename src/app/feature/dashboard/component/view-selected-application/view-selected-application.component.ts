@@ -7,6 +7,8 @@ import { RequestResult } from '../../../../shared/types/types';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InterviewSchedule } from '../../../../shared/entity/interviewSchedule';
 import { InterviewService } from '../../service/interview/interview.service';
+import { UserService } from '../../../user/service/user.service';
+import { Job } from '../../../../shared/entity/job';
 
 
 @Component({
@@ -16,6 +18,7 @@ import { InterviewService } from '../../service/interview/interview.service';
   styleUrl: './view-selected-application.component.css'
 })
 export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
+  userRole! : string | null;
   activatedRouteSubcription! : Subscription;
   getApplicationByIdSubcription! : Subscription;
   getResumeByIdSubcription! : Subscription;
@@ -24,6 +27,7 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
   displayResume : boolean = false;
   applicationId! : number;
   application! : Application;
+  jobDescription! : Job;
   resumeDataBlob! : Blob;
   resumeFileData! : Uint8Array;
   scheduledInterviews! : InterviewSchedule[];
@@ -33,10 +37,13 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
     private applicationService : ApplicationService,
     private interviewService : InterviewService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private userService: UserService,
   ){}
 
   ngOnInit(): void {
+    this.userRole = this.userService.getUserRole();
+
     this.activatedRouteSubcription = this.activatedRoute.params.subscribe({
       next : (value) => {
         if(value['applicationId'] && parseInt(value['applicationId'])){
@@ -169,6 +176,9 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
     }  
     else if(status === 'Rejected'){
       return  { color : 'red', 'font-weight' : 'bold'};
+    }
+    else if(status === 'Interview'){
+      return  { color : 'blue', 'font-weight' : 'bold'};
     }
     return null;
   }

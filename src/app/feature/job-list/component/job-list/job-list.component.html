@@ -2,7 +2,7 @@
 
 <p-confirmdialog />
 <div id="current-jobs-displayed-div">
-    <p>Showing {{(page * limit)-limit+1}} to {{page * limit < totalJobsCount ? page * limit : totalJobsCount}} of {{totalJobsCount}} jobs</p>
+    <p>Showing {{getFirstJobInListNumber()}} to {{getLastJobInListNumber()}} of {{totalJobsCountAfterFiltering}} jobs</p>
 </div>
 <div id="parent-div" *ngIf="filteredJobs; else loading">
     <div class="job-list-item" *ngFor="let job of filteredJobs" (click)="loadDescriptionPage(job)">
@@ -23,7 +23,7 @@
     <div id="pagination-options">
         <p-button icon="pi pi-angle-left" severity="contrast" [outlined]="true" (click)="loadPreviousPage()" [disabled]="page === 1"></p-button>
         <p>{{page}}</p>
-        <p-button icon="pi pi-angle-right" severity="contrast" [outlined]="true" (click)="loadNextPage()" [disabled]="page * limit >= totalJobsCount"></p-button>
+        <p-button icon="pi pi-angle-right" severity="contrast" [outlined]="true" (click)="loadNextPage()" [disabled]="page * limit >= totalJobsCountAfterFiltering"></p-button>
     </div>
 </div>
 
