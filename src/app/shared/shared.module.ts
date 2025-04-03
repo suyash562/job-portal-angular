@@ -18,6 +18,9 @@ import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { CardModule } from 'primeng/card';
+import { ProgressSpinnerComponent } from './component/progress-spinner/progress-spinner.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { OverlayProgressSpinnerComponent } from './component/overlay-progress-spinner/overlay-progress-spinner.component';
 
 
 @NgModule({
@@ -25,7 +28,9 @@ import { CardModule } from 'primeng/card';
     HeaderComponent,
     FilterOptionsComponent,
     JobDescriptionComponentComponent,
-    TableComponent
+    TableComponent,
+    ProgressSpinnerComponent,
+    OverlayProgressSpinnerComponent
   ],
   imports: [
     CommonModule,
@@ -42,13 +47,16 @@ import { CardModule } from 'primeng/card';
     ConfirmDialogModule,
     DialogModule,
     OverlayBadgeModule,
-    CardModule
+    CardModule,
+    ProgressSpinnerModule
   ],
   exports : [
     HeaderComponent,
     FilterOptionsComponent,
     JobDescriptionComponentComponent,
-    TableComponent
+    TableComponent,
+    ProgressSpinnerComponent,
+    OverlayProgressSpinnerComponent
   ],
   providers : [
     MessageService

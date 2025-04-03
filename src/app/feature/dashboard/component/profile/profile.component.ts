@@ -14,6 +14,7 @@ import { CustomFormValidators } from '../../../../shared/validators/formValidato
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit, OnDestroy{
+  displayOverloaySpinner : boolean = false;
   userProfile! : UserProfile;
   userResumes! : {
     1 : Blob | null,
@@ -48,7 +49,6 @@ export class ProfileComponent implements OnInit, OnDestroy{
   ){}
   
   ngOnInit(): void {
-    
     this.userResumes = {
       1 : null,
       2 : null,
@@ -87,8 +87,10 @@ export class ProfileComponent implements OnInit, OnDestroy{
       this.showResume(resumeNumber);
     }
     else{            
+      this.displayOverloaySpinner = true;
       this.getResumeByEmailSubcription = this.profileService.getUserResume(resumeNumber).subscribe({
         next : (value : Blob) => {
+          this.displayOverloaySpinner = false;
           if(value){
             this.userResumes[resumeNumber as '1' | '2' | '3'] = value;
             this.showResume(resumeNumber);
@@ -98,6 +100,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
           }
         },
         error : (err) => {
+          this.displayOverloaySpinner = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to get resume'});
         }
       })
@@ -128,6 +131,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
   }
 
   uploadResume(){    
+    
     this.resumeFieldError = this.profileService.isResumeValid(this.newResume);
     if(this.resumeFieldError !== ''){
       return;
@@ -137,8 +141,10 @@ export class ProfileComponent implements OnInit, OnDestroy{
     formData.set('email', this.userProfile.user?.email as string);
     formData.set('resume', this.newResume);
 
+    this.displayOverloaySpinner = true;
     this.uploadUserResumeSubcription = this.profileService.uploadUserResume(formData).subscribe({
       next : (requestResult) => {
+        this.displayOverloaySpinner = false;
         if(requestResult.value){
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Resume uploaded successfully'});
           this.resumeCountArray.push(this.resumeCountArray.length+1);
@@ -151,6 +157,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
         }
       },
       error : (err) => {
+        this.displayOverloaySpinner = false;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to upload the resume' });
       }
     });
@@ -161,8 +168,10 @@ export class ProfileComponent implements OnInit, OnDestroy{
     if(this.userProfile.primaryResume === resumeNumber){
       return;
     }
+    this.displayOverloaySpinner = true;
     this.profileService.updatePrimaryResume(resumeNumber).subscribe({
       next : (requestResult : RequestResult) => {
+        this.displayOverloaySpinner = false;
         if(requestResult.value){
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Primary resume updated'});
           this.userProfile.primaryResume = resumeNumber;
@@ -172,6 +181,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
         }
       },
       error : (err) => {
+        this.displayOverloaySpinner = false;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update primary resume'});
       }
     })
@@ -201,8 +211,10 @@ export class ProfileComponent implements OnInit, OnDestroy{
 
   deleteApplicantResume(resumeNumber : number){
 
+    this.displayOverloaySpinner = true;
     this.profileService.deleteResume(resumeNumber).subscribe({
       next : (res : RequestResult) => {
+        this.displayOverloaySpinner = false;
         if(res.value){
           
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Resume deleted successfully'});
@@ -223,6 +235,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
         }
       },
       error : (err) => {
+        this.displayOverloaySpinner = false;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to deleted resume'});
         console.log(err);
       }
@@ -244,7 +257,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
     );
     const secondContactNumber = this.userProfile.phoneNumber.split(',')[1];
     if(secondContactNumber){
-      (this.updateProfileForm.controls['phoneNumbers'] as FormArray).push(new FormControl(secondContactNumber, [this.customFormValidators.validatePhoneNumber]));
+      (this.updateProfileForm.controls['phoneNumber'] as FormArray).push(new FormControl(secondContactNumber, [this.customFormValidators.validatePhoneNumber]));
     }
     this.updateProfile = true;
   }
@@ -271,10 +284,11 @@ export class ProfileComponent implements OnInit, OnDestroy{
           address : this.updateProfileForm.controls['address'].value,
           phoneNumber : this.updateProfileForm.controls['phoneNumber'].value
         }
-  
+        this.displayOverloaySpinner = true;
         this.updateUserProfileSubscription = this.profileService.updateUserProfile(newUserProfile, this.userProfile.id!).subscribe(
           {
             next : (requestResult : RequestResult)=>{
+              this.displayOverloaySpinner = false;
               if(requestResult.value){  
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Profile updated successfully', life: 3000 });
                 this.updateProfileForm.reset();
@@ -287,9 +301,10 @@ export class ProfileComponent implements OnInit, OnDestroy{
               }
             },
             error : (response)=>{
+              this.displayOverloaySpinner = false;
               this.messageService.add({ severity: 'error', summary: 'Error', detail: response.error.error, life: 3000 });
               console.log(response);
-            }
+            },
           }
         )
   
@@ -318,6 +333,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
       return;
     }
     
+    this.displayOverloaySpinner = true;
     this.profileService.updatePassword(
       this.updatePasswordForm.controls['currentPassword'].value,
       this.updatePasswordForm.controls['newPassword'].value
@@ -327,13 +343,16 @@ export class ProfileComponent implements OnInit, OnDestroy{
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Password updated successfully', life: 3000 });
           this.disableUpdatePasswordForm();
         }
+        this.displayOverloaySpinner = false;
       },
       error : (err) => {
+        this.displayOverloaySpinner = false;
         if(err.status === 401){
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Incorrect current password', life: 3000 });
         }
         console.log(err);
-      }
+      },
+
     })
 
     

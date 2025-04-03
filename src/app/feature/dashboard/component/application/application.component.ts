@@ -24,7 +24,7 @@ export class ApplicationComponent implements OnInit, OnDestroy{
   ){}
 
   ngOnInit(): void {
-
+    
     this.getApplicationsOfUserSubscription = this.applicationService.getApplicationsOfUser().subscribe({
       next : (result : RequestResult) => {
         result.value.forEach((application : Application) => {

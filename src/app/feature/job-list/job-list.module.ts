@@ -22,7 +22,8 @@ import { Toast } from 'primeng/toast';
     CardModule,
     ButtonModule,
     ConfirmDialogModule,
-    Toast
+    Toast,
+    
   ],
   providers : [
     ConfirmationService

@@ -3,7 +3,7 @@
 <p-confirmdialog />
 <div class="parent-div">
 
-    <div id="profile-div" *ngIf="userProfile;">
+    <div id="profile-div" *ngIf="userProfile; else loading">
         <div id="update-buttons">
             <p-button severity="contrast" id="update-button" size="small" (onClick)="updateProfile ? updateProfile = false : enableProfileUpdate()">{{updateProfile ? 'Cancel' : 'Update Profile'}}</p-button>
             <p-button *ngIf="!updateProfile" severity="contrast" id="update-button" size="small" (onClick)="showUpdatePasswordDialog()">Update Password</p-button>
@@ -58,6 +58,11 @@
                             </ng-template>
                         </div>
                     </div> 
+
+                    <div class="info-field">
+                        <p></p>
+                        <p><strong>Note : </strong>The resume set as primary will be sent to the employeer while applying for a job.</p>
+                    </div>
                 </div>
 
             </div>
@@ -107,6 +112,7 @@
 
         </div>
     </div>
+
     <div class="card flex justify-center">
         <p-dialog header="Update Password" [modal]="true" [(visible)]="isUpdatePasswordDialogVisible" [style]="{ width: '25rem' }">
             
@@ -159,3 +165,12 @@
         ></pdf-viewer> 
     </div>
 </div>
+
+
+<ng-template #loading>
+    <app-progress-spinner></app-progress-spinner>
+</ng-template>
+
+<ng-template [ngIf]="displayOverloaySpinner">
+    <app-overlay-progress-spinner></app-overlay-progress-spinner>
+</ng-template>
