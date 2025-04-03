@@ -1,4 +1,5 @@
 <p-toast />
+
 <form [formGroup]="addJobFormGroup" (ngSubmit)="submitForm()">
 
     <div *ngFor="let inputField of formInputFields">
@@ -8,6 +9,27 @@
                 <input pInputText id={{inputField.id}} type={{inputField.inputType}} formControlName={{inputField.formControlName}} placeholder={{inputField.placeholder}} />
                 <small>{{getErrorMessage(inputField.formControlName)}}</small>
             </div>
+        </div>
+    </div>
+
+    <div class="input-field">
+        <div>
+            <p>Salary Range</p>
+            <div *ngIf='getErrorMessage("salaryRangeFrom") != ""; else salaryRangeToError'>
+                <small>{{getErrorMessage("salaryRangeFrom")}}</small>
+            </div>
+            <ng-template #salaryRangeToError>
+                <small>{{getErrorMessage("salaryRangeTo")}}</small>
+            </ng-template>
+        </div>
+        <div id="salaryInputDiv">
+            <div>
+                <input style="width: 60%;" pInputText id='' type='number' formControlName="salaryRangeFrom" placeholder="From" />
+            </div>
+            <div>
+                <input style="width: 60%;" pInputText id='' type='number' formControlName="salaryRangeTo" placeholder="To" />
+            </div>
+            <span style="padding-right: 30px;">LPA</span>
         </div>
     </div>
     

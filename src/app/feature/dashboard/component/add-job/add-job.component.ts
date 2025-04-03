@@ -61,7 +61,8 @@ export class AddJobComponent implements OnInit, OnDestroy{
         preferredSkills  : new FormControl('', [this.customFormValidators.defaultValidator]),
         employementType : new FormControl(null, [this.customFormValidators.requiredValidator]),
         workMode  : new FormControl('', [this.customFormValidators.requiredValidator]),
-        salaryRange  : new FormControl('', [this.customFormValidators.defaultValidator]),
+        salaryRangeFrom  : new FormControl('', [this.customFormValidators.validateSalary, this.customFormValidators.requiredValidator]),
+        salaryRangeTo  : new FormControl('', [this.customFormValidators.validateSalary, this.customFormValidators.requiredValidator]),
         facilities  : new FormControl('', [this.customFormValidators.defaultValidator]),
         experienceLevel  : new FormControl('', [this.customFormValidators.requiredValidator, this.customFormValidators.validateNumber]),
         workLocation  : new FormControl('', [this.customFormValidators.defaultValidator]),
@@ -75,7 +76,6 @@ export class AddJobComponent implements OnInit, OnDestroy{
       {id : 'requiredSkillsInput', inputType : 'text' , formControlName : 'requiredSkills', placeholder : 'Required Skills'},
       {id : 'vacanciesInput', inputType : 'number' , formControlName : 'vacancies', placeholder : 'Number of Vacancies'},
       {id : 'preferredSkillsInput', inputType : 'text' , formControlName : 'preferredSkills', placeholder : 'Prefered Skills'},
-      {id : 'salaryRangeInput', inputType : 'text' , formControlName : 'salaryRange', placeholder : 'Salary Range'},
       {id : 'facilitiesInput', inputType : 'text' , formControlName : 'facilities', placeholder : 'Facilities'},
       {id : 'experienceLevelInput', inputType : 'number' , formControlName : 'experienceLevel', placeholder : 'Experience Level'},
       {id : 'workLocationInput', inputType : 'text' , formControlName : 'workLocation', placeholder : 'Work Location'},
@@ -96,7 +96,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
       this.getJobByIdSubscription = this.jobListService.getJobById(this.jobIdToUpdate).subscribe({
         next : (requestResult : RequestResult) => {
           this.jobToUpdate = requestResult.value;
-          this.jobToUpdate.deadlineForApplying = new Date(requestResult.value.deadlineForApplying)
+          this.jobToUpdate.deadlineForApplying = new Date(requestResult.value.deadlineForApplying);
           this.addJobFormGroup.setValue(
             {
               title : requestResult.value.title,
@@ -106,7 +106,8 @@ export class AddJobComponent implements OnInit, OnDestroy{
               preferredSkills : requestResult.value.preferredSkills,
               employementType : {name : requestResult.value.employementType},
               workMode : {name : requestResult.value.workMode},
-              salaryRange : requestResult.value.salaryRange,
+              salaryRangeFrom : requestResult.value.salaryRange.split(' ')[0],
+              salaryRangeTo : requestResult.value.salaryRange.split(' ')[1],
               facilities : requestResult.value.facilities,
               experienceLevel : requestResult.value.experienceLevel,
               workLocation : requestResult.value.workLocation,
@@ -137,7 +138,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
         this.addJobFormGroup.controls['preferredSkills'].value,
         this.addJobFormGroup.controls['employementType'].value.name,
         this.addJobFormGroup.controls['workMode'].value.name,
-        this.addJobFormGroup.controls['salaryRange'].value,
+        this.addJobFormGroup.controls['salaryRangeFrom'].value+' '+this.addJobFormGroup.controls['salaryRangeTo'].value,
         this.addJobFormGroup.controls['facilities'].value,
         this.addJobFormGroup.controls['experienceLevel'].value,
         this.addJobFormGroup.controls['workLocation'].value,
@@ -196,12 +197,14 @@ export class AddJobComponent implements OnInit, OnDestroy{
       this.addJobFormGroup.controls['deadlineForApplying'].markAsDirty();
       this.addJobFormGroup.controls['employementType'].markAsDirty();
       this.addJobFormGroup.controls['workMode'].markAsDirty();
+      this.addJobFormGroup.controls['salaryRangeFrom'].markAsDirty();
+      this.addJobFormGroup.controls['salaryRangeTo'].markAsDirty();
     }
   }
 
   isFormChanged(){
     for(const key in this.addJobFormGroup.value){
-      if( key != 'deadlineForApplying' && typeof(this.addJobFormGroup.controls[key].value) === 'string' && this.addJobFormGroup.controls[key].value != this.jobToUpdate[key]){
+      if( !['deadlineForApplying', 'salaryRangeFrom', 'salaryRangeTo'].includes(key) && typeof(this.addJobFormGroup.controls[key].value) === 'string' && this.addJobFormGroup.controls[key].value != this.jobToUpdate[key]){
         return true;
       }
     }
@@ -209,6 +212,10 @@ export class AddJobComponent implements OnInit, OnDestroy{
       return true;
     }
     if(this.addJobFormGroup.controls['workMode'].value.name != this.jobToUpdate['workMode'] || this.addJobFormGroup.controls['employementType'].value.name != this.jobToUpdate['employementType']){
+      return true;
+    }
+    const salaryRange = this.addJobFormGroup.controls['salaryRangeFrom'].value + ' ' + this.addJobFormGroup.controls['salaryRangeTo'].value;
+    if(salaryRange != this.jobToUpdate['salaryRange']){
       return true;
     }
     return false;

@@ -14,10 +14,11 @@ import { ConfirmationService } from 'primeng/api';
 })
 export class JobListComponent implements OnInit, OnDestroy{
   jobs! : Job[];
+  totalJobsCount! : number;
   companies! : string[];
   filteredJobs! : Job[];
   page : number =  1;
-  limit : number = 3;
+  limit : number = 2;
   getAllJobsSubscription! : Subscription;
   isRedirectedFromDashboardSubscription! : Subscription;
 
@@ -60,6 +61,16 @@ export class JobListComponent implements OnInit, OnDestroy{
       }
     })
 
+    this.jobListService.getTotalNumberOfJobs().subscribe({
+      next : (requestResult : RequestResult) => {
+        this.totalJobsCount = requestResult.value;
+      },
+      error : (err) => {
+        console.log(err);
+        this.totalJobsCount = 0;
+      }
+    })
+
   }
 
   getJobs(){
@@ -67,7 +78,6 @@ export class JobListComponent implements OnInit, OnDestroy{
       next : (result : RequestResult) => {
         this.jobs = result.value;     
         this.filteredJobs = this.jobs;
-        
         this.companies = this.jobListService.getCompanies(this.jobs);        
       },
       error : (err) => {

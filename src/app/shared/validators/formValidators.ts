@@ -70,6 +70,13 @@ export class CustomFormValidators{
         return null;
     }
 
+    validateSalary(control : AbstractControl) : ValidationErrors | null{
+        if(control.value <= 0){
+            return {error : 'Invalid'}
+        }
+        return null;
+    }
+
     validateResume(control : AbstractControl) : ValidationErrors | null{
         if(!control.value || control.value === ''){
             return {error : '* Required'};

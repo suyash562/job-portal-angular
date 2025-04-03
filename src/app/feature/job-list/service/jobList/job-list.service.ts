@@ -35,6 +35,10 @@ export class JobListService {
     return this.httpClient.get<RequestResult>(`http://localhost:3200/job/jobs?page=${page}&limit=${limit}`,{withCredentials : true});
   }
 
+  getTotalNumberOfJobs(){
+    return this.httpClient.get<RequestResult>(`http://localhost:3200/job/totalActiveJobs`,{withCredentials : true});
+  }
+
   getJobById(jobId : number){
     return this.httpClient.get<RequestResult>(`http://localhost:3200/job/${jobId}` ,{withCredentials : true});
   }

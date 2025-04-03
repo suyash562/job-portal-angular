@@ -34,3 +34,12 @@
 p-button{
     margin: 8px;
 }
+
+#current-jobs-displayed-div{
+    margin: 8px;
+}
+
+#current-jobs-displayed-div p{
+    color: rgb(51, 46, 46);
+    font-size: large;
+}
