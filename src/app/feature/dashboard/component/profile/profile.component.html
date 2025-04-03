@@ -4,8 +4,9 @@
 <div class="parent-div">
 
     <div id="profile-div" *ngIf="userProfile;">
-        <div>
-            <p-button severity="contrast" id="update-button" (onClick)="enableProfileUpdate()">Update Profile</p-button>
+        <div id="update-buttons">
+            <p-button severity="contrast" id="update-button" size="small" (onClick)="updateProfile ? updateProfile = false : enableProfileUpdate()">{{updateProfile ? 'Cancel' : 'Update Profile'}}</p-button>
+            <p-button *ngIf="!updateProfile" severity="contrast" id="update-button" size="small" (onClick)="showUpdatePasswordDialog()">Update Password</p-button>
         </div>
 
         <div id="profile-avatar">
@@ -25,7 +26,7 @@
                 </div>
                 <div class="info-field">
                     <p class="title-font">Contact Number</p>
-                    <p class="info-field-value">{{userProfile.phoneNumber.split(',')[0]+' '+(userProfile.phoneNumber.split(',')[1] ?? '')}}</p>
+                    <p class="info-field-value">{{userProfile.phoneNumber.split(',')[0]+' '+(userProfile.phoneNumber.split(',')[1] ? userProfile.phoneNumber.split(',')[1] : '')}}</p>
                 </div>
                 <div class="info-field">
                     <p class="title-font">Address</p>
@@ -79,7 +80,7 @@
                         </div>
                         <div class="info-field">
                             <p class="title-font">Contact Number</p>
-                            <div formArrayName="phoneNumbers">
+                            <div formArrayName="phoneNumber">
                                 <div id="contactDiv" style="display: flex;">
                                     <ng-container *ngFor="let phoneNumber of phoneNumbers; let i = index">
                                         <div id="contact">
@@ -105,6 +106,43 @@
             </ng-template>
 
         </div>
+    </div>
+    <div class="card flex justify-center">
+        <p-dialog header="Update Password" [modal]="true" [(visible)]="isUpdatePasswordDialogVisible" [style]="{ width: '25rem' }">
+            
+            <ng-template #headless>
+                <div id="update-password-head">
+                    Update Password
+                </div>
+                <div>
+                    <form [formGroup]="updatePasswordForm">
+                        <div class="flex-row-center">
+                            <div class="flex-column">
+                                <input pInputText formControlName="currentPassword" placeholder="Current password" autocomplete="off" />
+                                <small>{{getErrorMessageForPassword('currentPassword')}}</small>
+                            </div>
+                        </div>
+                        <div class="flex-row-center">
+                            <div class="flex-column">
+                                <input pInputText formControlName="newPassword" placeholder="New password" autocomplete="off" />
+                                <small>{{getErrorMessageForPassword('newPassword')}}</small>
+                            </div>
+                        </div>
+                        <div class="flex-row-center">
+                            <div class="flex-column">    
+                                <input pInputText formControlName="confirmNewPassword" placeholder="Confirm new password" autocomplete="off" />
+                                <small>{{getErrorMessageForPassword('confirmNewPassword')}}</small>
+                            </div>
+                        </div>
+                        <div class="flex-row-center">
+                            <p-button label="Cancel" severity="contrast" variant="outlined" size="small"   (click)="disableUpdatePasswordForm()" />
+                            <p-button label="Save" severity="help" size="small" (click)="updatePassword()" />
+                        </div>
+                    </form>
+                </div>
+            </ng-template>
+            
+        </p-dialog>
     </div>
 </div>
 

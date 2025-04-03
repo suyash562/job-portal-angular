@@ -29,7 +29,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { AvatarModule } from 'primeng/avatar';
 import { FileUploadModule } from 'primeng/fileupload';
-
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -55,6 +55,7 @@ import { FileUploadModule } from 'primeng/fileupload';
     CardModule,
     ButtonModule,
     BadgeModule,
+    DialogModule,
     ConfirmDialogModule,
     ToastModule,
     SelectModule,

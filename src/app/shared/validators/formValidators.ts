@@ -7,7 +7,7 @@ import { AbstractControl, ValidationErrors } from "@angular/forms";
 export class CustomFormValidators{
 
     defaultValidator(control : AbstractControl) : ValidationErrors | null {  
-        if(control.value === ''){
+        if(control.value === '' || control.value === null){
             return {error : '* Required'};
         }
         else if((control.value as string)?.startsWith(' ') || (control.value as string)?.endsWith(' ')){

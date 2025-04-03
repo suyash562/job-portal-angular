@@ -42,8 +42,15 @@
     color: rgb(61, 60, 60);
 }
 
-#update-button{
+#update-buttons{
+    display: inline-flex;
+    flex-direction: column;
     float: right;
+    align-items: end;
+}
+
+#update-button{
+    margin-bottom: 4px;
 }
 
 #resume-container{
@@ -85,6 +92,35 @@ small{
     flex-direction: column;
 }
 
-.info-field input{
-    margin-right: 8px;
+#firstName{
+    margin-right: 6px;
+}
+
+.flex-row-center{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    margin-left: 18px;
+    margin-right: 18px;
+}
+
+.flex-row-center  p-button{
+    margin: 10px;
+}
+
+.flex-column{
+    width: 100%;
+}
+
+.flex-row-center input{
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+#update-password-head{
+    margin-top: 28px;
+    margin-bottom: 15px;
+    margin-left: 16px;
+    font-size: larger;
+    font-weight: bold;
 }

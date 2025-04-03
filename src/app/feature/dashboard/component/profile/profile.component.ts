@@ -21,8 +21,10 @@ export class ProfileComponent implements OnInit, OnDestroy{
     3 : Blob | null,
   };
   newResume : any;
+  profileToUpdate : any;
   resumeFieldError! : string;
   updateProfile : boolean = false;
+  isUpdatePasswordDialogVisible : boolean = false;
   displayResume : boolean = false;
   addNewResumeEnable : boolean = false;
   resumeCountArray : number[] = [];
@@ -32,9 +34,10 @@ export class ProfileComponent implements OnInit, OnDestroy{
   uploadUserResumeSubcription! : Subscription;
   updateUserProfileSubscription! : Subscription;
   updateProfileForm : FormGroup = new FormGroup({});
+  updatePasswordForm : FormGroup = new FormGroup({});
   
   get phoneNumbers(){
-    return (this.updateProfileForm.get('phoneNumbers') as FormArray).controls;
+    return (this.updateProfileForm.get('phoneNumber') as FormArray).controls;
   }
 
   constructor(
@@ -52,10 +55,17 @@ export class ProfileComponent implements OnInit, OnDestroy{
       3 : null,
     }
 
+    this.updatePasswordForm = new FormGroup({
+      currentPassword : new FormControl('', [this.customFormValidators.defaultValidator]),
+      newPassword : new FormControl('', [this.customFormValidators.validatePassword, this.customFormValidators.defaultValidator]),
+      confirmNewPassword : new FormControl('',[this.customFormValidators.validatePassword, this.customFormValidators.defaultValidator]),
+    });
+
     this.getUserProfileSubscription = this.profileService.getUserProfile().subscribe({
       next : (requestResult : RequestResult) => {       
         if(requestResult.value){
           this.userProfile = requestResult.value;
+          this.profileToUpdate = requestResult.value;
           if(this.userProfile.user?.role === 'user'){
             for(let i=1; i<= this.userProfile.resumeCount; i++){
               this.resumeCountArray.push(i);
@@ -66,7 +76,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to get user profile'});
         }
       },
-      error : (err) => {
+      error : (err) => {        
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to get user profile'});
       }
     })
@@ -104,7 +114,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
   getResumeFieldValue(event: any) {
     if (event.target.files && event.target.files[0]) {
       this.newResume = event.target.files[0];
-      this.isResumeValid();
+      this.resumeFieldError = this.profileService.isResumeValid(this.newResume);
     }
   }
 
@@ -118,7 +128,8 @@ export class ProfileComponent implements OnInit, OnDestroy{
   }
 
   uploadResume(){    
-    if(!this.isResumeValid()){
+    this.resumeFieldError = this.profileService.isResumeValid(this.newResume);
+    if(this.resumeFieldError !== ''){
       return;
     }
     
@@ -132,6 +143,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Resume uploaded successfully'});
           this.resumeCountArray.push(this.resumeCountArray.length+1);
           this.userProfile.primaryResume = this.userProfile.primaryResume === 0 ? 1 : this.userProfile.primaryResume;
+          this.userProfile.resumeCount++;
           this.addNewResumeEnable = false;
         }
         else{
@@ -145,25 +157,10 @@ export class ProfileComponent implements OnInit, OnDestroy{
 
   }
 
-  isResumeValid(){
-    if(!this.newResume || this.newResume.value === ''){
-      this.resumeFieldError = '* Required';
-      return false;
-    }
-    const fileSplit : string[] = (this.newResume.name as string).split('.');
-    if(fileSplit[fileSplit.length-1] !== 'pdf'){
-      this.resumeFieldError = 'Upload only pdf files';
-      return false;
-    }
-    if(this.newResume.size > 10 * 1024 *1024){
-      this.resumeFieldError =  'Maximum size of file must be 10 MB';
-      return false;
-    }
-    this.resumeFieldError = '';
-    return true;
-  }
-
   setResumeAsPrimary(resumeNumber : number){
+    if(this.userProfile.primaryResume === resumeNumber){
+      return;
+    }
     this.profileService.updatePrimaryResume(resumeNumber).subscribe({
       next : (requestResult : RequestResult) => {
         if(requestResult.value){
@@ -207,11 +204,19 @@ export class ProfileComponent implements OnInit, OnDestroy{
     this.profileService.deleteResume(resumeNumber).subscribe({
       next : (res : RequestResult) => {
         if(res.value){
+          
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Resume deleted successfully'});
           this.resumeCountArray.pop();
+          this.userProfile.resumeCount--;
+          this.displayResume = false;
+
+          for(let i = 0; i<=3; i++){
+            this.userResumes[i.toString() as '1'| '2' | '3'] = null;
+          }
           if(this.resumeCountArray.length < this.userProfile.primaryResume){
             this.userProfile.primaryResume = this.resumeCountArray.length;
           }
+          
         }
         else{
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to deleted resume'});
@@ -229,7 +234,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
       {
         firstName : new FormControl(this.userProfile.firstName, [this.customFormValidators.defaultValidator,]),
         lastName : new FormControl(this.userProfile.lastName, [this.customFormValidators.defaultValidator,]),
-        phoneNumbers : new FormArray(
+        phoneNumber : new FormArray(
           [
             new FormControl(this.userProfile.phoneNumber.split(',')[0], [this.customFormValidators.validatePhoneNumber,]),
           ]
@@ -244,52 +249,116 @@ export class ProfileComponent implements OnInit, OnDestroy{
     this.updateProfile = true;
   }
 
+  isFormChanged(){
+    for(const key in this.updateProfileForm.value){
+      if( this.updateProfileForm.controls[key].value.toString() != this.profileToUpdate[key]){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  updateProfileMethod(){
+    if(!this.isFormChanged()){
+      this.messageService.add({ severity: 'info', summary: 'Updated', detail: 'Profile is already updated' });
+    }
+    else{
+
+      if(!this.updateProfileForm.invalid){
+        const newUserProfile : Partial<UserProfile> = {
+          firstName : this.updateProfileForm.controls['firstName'].value,
+          lastName : this.updateProfileForm.controls['lastName'].value,
+          address : this.updateProfileForm.controls['address'].value,
+          phoneNumber : this.updateProfileForm.controls['phoneNumber'].value
+        }
+  
+        this.updateUserProfileSubscription = this.profileService.updateUserProfile(newUserProfile, this.userProfile.id!).subscribe(
+          {
+            next : (requestResult : RequestResult)=>{
+              if(requestResult.value){  
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Profile updated successfully', life: 3000 });
+                this.updateProfileForm.reset();
+                this.userProfile = {...this.userProfile, ...requestResult.value};
+                this.profileToUpdate = requestResult.value;
+                this.updateProfile = false;
+              }
+              else{
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update profile', life: 3000 });
+              }
+            },
+            error : (response)=>{
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: response.error.error, life: 3000 });
+              console.log(response);
+            }
+          }
+        )
+  
+      }
+      else{
+        this.updateProfileForm.get('firstName')?.markAsDirty();
+        this.updateProfileForm.get('lastName')?.markAsDirty();
+        this.updateProfileForm.get('lastName')?.markAsDirty();
+        this.updateProfileForm.get('address')?.markAsDirty();
+        this.phoneNumbers[0].markAsDirty();
+        this.phoneNumbers[1]?.markAsDirty();  
+      }
+    }
+  }
+
+  updatePassword(){
+    if(this.updatePasswordForm.invalid){
+      this.updatePasswordForm.controls['currentPassword'].markAsDirty();
+      this.updatePasswordForm.controls['newPassword'].markAsDirty();
+      this.updatePasswordForm.controls['confirmNewPassword'].markAsDirty();
+      return;
+    }
+    
+    if(this.updatePasswordForm.controls['newPassword'].value !== this.updatePasswordForm.controls['confirmNewPassword'].value){
+      this.updatePasswordForm.get('confirmNewPassword')?.setErrors({error : 'Confirm password must match provided password'});
+      return;
+    }
+    
+    this.profileService.updatePassword(
+      this.updatePasswordForm.controls['currentPassword'].value,
+      this.updatePasswordForm.controls['newPassword'].value
+    ).subscribe({
+      next : (requestResult : RequestResult) => {
+        if(requestResult.value){
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Password updated successfully', life: 3000 });
+          this.disableUpdatePasswordForm();
+        }
+      },
+      error : (err) => {
+        if(err.status === 401){
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Incorrect current password', life: 3000 });
+        }
+        console.log(err);
+      }
+    })
+
+    
+  }
+
+  showUpdatePasswordDialog(){
+    this.isUpdatePasswordDialogVisible = true;
+  }
+
+  disableUpdatePasswordForm(){
+    this.isUpdatePasswordDialogVisible = false;
+    this.updatePasswordForm.reset();
+    
+  }
+
   getErrorMessage(field : string){
     return this.updateProfileForm.get(field)?.dirty && this.updateProfileForm.get(field)?.errors ? this.updateProfileForm.get(field)?.getError('error') : ''
   }
   
+  getErrorMessageForPassword(field : string){
+    return this.updatePasswordForm.get(field)?.dirty && this.updatePasswordForm.get(field)?.errors ? this.updatePasswordForm.get(field)?.getError('error') : ''
+  }
+  
   getErrorMessageForContact(contactControlName : number){
     return this.phoneNumbers[contactControlName].dirty && this.phoneNumbers[contactControlName].errors ? this.phoneNumbers[contactControlName].getError('error') : ''
-  }
-
-  updateProfileMethod(){
-    if(!this.updateProfileForm.invalid){
-      
-          const newUserProfile : Partial<UserProfile> = {
-            firstName : this.updateProfileForm.controls['firstName'].value,
-            lastName : this.updateProfileForm.controls['lastName'].value,
-            address : this.updateProfileForm.controls['address'].value,
-            phoneNumber : this.updateProfileForm.controls['phoneNumbers'].value
-          }
-    
-          this.updateUserProfileSubscription = this.profileService.updateUserProfile(newUserProfile, this.userProfile.id!).subscribe(
-            {
-              next : (requestResult : RequestResult)=>{
-                if(requestResult.value){  
-                  this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Profile updated successfully', life: 3000 });
-                  this.updateProfileForm.reset();
-                  this.updateProfile = false;
-                }
-                else{
-                  this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update profile', life: 3000 });
-                }
-              },
-              error : (response)=>{
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: response.error.error, life: 3000 });
-                console.log(response);
-              }
-            }
-          )
-
-        }
-        else{
-          this.updateProfileForm.get('firstName')?.markAsDirty();
-          this.updateProfileForm.get('lastName')?.markAsDirty();
-          this.updateProfileForm.get('lastName')?.markAsDirty();
-          this.updateProfileForm.get('address')?.markAsDirty();
-          this.phoneNumbers[0].markAsDirty();
-          this.phoneNumbers[1]?.markAsDirty();  
-        }
   }
 
   ngOnDestroy(): void {
@@ -298,4 +367,5 @@ export class ProfileComponent implements OnInit, OnDestroy{
     this.uploadUserResumeSubcription?.unsubscribe();
     this.updateUserProfileSubscription?.unsubscribe();
   }
+
 }
