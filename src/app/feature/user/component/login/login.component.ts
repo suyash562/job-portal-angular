@@ -16,6 +16,7 @@ import { MessageService } from 'primeng/api';
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit, OnDestroy{
+  displayOverlaySpinner : boolean = false; 
   loginForm! : FormGroup;
   customFormValidators! : CustomFormValidators;
   loginSubscription! : Subscription;
@@ -50,17 +51,19 @@ export class LoginComponent implements OnInit, OnDestroy{
         password : this.loginForm.controls['password'].value,
       }
 
+      this.displayOverlaySpinner = true;
       this.loginSubscription = this.userService.login(user).subscribe(
         {
           next : (requestResult : RequestResult)=>{
-            sessionStorage.setItem('role', requestResult.value.role);
+            this.displayOverlaySpinner = false;
+            localStorage.setItem('role', requestResult.value.role);
             this.userService.updateUserLoginStatus(true);
             this.jobListService.emitIsRedirectedFromDashboardSubject(false);
             this.router.navigate(['/jobs']);
           },
-          error : (response)=>{
-            console.log(response);
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: response.error.error, life: 3000 });
+          error : (err)=>{
+            this.displayOverlaySpinner = false;
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error, life: 3000 });
           }
         }
       )

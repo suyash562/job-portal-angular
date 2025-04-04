@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 import { Job } from '../../../../shared/entity/job';
 import { RequestResult } from '../../../../shared/types/types';
@@ -16,6 +16,8 @@ import { MessageService } from 'primeng/api';
   styleUrl: './add-job.component.css'
 })
 export class AddJobComponent implements OnInit, OnDestroy{
+  displayOverlaySpinner! : boolean;
+  displayLoadingSpinner! : boolean;
   jobIdToUpdate! : number;
   updateJobForm! : boolean;
   currentDate : Date = new Date();
@@ -38,6 +40,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
   ){}
 
   ngOnInit(): void {
+    
     this.routeParamsSubscription = this.activatedRoute.params.subscribe({
       next : (param : any) => {
         this.jobIdToUpdate = param.jobId;
@@ -67,7 +70,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
         experienceLevel  : new FormControl('', [this.customFormValidators.requiredValidator, this.customFormValidators.validateNumber]),
         workLocation  : new FormControl('', [this.customFormValidators.defaultValidator]),
         deadlineForApplying  : new FormControl('', [this.customFormValidators.requiredValidator]),
-      }
+      },
     );
 
     this.formInputFields = [
@@ -93,6 +96,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
     ];
   
     if(this.updateJobForm){
+      this.displayLoadingSpinner = true
       this.getJobByIdSubscription = this.jobListService.getJobById(this.jobIdToUpdate).subscribe({
         next : (requestResult : RequestResult) => {
           this.jobToUpdate = requestResult.value;
@@ -113,10 +117,12 @@ export class AddJobComponent implements OnInit, OnDestroy{
               workLocation : requestResult.value.workLocation,
               deadlineForApplying : new Date(requestResult.value.deadlineForApplying),
             }
-          );  
+          ); 
+          this.displayLoadingSpinner = false; 
         },
         error : (requestResult : RequestResult) => {
           console.log(requestResult.message);
+          this.displayLoadingSpinner = false;
         }
       })
     }
@@ -129,6 +135,11 @@ export class AddJobComponent implements OnInit, OnDestroy{
   submitForm(){
     
     if(!this.addJobFormGroup.invalid){
+
+      if(this.addJobFormGroup.controls['salaryRangeFrom'].value >= this.addJobFormGroup.controls['salaryRangeTo'].value){
+        this.addJobFormGroup.controls['salaryRangeTo'].setErrors({error : 'Must be greater than base salary'});
+        return;
+      }
     
       const newJob : Job = new Job(
         this.addJobFormGroup.controls['title'].value,
@@ -149,7 +160,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
       
       if(this.updateJobForm){
         if(this.isFormChanged()){
-          
+          this.displayOverlaySpinner = true;
           this.addNewJobSubscription = this.jobsService.updatePostedJob(this.jobIdToUpdate, newJob).subscribe(
             {
               next : (requestResult : RequestResult)=>{
@@ -160,9 +171,11 @@ export class AddJobComponent implements OnInit, OnDestroy{
                 else{
                   this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update the job post' });
                 }
+                this.displayOverlaySpinner = false;
               },
               error : (err)=>{
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update the job post' });
+                this.displayOverlaySpinner = false;
               }
             }
           )
@@ -172,6 +185,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
         }
       }
       else{
+        this.displayOverlaySpinner = true;
         this.addNewJobSubscription = this.jobsService.addNewJob(newJob).subscribe(
           {
             next : (requestResult : RequestResult)=>{
@@ -182,9 +196,11 @@ export class AddJobComponent implements OnInit, OnDestroy{
               else{
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to post the job' });
               }
+              this.displayOverlaySpinner = false;
             },
             error : (requestResult : RequestResult)=>{
               this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to post the job' });
+              this.displayOverlaySpinner = false;
             }
           }
         )

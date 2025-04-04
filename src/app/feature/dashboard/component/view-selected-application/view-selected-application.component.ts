@@ -19,6 +19,7 @@ import { Job } from '../../../../shared/entity/job';
 })
 export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
   userRole! : string | null;
+  displayOverlaySpinner : boolean = false;
   activatedRouteSubcription! : Subscription;
   getApplicationByIdSubcription! : Subscription;
   getResumeByIdSubcription! : Subscription;
@@ -137,8 +138,10 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
   }
 
   acceptApplication(){
+    this.displayOverlaySpinner = true;
     this.updateApplicationStatusSubcription = this.applicationService.updateApplicationStatus(this.application.id, 'Accepted').subscribe({
       next : (result : RequestResult) => {
+        this.displayOverlaySpinner = false;
         if(result.value){
           this.application.status = 'Accepted';
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Application has been accepted' });
@@ -148,14 +151,17 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
         }
       },
       error : (err) => {
+        this.displayOverlaySpinner = false;
         console.log(err);
       }
     })
   }
-
+  
   rejectApplication(){
+    this.displayOverlaySpinner = true;
     this.updateApplicationStatusSubcription = this.applicationService.updateApplicationStatus(this.application.id, 'Rejected').subscribe({
       next : (result : RequestResult) => {
+        this.displayOverlaySpinner = false;
         if(result.value){
           this.application.status = 'Rejected';
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Application has been rejected' });
@@ -165,6 +171,7 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
         }
       },
       error : (err) => {
+        this.displayOverlaySpinner = false;
         console.log(err);
       }
     })

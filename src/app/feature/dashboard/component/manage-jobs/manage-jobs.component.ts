@@ -15,9 +15,10 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 })
 export class ManageJobsComponent implements OnInit, OnDestroy{
   userRole! : string | null;
+  displayOverlaySpinner! : boolean;
   getPostedJobsSubscription! : Subscription;
   deletePostedJobSubscription! : Subscription;
-  postedJobsData : any[] = [];
+  postedJobsData! : any[];
   postedJobsTitle : string[] = [
     'Job Position',
     'Vacancies',
@@ -59,6 +60,7 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
   getAllPostedJobs(){
     this.getPostedJobsSubscription  = this.getPostedJobsSubscription = this.jobsService.getAllPostedJobs().subscribe({
       next : (result : RequestResult) => {
+        this.postedJobsData = [];
         result.value.forEach((job : Job) => {
           this.postedJobsData.push(
             {
@@ -76,7 +78,6 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
       },
       error : (err) => {
         console.log(err);
-        this.postedJobsData = [];
       }
     })
   }
@@ -106,13 +107,16 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
           severity: 'contrast',
       },
       accept: () => {
+        this.displayOverlaySpinner = true;
         this.deletePostedJobSubscription = this.jobsService.deletePostedJob(jobId).subscribe({
           next : (requestResult : RequestResult) => {
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Job Post Deleted Successfully' });
             const jobIndex = this.postedJobsData.findIndex((job) => job.id == jobId);
             this.postedJobsData.splice(jobIndex, 1);
+            this.displayOverlaySpinner = false;
           },
           error : (requestResult : RequestResult) => {
+            this.displayOverlaySpinner = false;
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete job post' });
           }
         })

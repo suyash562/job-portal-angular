@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 export class CurrentUserApplicationComponent {
   getApplicationsOfUserSubscription! : Subscription;
   userRole! : string | null;
-  applicationData : any[] = [];
+  applicationData! : any[];
   removedApplicationsId : number[] = [];
   applicationDataTitle : string[] = [
     'Job Position',
@@ -46,7 +46,7 @@ export class CurrentUserApplicationComponent {
       this.userRole = this.userService.getUserRole();
       this.getApplicationsOfUserSubscription = this.applicationService.getCurrentUserApplication().subscribe({
         next : (result : RequestResult) => {
-          
+          this.applicationData = [];
           result.value.forEach((application : Application) => {
             if(!application.isActive){
               this.removedApplicationsId.push(application.id);

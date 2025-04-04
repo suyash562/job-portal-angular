@@ -28,7 +28,7 @@ export class AppComponent implements OnInit{
   logout(){
     this.userService.logout().subscribe({
       next : () => {
-        sessionStorage.removeItem('role');
+        localStorage.removeItem('role');
         this.userService.updateUserLoginStatus(false);
         this.router.navigate(['']);
       },

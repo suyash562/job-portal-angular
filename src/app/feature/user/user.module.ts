@@ -11,6 +11,7 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { SelectModule } from 'primeng/select';
 import { Toast } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { SharedModule } from '../../shared/shared.module';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { MessageService } from 'primeng/api';
     ButtonModule,
     FloatLabel,
     SelectModule,
-    Toast
+    Toast,
+    SharedModule
   ],
   providers: [
     MessageService

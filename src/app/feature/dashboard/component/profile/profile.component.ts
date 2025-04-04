@@ -14,7 +14,7 @@ import { CustomFormValidators } from '../../../../shared/validators/formValidato
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit, OnDestroy{
-  displayOverloaySpinner : boolean = false;
+  displayOverlaySpinner : boolean = false;
   userProfile! : UserProfile;
   userResumes! : {
     1 : Blob | null,
@@ -63,7 +63,6 @@ export class ProfileComponent implements OnInit, OnDestroy{
 
     this.getUserProfileSubscription = this.profileService.getUserProfile().subscribe({
       next : (requestResult : RequestResult) => {       
-        if(requestResult.value){
           this.userProfile = requestResult.value;
           this.profileToUpdate = requestResult.value;
           if(this.userProfile.user?.role === 'user'){
@@ -71,13 +70,9 @@ export class ProfileComponent implements OnInit, OnDestroy{
               this.resumeCountArray.push(i);
             }
           }
-        }
-        else{
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to get user profile'});
-        }
       },
       error : (err) => {        
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to get user profile'});
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     })
   }
@@ -87,21 +82,18 @@ export class ProfileComponent implements OnInit, OnDestroy{
       this.showResume(resumeNumber);
     }
     else{            
-      this.displayOverloaySpinner = true;
+      this.displayOverlaySpinner = true;
       this.getResumeByEmailSubcription = this.profileService.getUserResume(resumeNumber).subscribe({
         next : (value : Blob) => {
-          this.displayOverloaySpinner = false;
+          this.displayOverlaySpinner = false;
           if(value){
             this.userResumes[resumeNumber as '1' | '2' | '3'] = value;
             this.showResume(resumeNumber);
           }
-          else{
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to get resume'});
-          }
         },
         error : (err) => {
-          this.displayOverloaySpinner = false;
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to get resume'});
+          this.displayOverlaySpinner = false;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
         }
       })
     }
@@ -141,24 +133,19 @@ export class ProfileComponent implements OnInit, OnDestroy{
     formData.set('email', this.userProfile.user?.email as string);
     formData.set('resume', this.newResume);
 
-    this.displayOverloaySpinner = true;
+    this.displayOverlaySpinner = true;
     this.uploadUserResumeSubcription = this.profileService.uploadUserResume(formData).subscribe({
       next : (requestResult) => {
-        this.displayOverloaySpinner = false;
-        if(requestResult.value){
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Resume uploaded successfully'});
-          this.resumeCountArray.push(this.resumeCountArray.length+1);
-          this.userProfile.primaryResume = this.userProfile.primaryResume === 0 ? 1 : this.userProfile.primaryResume;
-          this.userProfile.resumeCount++;
-          this.addNewResumeEnable = false;
-        }
-        else{
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: requestResult.value });
-        }
+        this.displayOverlaySpinner = false;
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message});
+        this.resumeCountArray.push(this.resumeCountArray.length+1);
+        this.userProfile.primaryResume = this.userProfile.primaryResume === 0 ? 1 : this.userProfile.primaryResume;
+        this.userProfile.resumeCount++;
+        this.addNewResumeEnable = false;
       },
       error : (err) => {
-        this.displayOverloaySpinner = false;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to upload the resume' });
+        this.displayOverlaySpinner = false;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     });
 
@@ -168,21 +155,16 @@ export class ProfileComponent implements OnInit, OnDestroy{
     if(this.userProfile.primaryResume === resumeNumber){
       return;
     }
-    this.displayOverloaySpinner = true;
+    this.displayOverlaySpinner = true;
     this.profileService.updatePrimaryResume(resumeNumber).subscribe({
       next : (requestResult : RequestResult) => {
-        this.displayOverloaySpinner = false;
-        if(requestResult.value){
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Primary resume updated'});
-          this.userProfile.primaryResume = resumeNumber;
-        }
-        else{
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update primary resume'});
-        }
+        this.displayOverlaySpinner = false;
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message});
+        this.userProfile.primaryResume = resumeNumber;
       },
       error : (err) => {
-        this.displayOverloaySpinner = false;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update primary resume'});
+        this.displayOverlaySpinner = false;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     })
   }
@@ -211,38 +193,31 @@ export class ProfileComponent implements OnInit, OnDestroy{
 
   deleteApplicantResume(resumeNumber : number){
 
-    this.displayOverloaySpinner = true;
+    this.displayOverlaySpinner = true;
     this.profileService.deleteResume(resumeNumber).subscribe({
-      next : (res : RequestResult) => {
-        this.displayOverloaySpinner = false;
-        if(res.value){
-          
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Resume deleted successfully'});
-          this.resumeCountArray.pop();
-          this.userProfile.resumeCount--;
-          this.displayResume = false;
+      next : (requestResult : RequestResult) => {
+        this.displayOverlaySpinner = false;
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message});
+        this.resumeCountArray.pop();
+        this.userProfile.resumeCount--;
+        this.displayResume = false;
 
-          for(let i = 0; i<=3; i++){
-            this.userResumes[i.toString() as '1'| '2' | '3'] = null;
-          }
-          if(this.resumeCountArray.length < this.userProfile.primaryResume){
-            this.userProfile.primaryResume = this.resumeCountArray.length;
-          }
-          
+        for(let i = 0; i<=3; i++){
+          this.userResumes[i.toString() as '1'| '2' | '3'] = null;
         }
-        else{
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to deleted resume'});
+        if(this.resumeCountArray.length < this.userProfile.primaryResume){
+          this.userProfile.primaryResume = this.resumeCountArray.length;
         }
       },
       error : (err) => {
-        this.displayOverloaySpinner = false;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to deleted resume'});
-        console.log(err);
+        this.displayOverlaySpinner = false;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     })
   }
 
   enableProfileUpdate(){
+    this.displayResume = false;
     this.updateProfileForm = new FormGroup(
       {
         firstName : new FormControl(this.userProfile.firstName, [this.customFormValidators.defaultValidator,]),
@@ -284,26 +259,20 @@ export class ProfileComponent implements OnInit, OnDestroy{
           address : this.updateProfileForm.controls['address'].value,
           phoneNumber : this.updateProfileForm.controls['phoneNumber'].value
         }
-        this.displayOverloaySpinner = true;
+        this.displayOverlaySpinner = true;
         this.updateUserProfileSubscription = this.profileService.updateUserProfile(newUserProfile, this.userProfile.id!).subscribe(
           {
             next : (requestResult : RequestResult)=>{
-              this.displayOverloaySpinner = false;
-              if(requestResult.value){  
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Profile updated successfully', life: 3000 });
-                this.updateProfileForm.reset();
-                this.userProfile = {...this.userProfile, ...requestResult.value};
-                this.profileToUpdate = requestResult.value;
-                this.updateProfile = false;
-              }
-              else{
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update profile', life: 3000 });
-              }
+              this.displayOverlaySpinner = false;
+              this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message, life: 3000 });
+              this.updateProfileForm.reset();
+              this.userProfile = {...this.userProfile, ...requestResult.value};
+              this.profileToUpdate = requestResult.value;
+              this.updateProfile = false;
             },
-            error : (response)=>{
-              this.displayOverloaySpinner = false;
-              this.messageService.add({ severity: 'error', summary: 'Error', detail: response.error.error, life: 3000 });
-              console.log(response);
+            error : (err)=>{
+              this.displayOverlaySpinner = false;
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
             },
           }
         )
@@ -333,29 +302,22 @@ export class ProfileComponent implements OnInit, OnDestroy{
       return;
     }
     
-    this.displayOverloaySpinner = true;
+    this.displayOverlaySpinner = true;
     this.profileService.updatePassword(
       this.updatePasswordForm.controls['currentPassword'].value,
       this.updatePasswordForm.controls['newPassword'].value
     ).subscribe({
       next : (requestResult : RequestResult) => {
-        if(requestResult.value){
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Password updated successfully', life: 3000 });
-          this.disableUpdatePasswordForm();
-        }
-        this.displayOverloaySpinner = false;
+        this.displayOverlaySpinner = false;
+        this.disableUpdatePasswordForm();
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message, life: 3000 });
       },
       error : (err) => {
-        this.displayOverloaySpinner = false;
-        if(err.status === 401){
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Incorrect current password', life: 3000 });
-        }
-        console.log(err);
+        this.displayOverlaySpinner = false;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       },
+    });
 
-    })
-
-    
   }
 
   showUpdatePasswordDialog(){
@@ -365,7 +327,6 @@ export class ProfileComponent implements OnInit, OnDestroy{
   disableUpdatePasswordForm(){
     this.isUpdatePasswordDialogVisible = false;
     this.updatePasswordForm.reset();
-    
   }
 
   getErrorMessage(field : string){

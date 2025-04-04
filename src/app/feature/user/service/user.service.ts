@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { User } from '../../../shared/entity/user';
 import { RequestResult } from '../../../shared/types/types';
 
@@ -8,7 +8,7 @@ import { RequestResult } from '../../../shared/types/types';
   providedIn: 'root'
 })
 export class UserService {
-  private isUserLoggedIn : BehaviorSubject<boolean> = new BehaviorSubject(sessionStorage.getItem('role') ? true : false);
+  private isUserLoggedIn : BehaviorSubject<boolean> = new BehaviorSubject(localStorage.getItem('role') ? true : false);
 
   constructor(
     private httpClient : HttpClient,
@@ -35,10 +35,10 @@ export class UserService {
   }
 
   isLoggedIn(){
-    return sessionStorage.getItem('role') ? true : false;
+    return localStorage.getItem('role') ? true : false;
   }
 
   getUserRole(){
-    return sessionStorage.getItem('role');
+    return localStorage.getItem('role');
   }
 }

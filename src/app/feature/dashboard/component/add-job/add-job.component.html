@@ -1,6 +1,6 @@
 <p-toast />
 
-<form [formGroup]="addJobFormGroup" (ngSubmit)="submitForm()">
+<form *ngIf="!displayLoadingSpinner" [formGroup]="addJobFormGroup" (ngSubmit)="submitForm()">
 
     <div *ngFor="let inputField of formInputFields">
         <div class="input-field">
@@ -63,3 +63,11 @@
     </div>
     
 </form>
+
+<ng-template [ngIf]="displayLoadingSpinner">
+    <app-progress-spinner></app-progress-spinner>
+</ng-template>
+
+<ng-template [ngIf]="displayOverlaySpinner">
+    <app-overlay-progress-spinner></app-overlay-progress-spinner>
+</ng-template>

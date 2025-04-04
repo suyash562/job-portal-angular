@@ -16,6 +16,7 @@ import { MessageService } from 'primeng/api';
 })
 export class ScheduleInterviewComponent implements OnInit{
   applicationId! : number;
+  displayOverlaySpinner : boolean = false;
   minDate: Date = new Date();
   interviewType : any = {type : 'Online'};
   scheduleInterviewForm! : FormGroup;
@@ -42,15 +43,19 @@ export class ScheduleInterviewComponent implements OnInit{
     });
 
     this.activatedRouteSubcription = this.activatedRoute.params.subscribe({
-          next : (value) => {
-            if(value['applicationId'] && parseInt(value['applicationId'])){
-              this.applicationId = value['applicationId'];
-            }
-            else{
-              console.log(('Job Id not found'));
-            }
-          }
-        })
+      next : (value) => {
+        if(value['applicationId'] && parseInt(value['applicationId'])){
+          this.applicationId = value['applicationId'];
+        }
+        else{
+          console.log(('Job Id not found'));
+        }
+      },
+      error : (err) => {
+        console.log('error');
+        
+      }
+    })
   }
 
   getErrorMessage(field : string){
@@ -86,8 +91,11 @@ export class ScheduleInterviewComponent implements OnInit{
         this.scheduleInterviewForm.controls['interviewAddress'].value,
         this.scheduleInterviewForm.controls['instructions'].value
       )
+
+      this.displayOverlaySpinner = true;
       this.interviewService.addInterviewSchedule(this.applicationId, interviewSchedule).subscribe({
         next : (result : RequestResult) => {
+          this.displayOverlaySpinner = false;
           if(result.value){
             this.scheduleInterviewForm.reset();
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Interview has been scheduled successfully' });
@@ -97,6 +105,7 @@ export class ScheduleInterviewComponent implements OnInit{
           }
         },
         error : (err) => {
+          this.displayOverlaySpinner = false;
           console.log(err);
         }
       })

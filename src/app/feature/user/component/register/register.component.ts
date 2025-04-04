@@ -17,6 +17,7 @@ import { MessageService } from 'primeng/api';
 export class RegisterComponent implements OnInit, OnDestroy{
   registerForm! : FormGroup;
   employeerCompanyFormGroup! : FormGroup;
+  displayOverlaySpinner : boolean = false;
   employeerRegistration : boolean = false;
   resumeFileSelected : boolean = false;
   registerSubscription! : Subscription;
@@ -158,13 +159,16 @@ export class RegisterComponent implements OnInit, OnDestroy{
         }
       }
       
+      this.displayOverlaySpinner = true;
       this.registerSubscription = this.userService.register(formData).subscribe(
         {
           next : (requestResult : RequestResult)=>{            
+            this.displayOverlaySpinner = false;
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registration Successfull', life: 3000 });
             this.router.navigate(['/user']);
           },
           error : (response)=>{
+            this.displayOverlaySpinner = false;
             this.messageService.add({ severity: 'error', summary: 'Error', detail: response.error.error, life: 3000 });
           }
         }

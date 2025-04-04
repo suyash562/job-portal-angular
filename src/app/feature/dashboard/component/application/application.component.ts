@@ -13,8 +13,8 @@ import { ApplicationService } from '../../service/appliaction/application.servic
 })
 export class ApplicationComponent implements OnInit, OnDestroy{
   getApplicationsOfUserSubscription! : Subscription;
+  applicationData! : any[];
   applicationDataTitle : string[] = ['Job Position', 'Applicant Name', 'E-mail', 'Contact Numbers', 'Applied Date','Status', 'Actions'];
-  applicationData : any[] = [];
   applicationDataKey : string[] = ['title', 'applicantName', 'applicantEmail', 'contactNumber', 'appliedDate', 'status'];
   actions : string[] = ['View'];
   
@@ -27,6 +27,7 @@ export class ApplicationComponent implements OnInit, OnDestroy{
     
     this.getApplicationsOfUserSubscription = this.applicationService.getApplicationsOfUser().subscribe({
       next : (result : RequestResult) => {
+        this.applicationData = [];
         result.value.forEach((application : Application) => {
           this.applicationData.push(
             {
