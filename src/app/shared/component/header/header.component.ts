@@ -7,7 +7,7 @@ import { UserService } from '../../../feature/user/service/user.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent implements OnInit{
+export class HeaderComponent{
   @Input('isUserLoggedIn') isUserLoggedIn! : boolean;
   @Output() logoutEvent : EventEmitter<void> = new EventEmitter();
   
@@ -15,14 +15,14 @@ export class HeaderComponent implements OnInit{
     private userService : UserService,
   ){}
 
-  ngOnInit(): void {
-    this.userService.userLoggedInSubject.subscribe({
-      next : (value : boolean) => {
-        this.isUserLoggedIn = value
-      }
-    })
-  }
-
+  // ngOnInit(): void {
+    // this.userService.userLoggedInSubject.subscribe({
+    //   next : (value : boolean) => {
+    //     this.isUserLoggedIn = value
+    //   }
+    // })
+  // }
+  
   logout(){
     this.logoutEvent.emit();
   } 

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 import { Job } from '../../../../shared/entity/job';
 import { RequestResult } from '../../../../shared/types/types';
@@ -8,6 +8,7 @@ import { JobListService } from '../../../job-list/service/jobList/job-list.servi
 import { Subscription } from 'rxjs';
 import { JobsService } from '../../service/jobs/jobs.service';
 import { MessageService } from 'primeng/api';
+import { AppService } from '../../../../app.service';
 
 @Component({
   selector: 'app-add-job',
@@ -16,7 +17,6 @@ import { MessageService } from 'primeng/api';
   styleUrl: './add-job.component.css'
 })
 export class AddJobComponent implements OnInit, OnDestroy{
-  displayOverlaySpinner! : boolean;
   displayLoadingSpinner! : boolean;
   jobIdToUpdate! : number;
   updateJobForm! : boolean;
@@ -36,7 +36,8 @@ export class AddJobComponent implements OnInit, OnDestroy{
     private jobsService : JobsService,
     private jobListService : JobListService,
     private activatedRoute : ActivatedRoute,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private appService: AppService,
   ){}
 
   ngOnInit(): void {
@@ -120,10 +121,6 @@ export class AddJobComponent implements OnInit, OnDestroy{
           ); 
           this.displayLoadingSpinner = false; 
         },
-        error : (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
-          this.displayLoadingSpinner = false;
-        }
       })
     }
   }
@@ -160,20 +157,13 @@ export class AddJobComponent implements OnInit, OnDestroy{
       
       if(this.updateJobForm){
         if(this.isFormChanged()){
-          this.displayOverlaySpinner = true;
+          this.appService.updateDisplayOverlaySpinnerSubject(true);
           this.addNewJobSubscription = this.jobsService.updatePostedJob(this.jobIdToUpdate, newJob).subscribe(
             {
               next : (requestResult : RequestResult)=>{
-                
-                  this.jobToUpdate = newJob;
-                  this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message });
-            
-                this.displayOverlaySpinner = false;
+                this.jobToUpdate = newJob;
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message });
               },
-              error : (err)=>{
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
-                this.displayOverlaySpinner = false;
-              }
             }
           )
         }
@@ -182,18 +172,13 @@ export class AddJobComponent implements OnInit, OnDestroy{
         }
       }
       else{
-        this.displayOverlaySpinner = true;
+        this.appService.updateDisplayOverlaySpinnerSubject(true);
         this.addNewJobSubscription = this.jobsService.addNewJob(newJob).subscribe(
           {
             next : (requestResult : RequestResult)=>{
               this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message});
               this.addJobFormGroup.reset();
-              this.displayOverlaySpinner = false;
             },
-            error : (err)=>{
-              this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
-              this.displayOverlaySpinner = false;
-            }
           }
         )
       }

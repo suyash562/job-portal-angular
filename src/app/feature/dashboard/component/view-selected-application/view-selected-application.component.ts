@@ -9,6 +9,7 @@ import { InterviewSchedule } from '../../../../shared/entity/interviewSchedule';
 import { InterviewService } from '../../service/interview/interview.service';
 import { UserService } from '../../../user/service/user.service';
 import { Job } from '../../../../shared/entity/job';
+import { AppService } from '../../../../app.service';
 
 
 @Component({
@@ -19,7 +20,6 @@ import { Job } from '../../../../shared/entity/job';
 })
 export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
   userRole! : string | null;
-  displayOverlaySpinner : boolean = false;
   activatedRouteSubcription! : Subscription;
   getApplicationByIdSubcription! : Subscription;
   getResumeByIdSubcription! : Subscription;
@@ -41,6 +41,7 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
     private messageService: MessageService,
     private userService: UserService,
     private router: Router,
+    private appService: AppService,
   ){}
 
   ngOnInit(): void {
@@ -63,11 +64,10 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
     this.getApplicationByIdSubcription = this.applicationService.getApplicationById(applicationId).subscribe({
       next : (result : RequestResult) => {
         this.application = result.value;
-        this.getApplicantResume();
         this.getScheduledInterviews();
-      },
-      error : (err) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
+        if(this.userRole === 'employeer'){
+          this.getApplicantResume();
+        }
       }
     })
   }
@@ -76,9 +76,6 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
     this.getScheduledInterviewsSubcription = this.interviewService.getScheduledInterviews(this.applicationId).subscribe({
       next : (result : RequestResult) => {
         this.scheduledInterviews = result.value;
-      },
-      error : (err) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     })
   }
@@ -87,9 +84,6 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
     this.getResumeByIdSubcription = this.applicationService.getResumeOfApplicantById(this.applicationId).subscribe({
       next : (value : Blob) => {
         this.resumeDataBlob = value;
-      },
-      error : (err) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load resume', life: 3000 });
       }
     })
   }
@@ -132,31 +126,21 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
   }
 
   acceptApplication(){
-    this.displayOverlaySpinner = true;
+    this.appService.updateDisplayOverlaySpinnerSubject(true);
     this.updateApplicationStatusSubcription = this.applicationService.updateApplicationStatus(this.application.id, 'Accepted').subscribe({
       next : (result : RequestResult) => {
-        this.displayOverlaySpinner = false;
         this.application.status = 'Accepted';
         this.messageService.add({ severity: 'success', summary: 'Success', detail: result.message });
       },
-      error : (err) => {
-        this.displayOverlaySpinner = false;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
-      }
     })
   }
   
   rejectApplication(){
-    this.displayOverlaySpinner = true;
+    this.appService.updateDisplayOverlaySpinnerSubject(true);
     this.updateApplicationStatusSubcription = this.applicationService.updateApplicationStatus(this.application.id, 'Rejected').subscribe({
       next : (result : RequestResult) => {
-        this.displayOverlaySpinner = false;
         this.application.status = 'Rejected';
         this.messageService.add({ severity: 'success', summary: 'Success', detail: result.message });
-      },
-      error : (err) => {
-        this.displayOverlaySpinner = false;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     })
   }

@@ -67,10 +67,6 @@ export class CurrentUserApplicationComponent {
             );
           });          
         },
-        error : (err) => {
-          console.log(err);
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
-        }
       })
     }
 

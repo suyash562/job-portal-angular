@@ -72,12 +72,10 @@ export class JobListComponent implements OnInit, OnDestroy{
         this.totalJobsCountAfterFiltering = requestResult.value;
       },
       error : (err) => {
-        console.log(err);
         this.totalJobsCount = 0;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     });
-
   }
 
   getJobs(){

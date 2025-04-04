@@ -8,6 +8,7 @@ import { CustomFormValidators } from '../../../../shared/validators/formValidato
 import { RequestResult } from '../../../../shared/types/types';
 import { JobListService } from '../../../job-list/service/jobList/job-list.service';
 import { MessageService } from 'primeng/api';
+import { AppService } from '../../../../app.service';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy{
     private userService : UserService,
     private router : Router,
     private jobListService : JobListService,
-    private messageService: MessageService,
+    private appService : AppService,
   ){}
 
   ngOnInit(): void {
@@ -51,20 +52,15 @@ export class LoginComponent implements OnInit, OnDestroy{
         password : this.loginForm.controls['password'].value,
       }
 
-      this.displayOverlaySpinner = true;
+      this.appService.updateDisplayOverlaySpinnerSubject(true);
       this.loginSubscription = this.userService.login(user).subscribe(
         {
           next : (requestResult : RequestResult)=>{
-            this.displayOverlaySpinner = false;
             localStorage.setItem('role', requestResult.value.role);
             this.userService.updateUserLoginStatus(true);
             this.jobListService.emitIsRedirectedFromDashboardSubject(false);
             this.router.navigate(['/jobs']);
           },
-          error : (err)=>{
-            this.displayOverlaySpinner = false;
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
-          }
         }
       )
     }

@@ -5,7 +5,7 @@ import { CustomFormValidators } from '../../../../shared/validators/formValidato
 import { RequestResult } from '../../../../shared/types/types';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { MessageService } from 'primeng/api';
+import { AppService } from '../../../../app.service';
 
 
 @Component({
@@ -17,7 +17,6 @@ import { MessageService } from 'primeng/api';
 export class RegisterComponent implements OnInit, OnDestroy{
   registerForm! : FormGroup;
   employeerCompanyFormGroup! : FormGroup;
-  displayOverlaySpinner : boolean = false;
   employeerRegistration : boolean = false;
   resumeFileSelected : boolean = false;
   registerSubscription! : Subscription;
@@ -51,7 +50,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
     private userService : UserService,
     private customFormValidators : CustomFormValidators,
     private router : Router,
-    private messageService: MessageService,
+    private appService : AppService,
   ){}
 
   ngOnInit(): void {
@@ -159,16 +158,11 @@ export class RegisterComponent implements OnInit, OnDestroy{
         }
       }
       
-      this.displayOverlaySpinner = true;
+      this.appService.updateDisplayOverlaySpinnerSubject(true);
       this.registerSubscription = this.userService.register(formData).subscribe(
         {
           next : (requestResult : RequestResult)=>{            
-            this.displayOverlaySpinner = false;
             this.router.navigate(['/user']);
-          },
-          error : (err)=>{
-            this.displayOverlaySpinner = false;
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
           }
         }
       )

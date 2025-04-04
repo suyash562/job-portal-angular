@@ -33,9 +33,6 @@ export class ViewJobComponent implements OnInit, OnDestroy{
           this.getJobSubscription = this.jobListService.getJobById(value['jobId']).subscribe({
             next : (result : RequestResult) => {
               this.job = result.value;
-            },
-            error : (err) => {
-              this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
             }
           })
         }

@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { InterviewSchedule } from '../../../../shared/entity/interviewSchedule';
 import { RequestResult } from '../../../../shared/types/types';
 import { MessageService } from 'primeng/api';
+import { AppService } from '../../../../app.service';
 
 @Component({
   selector: 'app-schedule-interview',
@@ -16,7 +17,6 @@ import { MessageService } from 'primeng/api';
 })
 export class ScheduleInterviewComponent implements OnInit, OnDestroy{
   applicationId! : number;
-  displayOverlaySpinner : boolean = false;
   minDate: Date = new Date();
   interviewType : any = {type : 'Online'};
   scheduleInterviewForm! : FormGroup;
@@ -33,6 +33,7 @@ export class ScheduleInterviewComponent implements OnInit, OnDestroy{
     private activatedRoute : ActivatedRoute,
     private messageService: MessageService,
     private router: Router,
+    private appService: AppService,
   ){}
 
   ngOnInit(): void {
@@ -94,16 +95,11 @@ export class ScheduleInterviewComponent implements OnInit, OnDestroy{
         this.scheduleInterviewForm.controls['instructions'].value
       )
 
-      this.displayOverlaySpinner = true;
+      this.appService.updateDisplayOverlaySpinnerSubject(true);
       this.addInterviewScheduleSubcription = this.interviewService.addInterviewSchedule(this.applicationId, interviewSchedule).subscribe({
         next : (result : RequestResult) => {
-          this.displayOverlaySpinner = false;
           this.scheduleInterviewForm.reset();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: result.message });
-        },
-        error : (err) => {
-          this.displayOverlaySpinner = false;
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
         }
       })
     }

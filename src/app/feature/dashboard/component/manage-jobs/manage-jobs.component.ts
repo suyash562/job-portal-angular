@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { UserService } from '../../../user/service/user.service';
 import { JobsService } from '../../service/jobs/jobs.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { AppService } from '../../../../app.service';
 
 @Component({
   selector: 'app-manage-jobs',
@@ -15,7 +16,6 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 })
 export class ManageJobsComponent implements OnInit, OnDestroy{
   userRole! : string | null;
-  displayOverlaySpinner! : boolean;
   getPostedJobsSubscription! : Subscription;
   deletePostedJobSubscription! : Subscription;
   postedJobsData! : any[];
@@ -49,7 +49,8 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
     private userService : UserService,
     private router : Router,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private appService: AppService,
   ){}
 
   ngOnInit(): void {
@@ -75,10 +76,6 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
             }
           );
         });       
-      },
-      error : (err) => {
-        console.log(err);
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     })
   }
@@ -108,17 +105,12 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
           severity: 'contrast',
       },
       accept: () => {
-        this.displayOverlaySpinner = true;
+        this.appService.updateDisplayOverlaySpinnerSubject(true);
         this.deletePostedJobSubscription = this.jobsService.deletePostedJob(jobId).subscribe({
           next : (requestResult : RequestResult) => {
             const jobIndex = this.postedJobsData.findIndex((job) => job.id == jobId);
             this.postedJobsData.splice(jobIndex, 1);
-            this.displayOverlaySpinner = false;
             this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message });
-          },
-          error : (err) => {
-            this.displayOverlaySpinner = false;
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
           }
         })
       },

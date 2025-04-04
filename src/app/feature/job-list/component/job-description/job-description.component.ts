@@ -10,6 +10,7 @@ import { ApplicationService } from '../../../dashboard/service/appliaction/appli
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { UserProfile } from '../../../../shared/entity/userProfile';
 import { ProfileService } from '../../../dashboard/service/profile/profile.service';
+import { AppService } from '../../../../app.service';
 
 @Component({
   selector: 'app-job-description',
@@ -35,6 +36,7 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
     private profileService : ProfileService,
     private messageService : MessageService,
     private confirmationService : ConfirmationService,
+    private appService : AppService,
     
   ){}
 
@@ -110,7 +112,7 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
         });
       }
       else{
-
+        this.appService.updateDisplayOverlaySpinnerSubject(true);
         this.applyForJobSubscription = this.jobListService.applyForJob(jobId).subscribe({
           next : (result : RequestResult) => {
             this.userAppliedJobs.push(jobId);
