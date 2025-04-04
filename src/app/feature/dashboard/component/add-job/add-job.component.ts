@@ -120,8 +120,8 @@ export class AddJobComponent implements OnInit, OnDestroy{
           ); 
           this.displayLoadingSpinner = false; 
         },
-        error : (requestResult : RequestResult) => {
-          console.log(requestResult.message);
+        error : (err) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
           this.displayLoadingSpinner = false;
         }
       })
@@ -164,17 +164,14 @@ export class AddJobComponent implements OnInit, OnDestroy{
           this.addNewJobSubscription = this.jobsService.updatePostedJob(this.jobIdToUpdate, newJob).subscribe(
             {
               next : (requestResult : RequestResult)=>{
-                if(requestResult.value){
+                
                   this.jobToUpdate = newJob;
-                  this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Job has been updated successfully' });
-                }
-                else{
-                  this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update the job post' });
-                }
+                  this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message });
+            
                 this.displayOverlaySpinner = false;
               },
               error : (err)=>{
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update the job post' });
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
                 this.displayOverlaySpinner = false;
               }
             }
@@ -189,17 +186,12 @@ export class AddJobComponent implements OnInit, OnDestroy{
         this.addNewJobSubscription = this.jobsService.addNewJob(newJob).subscribe(
           {
             next : (requestResult : RequestResult)=>{
-              if(requestResult.value){
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Job has been posted successfully' });
-                this.addJobFormGroup.reset();
-              }
-              else{
-                this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to post the job' });
-              }
+              this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message});
+              this.addJobFormGroup.reset();
               this.displayOverlaySpinner = false;
             },
-            error : (requestResult : RequestResult)=>{
-              this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to post the job' });
+            error : (err)=>{
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
               this.displayOverlaySpinner = false;
             }
           }

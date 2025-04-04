@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Job } from '../../../../../shared/entity/job';
-import { JobListService } from '../../../../job-list/service/jobList/job-list.service';
 import { Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { RequestResult } from '../../../../../shared/types/types';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Job } from '../../../../shared/entity/job';
+import { RequestResult } from '../../../../shared/types/types';
+import { MessageService } from 'primeng/api';
+import { JobListService } from '../../../job-list/service/jobList/job-list.service';
+
 
 @Component({
   selector: 'app-view-job',
@@ -19,24 +21,26 @@ export class ViewJobComponent implements OnInit, OnDestroy{
 
   constructor(
     private jobListService : JobListService,
-    private activatedRoute : ActivatedRoute
+    private activatedRoute : ActivatedRoute,
+    private messageService: MessageService,
+    private router: Router,
   ){}
 
   ngOnInit(): void {
     this.activatedRouteSubcription = this.activatedRoute.params.subscribe({
       next : (value) => {
-        if(value['jobId']){
+        if(value['jobId'] && parseInt(value['jobId'])){
           this.getJobSubscription = this.jobListService.getJobById(value['jobId']).subscribe({
             next : (result : RequestResult) => {
               this.job = result.value;
             },
             error : (err) => {
-              console.log(err);
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
             }
           })
         }
         else{
-          console.log(('Job Id not found'));
+          this.router.navigate(['../../manageJobs'], {relativeTo : this.activatedRoute});
         }
       }
     })

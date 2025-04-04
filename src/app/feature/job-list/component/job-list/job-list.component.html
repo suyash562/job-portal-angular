@@ -1,6 +1,8 @@
-<app-filter-options [companyNamesList]="companies" (filterEvent)="filterJobsList($event)" (clearFilterEvent)="clearFilters()"></app-filter-options>
 
+<p-toast />
 <p-confirmdialog />
+
+<app-filter-options [companyNamesList]="companies" (filterEvent)="filterJobsList($event)" (clearFilterEvent)="clearFilters()"></app-filter-options>
 
 <div id="parent-div" *ngIf="filteredJobs; else loading">
     <div id="current-jobs-displayed-div">

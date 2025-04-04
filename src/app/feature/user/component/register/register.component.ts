@@ -164,12 +164,11 @@ export class RegisterComponent implements OnInit, OnDestroy{
         {
           next : (requestResult : RequestResult)=>{            
             this.displayOverlaySpinner = false;
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registration Successfull', life: 3000 });
             this.router.navigate(['/user']);
           },
-          error : (response)=>{
+          error : (err)=>{
             this.displayOverlaySpinner = false;
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: response.error.error, life: 3000 });
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
           }
         }
       )

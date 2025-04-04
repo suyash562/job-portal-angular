@@ -5,7 +5,7 @@ import { ProfileComponent } from './component/profile/profile.component';
 import { AddJobComponent } from './component/add-job/add-job.component';
 import { ManageJobsComponent } from './component/manage-jobs/manage-jobs.component';
 import { ApplicationComponent } from './component/application/application.component';
-import { ViewJobComponent } from './component/view-job/view-job/view-job.component';
+import { ViewJobComponent } from './component/view-job/view-job.component';
 import { CurrentUserApplicationComponent } from './component/current-user-application/current-user-application.component';
 import { ViewSelectedApplicationComponent } from './component/view-selected-application/view-selected-application.component';
 import { ScheduleInterviewComponent } from './component/schedule-interview/schedule-interview.component';

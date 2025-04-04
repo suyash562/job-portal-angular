@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { JobListService } from '../../service/jobList/job-list.service';
 import { RequestResult } from '../../../../shared/types/types';
 import { Job } from '../../../../shared/entity/job';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-job-list',
@@ -14,10 +14,10 @@ import { ConfirmationService } from 'primeng/api';
 })
 export class JobListComponent implements OnInit, OnDestroy{
   jobs! : Job[];
+  filteredJobs! : Job[];
+  companies! : string[];
   totalJobsCount! : number;
   totalJobsCountAfterFiltering! : number;
-  companies! : string[];
-  filteredJobs! : Job[];
   page : number =  1;
   limit : number = 3;
   firstJobInListNumber! : number;
@@ -28,7 +28,9 @@ export class JobListComponent implements OnInit, OnDestroy{
   constructor(
     private jobListService : JobListService,
     private router : Router,
-    private confirmationService : ConfirmationService
+    private confirmationService : ConfirmationService,
+    private messageService : MessageService,
+    
   ){}
   
   ngOnInit(): void {
@@ -52,9 +54,9 @@ export class JobListComponent implements OnInit, OnDestroy{
                 label: 'Okay',
                 severity : 'contrast'
             },
-              accept: () => {
-                this.jobListService.emitIsRedirectedFromDashboardSubject(false);
-                this.router.navigate(['/user/login']);
+            accept: () => {
+              this.jobListService.emitIsRedirectedFromDashboardSubject(false);
+              this.router.navigate(['/user/login']);
             },
             reject: () => {
               this.jobListService.emitIsRedirectedFromDashboardSubject(false);
@@ -72,8 +74,9 @@ export class JobListComponent implements OnInit, OnDestroy{
       error : (err) => {
         console.log(err);
         this.totalJobsCount = 0;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
-    })
+    });
 
   }
 
@@ -85,10 +88,9 @@ export class JobListComponent implements OnInit, OnDestroy{
         this.companies = this.jobListService.getCompanies(this.jobs);        
       },
       error : (err) => {
-        console.log(err);
-        
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
-    })
+    });
   }
 
   filterJobsList(event : any) {
@@ -121,7 +123,6 @@ export class JobListComponent implements OnInit, OnDestroy{
   }
 
   getLastJobInListNumber(){
-    // const maximumJobs = this.totalJobsCount < this.filteredJobs?.length ? this.totalJobsCount : this.filteredJobs?.length;
     return (this.page * this.limit) < (this.totalJobsCountAfterFiltering) ? this.page * this.limit : (this.totalJobsCountAfterFiltering);
   }
 

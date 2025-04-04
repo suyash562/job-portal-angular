@@ -78,6 +78,7 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
       },
       error : (err) => {
         console.log(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     })
   }
@@ -110,14 +111,14 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
         this.displayOverlaySpinner = true;
         this.deletePostedJobSubscription = this.jobsService.deletePostedJob(jobId).subscribe({
           next : (requestResult : RequestResult) => {
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Job Post Deleted Successfully' });
             const jobIndex = this.postedJobsData.findIndex((job) => job.id == jobId);
             this.postedJobsData.splice(jobIndex, 1);
             this.displayOverlaySpinner = false;
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message });
           },
-          error : (requestResult : RequestResult) => {
+          error : (err) => {
             this.displayOverlaySpinner = false;
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete job post' });
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
           }
         })
       },

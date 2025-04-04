@@ -4,6 +4,7 @@ import { RequestResult } from '../../../../shared/types/types';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { ApplicationService } from '../../service/appliaction/application.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-application',
@@ -20,7 +21,9 @@ export class ApplicationComponent implements OnInit, OnDestroy{
   
   constructor(
     private applicationService : ApplicationService,
-    private router : Router
+    private router : Router,
+    private messageService: MessageService
+    
   ){}
 
   ngOnInit(): void {
@@ -44,6 +47,7 @@ export class ApplicationComponent implements OnInit, OnDestroy{
       },
       error : (err) => {
         console.log(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     })
   }

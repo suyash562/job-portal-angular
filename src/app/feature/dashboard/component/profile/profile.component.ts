@@ -63,13 +63,13 @@ export class ProfileComponent implements OnInit, OnDestroy{
 
     this.getUserProfileSubscription = this.profileService.getUserProfile().subscribe({
       next : (requestResult : RequestResult) => {       
-          this.userProfile = requestResult.value;
-          this.profileToUpdate = requestResult.value;
-          if(this.userProfile.user?.role === 'user'){
-            for(let i=1; i<= this.userProfile.resumeCount; i++){
-              this.resumeCountArray.push(i);
-            }
+        this.userProfile = requestResult.value;
+        this.profileToUpdate = requestResult.value;
+        if(this.userProfile.user?.role === 'user'){
+          for(let i=1; i<= this.userProfile.resumeCount; i++){
+            this.resumeCountArray.push(i);
           }
+        }
       },
       error : (err) => {        
         this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });

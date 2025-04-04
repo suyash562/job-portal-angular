@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit, OnDestroy{
           },
           error : (err)=>{
             this.displayOverlaySpinner = false;
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error, life: 3000 });
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
           }
         }
       )

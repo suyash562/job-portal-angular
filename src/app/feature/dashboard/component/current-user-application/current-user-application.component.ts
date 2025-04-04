@@ -5,6 +5,7 @@ import { Application } from '../../../../shared/entity/application';
 import { ApplicationService } from '../../service/appliaction/application.service';
 import { UserService } from '../../../user/service/user.service';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-current-user-application',
@@ -40,6 +41,8 @@ export class CurrentUserApplicationComponent {
       private applicationService : ApplicationService,
       private userService : UserService,
       private router : Router,
+      private messageService: MessageService
+      
     ){}
   
     ngOnInit(): void {
@@ -66,6 +69,7 @@ export class CurrentUserApplicationComponent {
         },
         error : (err) => {
           console.log(err);
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
         }
       })
     }

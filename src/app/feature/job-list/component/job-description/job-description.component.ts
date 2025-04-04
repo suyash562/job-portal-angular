@@ -66,20 +66,17 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
         },
         error : (err) => {
           console.log(err);
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
         }
       })
 
-      this.profileService.getUserProfile().subscribe({
+      this.getUserProfileSubscription = this.profileService.getUserProfile().subscribe({
         next : (result : RequestResult) => {
-          if(result.value){
-            this.userProfile = result.value;
-          }
-          else{
-            console.log(result.message);
-          }
+          this.userProfile = result.value;
         },
         error : (err) => {
           console.log(err);
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
         }
       })
 
@@ -116,19 +113,14 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
 
         this.applyForJobSubscription = this.jobListService.applyForJob(jobId).subscribe({
           next : (result : RequestResult) => {
-            if(result.value){
-              this.userAppliedJobs.push(jobId);
-              this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Applied to Job Successfully', life: 3000 });
-            }
-            else{
-              this.messageService.add({ severity: 'error', summary: 'Error', detail: result.message, life: 3000 });
-            }
+            this.userAppliedJobs.push(jobId);
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Applied to Job Successfully', life: 3000 });
           },
           error : (err) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to appply for Job', life: 3000 });
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
           }
         });
-
+        
       }
     }
     else{

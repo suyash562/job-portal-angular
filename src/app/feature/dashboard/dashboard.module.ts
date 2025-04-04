@@ -8,7 +8,7 @@ import { AddJobComponent } from './component/add-job/add-job.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ManageJobsComponent } from './component/manage-jobs/manage-jobs.component';
 import { ApplicationComponent } from './component/application/application.component';
-import { ViewJobComponent } from './component/view-job/view-job/view-job.component';
+import { ViewJobComponent } from './component/view-job/view-job.component';
 import { SharedModule } from '../../shared/shared.module';
 import { CurrentUserApplicationComponent } from './component/current-user-application/current-user-application.component';
 import { ViewSelectedApplicationComponent } from './component/view-selected-application/view-selected-application.component';

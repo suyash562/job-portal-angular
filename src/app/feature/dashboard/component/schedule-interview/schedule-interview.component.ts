@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 import { InterviewService } from '../../service/interview/interview.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { InterviewSchedule } from '../../../../shared/entity/interviewSchedule';
 import { RequestResult } from '../../../../shared/types/types';
@@ -14,7 +14,7 @@ import { MessageService } from 'primeng/api';
   templateUrl: './schedule-interview.component.html',
   styleUrl: './schedule-interview.component.css'
 })
-export class ScheduleInterviewComponent implements OnInit{
+export class ScheduleInterviewComponent implements OnInit, OnDestroy{
   applicationId! : number;
   displayOverlaySpinner : boolean = false;
   minDate: Date = new Date();
@@ -25,12 +25,14 @@ export class ScheduleInterviewComponent implements OnInit{
     {type : 'Online'},
   ];
   activatedRouteSubcription! : Subscription;
+  addInterviewScheduleSubcription! : Subscription;
 
   constructor(
     private customFormValidators : CustomFormValidators,
     private interviewService : InterviewService,
     private activatedRoute : ActivatedRoute,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private router: Router,
   ){}
 
   ngOnInit(): void {
@@ -48,12 +50,12 @@ export class ScheduleInterviewComponent implements OnInit{
           this.applicationId = value['applicationId'];
         }
         else{
-          console.log(('Job Id not found'));
+          this.router.navigate(['../../applications'], {relativeTo : this.activatedRoute})
         }
       },
       error : (err) => {
-        console.log('error');
-        
+        console.log(err);
+        this.router.navigate(['../../applications'], {relativeTo : this.activatedRoute})
       }
     })
   }
@@ -93,22 +95,22 @@ export class ScheduleInterviewComponent implements OnInit{
       )
 
       this.displayOverlaySpinner = true;
-      this.interviewService.addInterviewSchedule(this.applicationId, interviewSchedule).subscribe({
+      this.addInterviewScheduleSubcription = this.interviewService.addInterviewSchedule(this.applicationId, interviewSchedule).subscribe({
         next : (result : RequestResult) => {
           this.displayOverlaySpinner = false;
-          if(result.value){
-            this.scheduleInterviewForm.reset();
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Interview has been scheduled successfully' });
-          }
-          else{
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to schedule the interview' });
-          }
+          this.scheduleInterviewForm.reset();
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: result.message });
         },
         error : (err) => {
           this.displayOverlaySpinner = false;
-          console.log(err);
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
         }
       })
     }
+  }
+
+  ngOnDestroy(): void {
+    this.activatedRouteSubcription?.unsubscribe();
+    this.addInterviewScheduleSubcription?.unsubscribe();
   }
 }

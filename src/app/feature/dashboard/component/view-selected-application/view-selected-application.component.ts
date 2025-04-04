@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ApplicationService } from '../../service/appliaction/application.service';
 import { Application } from '../../../../shared/entity/application';
@@ -40,6 +40,7 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private userService: UserService,
+    private router: Router,
   ){}
 
   ngOnInit(): void {
@@ -52,7 +53,7 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
           this.getApplicationById(value['applicationId']);
         }
         else{
-          console.log(('Job Id not found'));
+          this.router.navigate(['../../applications'], {relativeTo : this.activatedRoute});
         }
       }
     })
@@ -61,17 +62,12 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
   getApplicationById(applicationId : number){
     this.getApplicationByIdSubcription = this.applicationService.getApplicationById(applicationId).subscribe({
       next : (result : RequestResult) => {
-        if(result.value){
-          this.application = result.value;
-          this.getApplicantResume();
-          this.getScheduledInterviews();
-        }
-        else{
-          console.log(result.message);
-        }
+        this.application = result.value;
+        this.getApplicantResume();
+        this.getScheduledInterviews();
       },
       error : (err) => {
-        console.log(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     })
   }
@@ -79,12 +75,10 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
   getScheduledInterviews(){
     this.getScheduledInterviewsSubcription = this.interviewService.getScheduledInterviews(this.applicationId).subscribe({
       next : (result : RequestResult) => {
-        if(result.value){
-          this.scheduledInterviews = result.value;
-        }
+        this.scheduledInterviews = result.value;
       },
       error : (err) => {
-        console.log(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     })
   }
@@ -95,7 +89,7 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
         this.resumeDataBlob = value;
       },
       error : (err) => {
-        console.log(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load resume', life: 3000 });
       }
     })
   }
@@ -142,17 +136,12 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
     this.updateApplicationStatusSubcription = this.applicationService.updateApplicationStatus(this.application.id, 'Accepted').subscribe({
       next : (result : RequestResult) => {
         this.displayOverlaySpinner = false;
-        if(result.value){
-          this.application.status = 'Accepted';
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Application has been accepted' });
-        }
-        else{
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to accept the application' });
-        }
+        this.application.status = 'Accepted';
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: result.message });
       },
       error : (err) => {
         this.displayOverlaySpinner = false;
-        console.log(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     })
   }
@@ -162,17 +151,12 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
     this.updateApplicationStatusSubcription = this.applicationService.updateApplicationStatus(this.application.id, 'Rejected').subscribe({
       next : (result : RequestResult) => {
         this.displayOverlaySpinner = false;
-        if(result.value){
-          this.application.status = 'Rejected';
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Application has been rejected' });
-        }
-        else{
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to reject the application' });
-        }
+        this.application.status = 'Rejected';
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: result.message });
       },
       error : (err) => {
         this.displayOverlaySpinner = false;
-        console.log(err);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     })
   }
