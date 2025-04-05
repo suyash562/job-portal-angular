@@ -4,7 +4,6 @@ import { RequestResult } from '../../../../shared/types/types';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { ApplicationService } from '../../service/appliaction/application.service';
-import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-application',

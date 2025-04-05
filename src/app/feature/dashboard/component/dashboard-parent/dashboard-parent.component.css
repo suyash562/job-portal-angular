@@ -1,6 +1,5 @@
 #dashboardContainer {
     display: flex;
-    height: 100%;
 }
 
 #sidebarContainer {
@@ -9,5 +8,4 @@
 
 #selectedContentContainer {
     width: 80%;
-    /* background-color: rgba(220, 220, 220, 0.226); */
 }

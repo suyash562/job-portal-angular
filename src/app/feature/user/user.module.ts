@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserRoutingModule } from './user-routing.module';
 import { LoginComponent } from './component/login/login.component';
 import { RegisterComponent } from './component/register/register.component';
@@ -12,12 +12,16 @@ import { SelectModule } from 'primeng/select';
 import { Toast } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { SharedModule } from '../../shared/shared.module';
+import { OtpValidationComponent } from './component/otp-validation/otp-validation.component';
+import { CardModule } from 'primeng/card';
+import { InputOtpModule } from 'primeng/inputotp';
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    OtpValidationComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +33,10 @@ import { SharedModule } from '../../shared/shared.module';
     FloatLabel,
     SelectModule,
     Toast,
-    SharedModule
+    SharedModule,
+    CardModule,
+    InputOtpModule,
+    FormsModule
   ],
   providers: [
     MessageService

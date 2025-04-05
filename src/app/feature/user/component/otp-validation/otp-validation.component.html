@@ -1,0 +1,30 @@
+
+<p-toast />
+<div id="p-card-div">
+    <p-card [style]="{ width: '25rem', overflow: 'hidden' }">
+
+        <ng-template #title>
+            <div class="flex-row-center">
+                <p>OTP Verification </p>
+            </div>
+        </ng-template>
+        <ng-template #subtitle> 
+            <p id="info-p" class="flex-row-center">
+                Enter the 6-digit OTP sent to your e-mail
+             </p>
+        </ng-template>
+        
+        <div id="otp-input-div" class="flex-row-center">
+            <p-inputotp [(ngModel)]="otpValue" [length]="6" [integerOnly]="true" />
+        </div>
+        <div id="countdown-div">
+            <p>{{countdown}}s</p>
+            <p-button label="Resend OTP" [disabled]="countdown != 0" size="small" severity="info" (onClick)="resendOtpAction()"></p-button>
+        </div>
+        <ng-template #footer>
+            <div id="verify-button-div" class="flex-row-center">
+                <p-button label="Verify OTP" size="small" severity="help" (onClick)="otpVerification()"/>
+            </div>
+        </ng-template>
+    </p-card>
+</div>

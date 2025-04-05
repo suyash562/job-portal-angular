@@ -50,7 +50,7 @@ export class AppComponent implements OnInit, OnDestroy{
   logout(){
     this.userService.logout().subscribe({
       next : () => {
-        localStorage.removeItem('role');
+        sessionStorage.removeItem('role');
         this.userService.updateUserLoginStatus(false);
         this.router.navigate(['']);
       },

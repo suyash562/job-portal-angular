@@ -75,7 +75,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
         companyName    : new FormControl('', [this.customFormValidators.defaultValidator]),
         description : new FormControl('', [this.customFormValidators.defaultValidator]),
         industry : new FormControl<{name : string} | null>(null, [this.customFormValidators.requiredValidator]),
-        companySize : new FormControl('', [this.customFormValidators.requiredValidator]),
+        companySize : new FormControl('', [this.customFormValidators.requiredValidator, this.customFormValidators.validateNumber]),
         website  : new FormControl('', [this.customFormValidators.validateUrl, this.customFormValidators.defaultValidator]),
         location : new FormControl('', [this.customFormValidators.defaultValidator]),
       }
@@ -161,11 +161,13 @@ export class RegisterComponent implements OnInit, OnDestroy{
       this.appService.updateDisplayOverlaySpinnerSubject(true);
       this.registerSubscription = this.userService.register(formData).subscribe(
         {
-          next : (requestResult : RequestResult)=>{            
-            this.router.navigate(['/user']);
+          next : (requestResult : RequestResult)=>{     
+            this.userService.userEmailForOtpVerification = this.registerForm.controls['email'].value;
+            this.router.navigate(['user','validateOtp']);
+            // this.router.navigate(['/user']);
           }
         }
-      )
+      );
 
     }
     else{

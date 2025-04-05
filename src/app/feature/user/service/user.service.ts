@@ -8,7 +8,8 @@ import { RequestResult } from '../../../shared/types/types';
   providedIn: 'root'
 })
 export class UserService {
-  private isUserLoggedIn : BehaviorSubject<boolean> = new BehaviorSubject(localStorage.getItem('role') ? true : false);
+  userEmailForOtpVerification! : string;
+  private isUserLoggedIn : BehaviorSubject<boolean> = new BehaviorSubject(sessionStorage.getItem('role') ? true : false);
 
   constructor(
     private httpClient : HttpClient,
@@ -26,6 +27,14 @@ export class UserService {
     return this.httpClient.post<RequestResult>("http://localhost:3200/user/register", formData);
   }
 
+  verifyOtp(email : string, otp : string){        
+    return this.httpClient.post<RequestResult>("http://localhost:3200/user/verify-otp", {email : email, otp : otp});
+  }
+
+  resendOtp(email : string){        
+    return this.httpClient.post<RequestResult>("http://localhost:3200/user/resend-otp", {email : email});
+  }
+
   login(user : Partial<User>){
     return this.httpClient.post<RequestResult>("http://localhost:3200/user/login",{user : user},{withCredentials : true});
   }
@@ -35,10 +44,10 @@ export class UserService {
   }
 
   isLoggedIn(){
-    return localStorage.getItem('role') ? true : false;
+    return sessionStorage.getItem('role') ? true : false;
   }
 
   getUserRole(){
-    return localStorage.getItem('role');
+    return sessionStorage.getItem('role');
   }
 }

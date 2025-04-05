@@ -1,27 +1,27 @@
 <div class="optionsDiv">
-    <a [routerLink]="['/dashboard']">Profile</a>
+    <p-button [style]="{width: '80%'}" icon="pi pi-user" label="Profile" severity="info" [routerLink]="['/dashboard']"></p-button>
 </div>
 
 <div *ngIf="userRole === 'user'">
     <div class="optionsDiv">
-        <a [routerLink]="['current-user-application']">My Applications</a>
+        <p-button [style]="{width: '80%'}" icon="pi pi-user" label="My Applications" severity="info" [routerLink]="['current-user-application']"></p-button>
     </div>
 </div>
 
 <div *ngIf="userRole === 'employeer'">
     <div class="optionsDiv">
-        <a [routerLink]="['addJob']">Post Job</a>
+        <p-button [style]="{width: '80%'}" icon="pi pi-plus-circle" label="Post Job" severity="info" [routerLink]="['addJob']"></p-button>
     </div>
     <div class="optionsDiv">
-        <a [routerLink]="['manageJobs']">Manage Posted Jobs</a>
+        <p-button [style]="{width: '80%'}" icon="pi pi-cog" label="Manage Posted Jobs"  severity="info" [routerLink]="['manageJobs']"></p-button>
     </div>
     <div class="optionsDiv">
-        <a [routerLink]="['applications']">Applications</a>
+        <p-button [style]="{width: '80%'}" icon="pi pi-briefcase" label="Applications" severity="info" [routerLink]="['applications']"></p-button>
     </div>
 </div>
 
 <div *ngIf="userRole === 'admin'">
     <div class="optionsDiv">
-        <a [routerLink]="[]">Stats</a>
+        <p-button [style]="{width: '100%'}" icon="pi pi-user" label="Stats" variant="outlined" severity="contrast" [routerLink]="[]"></p-button>
     </div>
 </div>

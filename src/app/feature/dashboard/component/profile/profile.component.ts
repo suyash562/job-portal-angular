@@ -134,7 +134,8 @@ export class ProfileComponent implements OnInit, OnDestroy{
         this.userProfile.primaryResume = this.userProfile.primaryResume === 0 ? 1 : this.userProfile.primaryResume;
         this.userProfile.resumeCount++;
         this.addNewResumeEnable = false;
-      }
+        this.newResume = null;
+      },
     });
 
   }

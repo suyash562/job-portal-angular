@@ -11,6 +11,7 @@ import { httpInterceptorsProvider } from './interceptor/interceptors-provider';
 import { GlobalErrorHandler } from './errorHandler/global-error-handler';
 import { Toast } from 'primeng/toast';
 
+
 @NgModule({
   declarations: [
     AppComponent

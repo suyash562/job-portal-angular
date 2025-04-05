@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit, OnDestroy{
       this.loginSubscription = this.userService.login(user).subscribe(
         {
           next : (requestResult : RequestResult)=>{
-            localStorage.setItem('role', requestResult.value.role);
+            sessionStorage.setItem('role', requestResult.value.role);
             this.userService.updateUserLoginStatus(true);
             this.jobListService.emitIsRedirectedFromDashboardSubject(false);
             this.router.navigate(['/jobs']);
