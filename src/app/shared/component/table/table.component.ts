@@ -25,8 +25,8 @@ export class TableComponent{
   getClassForTableData(dataObject : any){
     if(this.userRole === 'employeer'){
       const deadlineForApplying : number = Date.parse(dataObject['deadlineForApplying']);
-      const currentDate = Date.parse(new Date().toISOString().split('T')[0]);      
-      if(deadlineForApplying <= currentDate){
+      const currentDate : number = Date.parse(new Date().toISOString().split('T')[0]);      
+      if(deadlineForApplying < currentDate){
         return 'applicationDeadlinePassed';
       }
     }

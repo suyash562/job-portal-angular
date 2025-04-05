@@ -36,7 +36,7 @@
     <div class="input-field">
         <p>Application Deadline</p>
         <div>
-            <p-datepicker id="deadlineForApplyingInput" type="date" [minDate]="currentDate" formControlName="deadlineForApplying" placeholder="Application Deadline"/>
+            <input id="deadlineForApplyingInput" type="date" formControlName="deadlineForApplying" placeholder="Application Deadline"/>
             <small>{{getErrorMessage('deadlineForApplying')}}</small>
         </div>
     </div>

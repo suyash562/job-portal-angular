@@ -30,7 +30,7 @@ export class JobListService {
   emitIsRedirectedFromDashboardSubject(isRedirected : boolean){
     this.isRedirectedFromDashboardSubject.next(isRedirected);
   }
-
+  
   getAllJobs(page : number, limit : number){
     return this.httpClient.get<RequestResult>(`http://localhost:3200/job/jobs?page=${page}&limit=${limit}`,{withCredentials : true});
   }

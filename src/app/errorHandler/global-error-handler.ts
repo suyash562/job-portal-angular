@@ -11,6 +11,7 @@ export class GlobalErrorHandler implements ErrorHandler{
     ){}
 
     handleError(error: any): void {
+        console.log(error);
         
         if(error.error instanceof ProgressEvent){
             this.appService.updateDisplayErrorToastSubject('Unable to reach server');

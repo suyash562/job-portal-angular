@@ -79,16 +79,15 @@ export class JobListComponent implements OnInit, OnDestroy{
   }
 
   getJobs(){
+    
     this.getAllJobsSubscription = this.jobListService.getAllJobs(this.page, this.limit).subscribe({
       next : (result : RequestResult) => {
         this.jobs = result.value;     
         this.filteredJobs = this.jobs;
-        this.companies = this.jobListService.getCompanies(this.jobs);        
-      },
-      error : (err) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
+        this.companies = this.jobListService.getCompanies(this.jobs); 
       }
     });
+    
   }
 
   filterJobsList(event : any) {

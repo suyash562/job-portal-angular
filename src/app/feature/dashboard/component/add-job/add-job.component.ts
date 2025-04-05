@@ -137,7 +137,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
         this.addJobFormGroup.controls['salaryRangeTo'].setErrors({error : 'Must be greater than base salary'});
         return;
       }
-    
+      
       const newJob : Job = new Job(
         this.addJobFormGroup.controls['title'].value,
         this.addJobFormGroup.controls['description'].value,
@@ -150,7 +150,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
         this.addJobFormGroup.controls['facilities'].value,
         this.addJobFormGroup.controls['experienceLevel'].value,
         this.addJobFormGroup.controls['workLocation'].value,
-        this.addJobFormGroup.controls['deadlineForApplying'].value,
+        new Date(this.addJobFormGroup.controls['deadlineForApplying'].value),
         new Date(),
         true
       )
@@ -201,9 +201,18 @@ export class AddJobComponent implements OnInit, OnDestroy{
         return true;
       }
     }
-    if((this.addJobFormGroup.controls['deadlineForApplying'].value as Date).toISOString().split('T')[0] != (this.jobToUpdate['deadlineForApplying'] as Date).toISOString().split('T')[0]){
-      return true;
+    
+    if(typeof (this.addJobFormGroup.controls['deadlineForApplying'].value) !== 'string'){
+      if(this.addJobFormGroup.controls['deadlineForApplying'].value.toISOString().split('T')[0] != this.jobToUpdate['deadlineForApplying']?.toISOString().split('T')[0]){
+        return true;
+      }
     }
+    else{
+      if(this.addJobFormGroup.controls['deadlineForApplying'].value.split('T')[0] != this.jobToUpdate['deadlineForApplying']?.toISOString().split('T')[0]){
+        return true;
+      }  
+    }
+
     if(this.addJobFormGroup.controls['workMode'].value.name != this.jobToUpdate['workMode'] || this.addJobFormGroup.controls['employementType'].value.name != this.jobToUpdate['employementType']){
       return true;
     }
