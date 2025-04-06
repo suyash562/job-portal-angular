@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UserService } from '../../../feature/user/service/user.service';
+import { AppService } from '../../../app.service';
 
 @Component({
   selector: 'app-header',
@@ -12,17 +13,13 @@ export class HeaderComponent{
   @Output() logoutEvent : EventEmitter<void> = new EventEmitter();
   
   constructor(
-    private userService : UserService,
+    private appService : AppService,
   ){}
 
-  // ngOnInit(): void {
-    // this.userService.userLoggedInSubject.subscribe({
-    //   next : (value : boolean) => {
-    //     this.isUserLoggedIn = value
-    //   }
-    // })
-  // }
-  
+  enableNotificationsDrawer(){
+    this.appService.updateNotificationsDrawerVisisbleSubject(true);
+  }
+
   logout(){
     this.logoutEvent.emit();
   } 

@@ -1,6 +1,7 @@
 <p-toast></p-toast>
 <div>
     <app-header [isUserLoggedIn]="userLoggedIn" (logoutEvent)="logout()"></app-header>
+    <app-notification-drawer></app-notification-drawer>
     <router-outlet></router-outlet>
 </div>
 

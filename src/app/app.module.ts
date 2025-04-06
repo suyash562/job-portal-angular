@@ -10,6 +10,7 @@ import Aura from '@primeng/themes/aura';
 import { httpInterceptorsProvider } from './interceptor/interceptors-provider';
 import { GlobalErrorHandler } from './errorHandler/global-error-handler';
 import { Toast } from 'primeng/toast';
+import { WebSocketService } from './service/web-socket.service';
 
 
 @NgModule({
@@ -35,7 +36,6 @@ import { Toast } from 'primeng/toast';
     }),
     { provide : ErrorHandler, useClass : GlobalErrorHandler },
     httpInterceptorsProvider,
-    
   ],
   bootstrap: [AppComponent]
 })

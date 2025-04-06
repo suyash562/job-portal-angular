@@ -1,5 +1,7 @@
 import { ErrorHandler, Injectable } from "@angular/core";
 import { AppService } from "../app.service";
+import { UserService } from "../feature/user/service/user.service";
+import { Router } from "@angular/router";
 
 @Injectable({
     providedIn : 'root'
@@ -7,13 +9,20 @@ import { AppService } from "../app.service";
 export class GlobalErrorHandler implements ErrorHandler{
     
     constructor(
-        private appService : AppService
+        private appService : AppService,
+        private userService : UserService,
+        private router : Router,
     ){}
 
     handleError(error: any): void {
         console.log(error);
         
-        if(error.error instanceof ProgressEvent){
+        if(error.status === 401){
+            this.userService.clearUserSession();
+            this.appService.updateDisplayErrorToastSubject('Session Timeout. Please log in again.');
+            this.router.navigate(['user']);
+        }
+        else if(error.error instanceof ProgressEvent){
             this.appService.updateDisplayErrorToastSubject('Unable to reach server');
         }
         else if(error.error instanceof Blob){

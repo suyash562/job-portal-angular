@@ -4,7 +4,7 @@
 
 <div *ngIf="userRole === 'user'">
     <div class="optionsDiv">
-        <p-button [style]="{width: '80%'}" icon="pi pi-user" label="My Applications" severity="info" [routerLink]="['current-user-application']"></p-button>
+        <p-button [style]="{width: '80%'}" icon="pi pi-briefcase" label="My Applications" severity="info" [routerLink]="['current-user-application']"></p-button>
     </div>
 </div>
 
@@ -22,6 +22,6 @@
 
 <div *ngIf="userRole === 'admin'">
     <div class="optionsDiv">
-        <p-button [style]="{width: '100%'}" icon="pi pi-user" label="Stats" variant="outlined" severity="contrast" [routerLink]="[]"></p-button>
+        <p-button [style]="{width: '80%'}" icon="pi pi-user" label="Stats" severity="info" [routerLink]="[]"></p-button>
     </div>
 </div>

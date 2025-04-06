@@ -1,0 +1,13 @@
+.notification-item{
+    display: flex;
+    background-color: rgb(228, 234, 236);
+    border-radius: 4px;
+    padding-left: 12px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+#notification-item-div :hover{
+    background-color: rgb(213, 231, 236);
+    cursor: pointer;
+}

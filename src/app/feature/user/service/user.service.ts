@@ -23,6 +23,11 @@ export class UserService {
     this.isUserLoggedIn.next(status);
   }
 
+  clearUserSession(){
+    sessionStorage.removeItem('role');
+    this.isUserLoggedIn.next(false);
+  }
+
   register(formData : FormData){        
     return this.httpClient.post<RequestResult>("http://localhost:3200/user/register", formData);
   }

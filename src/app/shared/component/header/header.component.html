@@ -6,9 +6,11 @@
         <a [routerLink]="['dashboard']">Dashboard</a>
 
         <ng-container *ngIf="isUserLoggedIn; else userLoggedIn">
-            <p-overlaybadge size="small" severity="info" value="0">
-                <i class="pi pi-bell" style="font-size: 1.4rem"></i>
-            </p-overlaybadge>
+            <div id="notifications-icon-div" (click)="enableNotificationsDrawer()">
+                <p-overlaybadge size="small" severity="info" value="0">
+                    <i class="pi pi-bell" style="font-size: 1.4rem" ></i>
+                </p-overlaybadge>
+            </div>
             <p-button severity="info" icon="pi pi-sign-out" label="Logout" (click)="logout()"></p-button>
         </ng-container>
 

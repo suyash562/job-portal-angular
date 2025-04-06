@@ -21,7 +21,8 @@ import { CardModule } from 'primeng/card';
 import { ProgressSpinnerComponent } from './component/progress-spinner/progress-spinner.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { OverlayProgressSpinnerComponent } from './component/overlay-progress-spinner/overlay-progress-spinner.component';
-
+import { NotificationDrawerComponent } from './component/notification-drawer/notification-drawer.component';
+import { DrawerModule } from 'primeng/drawer';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { OverlayProgressSpinnerComponent } from './component/overlay-progress-sp
     JobDescriptionComponentComponent,
     TableComponent,
     ProgressSpinnerComponent,
-    OverlayProgressSpinnerComponent
+    OverlayProgressSpinnerComponent,
+    NotificationDrawerComponent
   ],
   imports: [
     CommonModule,
@@ -48,7 +50,8 @@ import { OverlayProgressSpinnerComponent } from './component/overlay-progress-sp
     DialogModule,
     OverlayBadgeModule,
     CardModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    DrawerModule
   ],
   exports : [
     HeaderComponent,
@@ -56,7 +59,8 @@ import { OverlayProgressSpinnerComponent } from './component/overlay-progress-sp
     JobDescriptionComponentComponent,
     TableComponent,
     ProgressSpinnerComponent,
-    OverlayProgressSpinnerComponent
+    OverlayProgressSpinnerComponent,
+    NotificationDrawerComponent
   ],
   providers : [
     MessageService

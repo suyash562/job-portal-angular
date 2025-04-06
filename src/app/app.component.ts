@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { AppService } from './app.service';
+import { WebSocketService } from './service/web-socket.service';
 
 @Component({
   selector: 'app-root',
@@ -41,21 +42,19 @@ export class AppComponent implements OnInit, OnDestroy{
 
     this.displayErrorToastSubscription = this.appService.displayErrorToast.subscribe({
       next : (errorMessage : string) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: errorMessage});
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: errorMessage, life : 4000});
       }
     })
 
   }
   
   logout(){
+    this.displayOverlaySpinner = true;
     this.userService.logout().subscribe({
       next : () => {
         sessionStorage.removeItem('role');
         this.userService.updateUserLoginStatus(false);
         this.router.navigate(['']);
-      },
-      error : (err) => {
-        console.log(err);
       }
     })
   }
