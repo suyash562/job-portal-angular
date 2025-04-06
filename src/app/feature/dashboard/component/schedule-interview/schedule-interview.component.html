@@ -40,10 +40,10 @@
             <div class="input-field">
                 <span>Date</span>
                 <div class="inputFloatLabel">
-                    <p-floatlabel variant="on">
-                        <p-datepicker formControlName="interviewDate"  [minDate]="minDate" id="date" [readonlyInput]="true" />
-                        <label for="date">Interview Date</label>
-                    </p-floatlabel>
+                    <!-- <p-floatlabel variant="on"> -->
+                        <input formControlName="interviewDate" min="{{minDate}}" type="date" id="date"/>
+                        <!-- <label for="date">Interview Date</label>
+                    </p-floatlabel> -->
                     <small>{{getErrorMessage('interviewDate')}}</small>
                 </div>
             </div>

@@ -1,11 +1,11 @@
 <div>
     <p-drawer [(visible)]="isDrawerVisible" position="right" header="Notifications" [style]="{width : '30%'}">
-        <div id="notification-item-div">
-            <div class="notification-item">
-                <p>
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Perferendis excepturi ullam nemo quaerat voluptatibus molestias.
-                </p>
+       
+        <div id="notification-item-div" *ngFor="let notification of notifications; let i = index">
+            <div class="notification-item" [ngStyle]="{ 'background-color' : !notification.isRead ? 'rgb(163, 195, 245)' : null}" (click)="onNotificationSelected(i, notification)">
+                <p>{{notification.message}}</p>
             </div>
         </div>
+        
     </p-drawer>
 </div>

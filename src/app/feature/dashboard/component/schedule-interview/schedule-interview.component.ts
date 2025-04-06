@@ -17,7 +17,7 @@ import { AppService } from '../../../../app.service';
 })
 export class ScheduleInterviewComponent implements OnInit, OnDestroy{
   applicationId! : number;
-  minDate: Date = new Date();
+  minDate: string = new Date().toISOString().split('T')[0];
   interviewType : any = {type : 'Online'};
   scheduleInterviewForm! : FormGroup;
   interviewScheduleOptions = [

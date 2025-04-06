@@ -1,6 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AppService } from '../../../app.service';
 import { Subscription } from 'rxjs';
+import { Notification } from '../../entity/notification';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-notification-drawer',
@@ -11,9 +13,11 @@ import { Subscription } from 'rxjs';
 export class NotificationDrawerComponent implements OnInit, OnDestroy{
   isDrawerVisible : boolean = false;
   notificationsDrawerVisisbleSubscription! : Subscription;
+  @Input('notifications') notifications! : Notification[];
+  @Output() markNotificationAsReadEvent : EventEmitter<{index : number, notification : Notification}> = new EventEmitter();
 
   constructor(
-    private appService : AppService
+    private appService : AppService,
   ){}
 
   ngOnInit(): void {
@@ -21,7 +25,20 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy{
       next : (value) => {
         this.isDrawerVisible = value;
       }
-    });
+    });   
+  }
+
+  onNotificationSelected(index : number, notification : Notification){
+    this.markNotificationAsReadEvent.emit({index : index, notification : notification})
+  }
+
+  getStyleForReadNotifications(isRead : boolean){
+    if(isRead){
+      return {
+        'background-color': 'rgb(120, 161, 182)'
+      };
+    }
+    return null;
   }
 
   ngOnDestroy(): void {

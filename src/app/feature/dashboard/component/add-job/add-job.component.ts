@@ -20,7 +20,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
   displayLoadingSpinner! : boolean;
   jobIdToUpdate! : number;
   updateJobForm! : boolean;
-  currentDate : Date = new Date();
+  minDate: string = new Date().toISOString().split('T')[0];
   addJobFormGroup! : FormGroup;
   formInputFields! : {id : string, inputType : string, formControlName : string, placeholder : string}[];
   employementTypeOptions! : any[];

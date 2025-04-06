@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 <div>
     <app-header [isUserLoggedIn]="userLoggedIn" (logoutEvent)="logout()"></app-header>
-    <app-notification-drawer></app-notification-drawer>
+    <app-notification-drawer *ngIf="userNotifications" [notifications]="userNotifications" (markNotificationAsReadEvent)="markNotificationAsRead($event)"></app-notification-drawer>
     <router-outlet></router-outlet>
 </div>
 
