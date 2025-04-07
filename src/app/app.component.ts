@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from './feature/user/service/user.service';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 import { AppService } from './app.service';
 import { RequestResult } from './shared/types/types';
@@ -25,15 +25,18 @@ export class AppComponent implements OnInit, OnDestroy{
   displayErrorToastSubscription! : Subscription;
   getUserNotificationSubscription! : Subscription;
   markNotificationAsReadSubscription! : Subscription;
+  isRedirectedFromDashboardSubscription! : Subscription;
 
   constructor(
     private appService : AppService,
     private userService : UserService,
     private router : Router,
     private messageService : MessageService,
+    private confirmationService : ConfirmationService,
   ){}
 
   ngOnInit(): void {    
+
     this.userLoggedInSubscription = this.userService.userLoggedInSubject.subscribe({
       next : (value) => {
         this.userLoggedIn = value;
@@ -55,6 +58,35 @@ export class AppComponent implements OnInit, OnDestroy{
       }
     });
 
+    this.isRedirectedFromDashboardSubscription = this.appService.isRedirectedFromDashboardObservable.subscribe({
+      next : (isRedirected) => {
+        if(isRedirected){
+          this.confirmationService.confirm({
+            header: 'Log In',
+            message: 'Please Log In to proceed',
+            closable: true,
+            closeOnEscape: true,
+            icon: 'pi pi-info-circle',
+            rejectButtonProps: {
+              label: 'Cancel',
+              severity: 'secondary',
+              outlined: true,
+            },
+            acceptButtonProps: {
+                label: 'Okay',
+                severity : 'contrast'
+            },
+            accept: () => {
+              this.appService.emitIsRedirectedFromDashboardSubject(false);
+              this.router.navigate(['/user/login']);
+            },
+            reject: () => {
+              this.appService.emitIsRedirectedFromDashboardSubject(false);
+            },
+          });
+        }
+      }
+    })
   }
   
   getUserNotifications(){
@@ -101,5 +133,6 @@ export class AppComponent implements OnInit, OnDestroy{
     this.displayErrorToastSubscription?.unsubscribe();
     this.getUserNotificationSubscription?.unsubscribe();
     this.markNotificationAsReadSubscription?.unsubscribe();
+    this.isRedirectedFromDashboardSubscription?.unsubscribe();
   }
 }

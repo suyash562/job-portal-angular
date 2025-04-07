@@ -30,7 +30,7 @@
                 </div>
                 <div class="application-field">
                     <label>Contact Number:</label>
-                    <span>{{application.user.profile?.phoneNumber}}</span>
+                    <span>{{application.user.profile?.contactNumbers![0].number + ' ' + application.user.profile?.contactNumbers![1].number}}</span>
                 </div>
                 <div class="application-field">
                     <label>Address:</label>

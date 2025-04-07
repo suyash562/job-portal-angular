@@ -27,7 +27,7 @@
                 </div>
                 <div class="info-field">
                     <p class="title-font">Contact Number</p>
-                    <p class="info-field-value">{{userProfile.phoneNumber.split(',')[0]+' '+(userProfile.phoneNumber.split(',')[1] ? userProfile.phoneNumber.split(',')[1] : '')}}</p>
+                    <p class="info-field-value">{{userProfile.contactNumbers[0].number +' '+ (userProfile.contactNumbers[1] ? userProfile.contactNumbers[1].number : '')}}</p>
                 </div>
                 <div class="info-field">
                     <p class="title-font">Address</p>
@@ -87,7 +87,7 @@
                         <div class="info-field">
                             <p class="title-font">Contact Number</p>
                             <div formArrayName="phoneNumber">
-                                <div id="contactDiv" style="display: flex;">
+                                <div id="contactDiv" style="display: flex; justify-content: space-between;">
                                     <ng-container *ngFor="let phoneNumber of phoneNumbers; let i = index">
                                         <div id="contact">
                                             <input pInputText type="number" formControlName="{{i}}" [placeholder]="`Contact ${i+1}`">

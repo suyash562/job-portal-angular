@@ -10,7 +10,8 @@ import Aura from '@primeng/themes/aura';
 import { httpInterceptorsProvider } from './interceptor/interceptors-provider';
 import { GlobalErrorHandler } from './errorHandler/global-error-handler';
 import { Toast } from 'primeng/toast';
-import { WebSocketService } from './service/web-socket.service';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { WebSocketService } from './service/web-socket.service';
     AppRoutingModule,
     SharedModule,
     HttpClientModule,
-    Toast
+    Toast,
+    ConfirmDialogModule
   ],
   providers: [
     provideAnimationsAsync(),
@@ -36,6 +38,7 @@ import { WebSocketService } from './service/web-socket.service';
     }),
     { provide : ErrorHandler, useClass : GlobalErrorHandler },
     httpInterceptorsProvider,
+    ConfirmationService
   ],
   bootstrap: [AppComponent]
 })

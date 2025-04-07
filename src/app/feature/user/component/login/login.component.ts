@@ -24,7 +24,6 @@ export class LoginComponent implements OnInit, OnDestroy{
   constructor(
     private userService : UserService,
     private router : Router,
-    private jobListService : JobListService,
     private appService : AppService,
   ){}
 
@@ -57,7 +56,7 @@ export class LoginComponent implements OnInit, OnDestroy{
           next : (requestResult : RequestResult)=>{
             sessionStorage.setItem('role', requestResult.value.role);
             this.userService.updateUserLoginStatus(true);
-            this.jobListService.emitIsRedirectedFromDashboardSubject(false);
+            this.appService.emitIsRedirectedFromDashboardSubject(false);
             this.router.navigate(['/jobs']);
           },
           error : (error) => {

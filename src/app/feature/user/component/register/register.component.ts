@@ -72,7 +72,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
     );
     this.employeerCompanyFormGroup = new FormGroup(
       {
-        companyName    : new FormControl('', [this.customFormValidators.defaultValidator]),
+        name    : new FormControl('', [this.customFormValidators.defaultValidator]),
         description : new FormControl('', [this.customFormValidators.defaultValidator]),
         industry : new FormControl<{name : string} | null>(null, [this.customFormValidators.requiredValidator]),
         companySize : new FormControl('', [this.customFormValidators.requiredValidator, this.customFormValidators.validateNumber]),
@@ -140,12 +140,15 @@ export class RegisterComponent implements OnInit, OnDestroy{
       let formData = new FormData();
 
       for (const key of Object.keys(this.registerForm.value)) {
-        if(key !== 'employeerCompany'){
+        if(key !== 'employeerCompany' && key != 'phoneNumbers'){
           formData.set(key, this.registerForm.value[key]);
         }
       }
-
+      console.log(this.phoneNumbers[0].value);
+      
       formData.set('role',this.employeerRegistration ? 'employeer' : 'user');
+      formData.set('contactNumber1',this.phoneNumbers[0].value.toString());
+      formData.set('contactNumber2',this.phoneNumbers[1]?.value.toString() ?? '');
 
       if(this.employeerRegistration){
         for (const key of Object.keys(this.employeerCompanyFormGroup.value)) {
@@ -164,7 +167,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
           next : (requestResult : RequestResult)=>{     
             this.userService.userEmailForOtpVerification = this.registerForm.controls['email'].value;
             this.router.navigate(['user','validateOtp']);
-            // this.router.navigate(['/user']);
           }
         }
       );

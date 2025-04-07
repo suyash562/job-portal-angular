@@ -1,4 +1,7 @@
 <p-toast></p-toast>
+<p-confirmdialog />
+
+
 <div>
     <app-header [isUserLoggedIn]="userLoggedIn" [newNotificationsCount]="newNotificationsCount"  (logoutEvent)="logout()"></app-header>
     <app-notification-drawer [notifications]="userNotifications" (markNotificationAsReadEvent)="markNotificationAsRead($event)"></app-notification-drawer>

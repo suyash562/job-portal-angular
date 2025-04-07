@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { RequestResult } from './shared/types/types';
-import { Notification } from './shared/entity/notification';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,8 @@ export class AppService {
   private displayErrorToastSubject : Subject<string> = new Subject();
   private displayOverlaySpinnerSubject : Subject<boolean> = new Subject();
   private notificationsDrawerVisisbleSubject : Subject<boolean> = new Subject();
+  private isRedirectedFromDashboardSubject : BehaviorSubject<boolean> = new BehaviorSubject(false);  
+
 
   constructor(
     private httpClient : HttpClient
@@ -26,6 +28,14 @@ export class AppService {
 
   get notificationsDrawerVisisble(){
     return this.notificationsDrawerVisisbleSubject.asObservable();
+  }
+
+  get isRedirectedFromDashboardObservable(){
+    return this.isRedirectedFromDashboardSubject.asObservable();
+  }
+
+  emitIsRedirectedFromDashboardSubject(isRedirected : boolean){
+    this.isRedirectedFromDashboardSubject.next(isRedirected);
   }
 
   updateDisplayOverlaySpinnerSubject(visible : boolean){

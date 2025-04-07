@@ -7,6 +7,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 import { AppService } from '../../../../app.service';
+import { ContactNumber } from '../../../../shared/entity/contactNumber';
 
 @Component({
   selector: 'app-profile',
@@ -64,6 +65,7 @@ export class ProfileComponent implements OnInit, OnDestroy{
 
     this.getUserProfileSubscription = this.profileService.getUserProfile().subscribe({
       next : (requestResult : RequestResult) => {       
+        
         this.userProfile = requestResult.value;
         this.profileToUpdate = requestResult.value;
         if(this.userProfile.user?.role === 'user'){
@@ -203,24 +205,31 @@ export class ProfileComponent implements OnInit, OnDestroy{
         lastName : new FormControl(this.userProfile.lastName, [this.customFormValidators.defaultValidator,]),
         phoneNumber : new FormArray(
           [
-            new FormControl(this.userProfile.phoneNumber.split(',')[0], [this.customFormValidators.validatePhoneNumber,]),
+            new FormControl(this.userProfile.contactNumbers[0].number, [this.customFormValidators.validatePhoneNumber,]),
           ]
         ),
         address : new FormControl(this.userProfile.address, [this.customFormValidators.defaultValidator]),
       }
-    );
-    const secondContactNumber = this.userProfile.phoneNumber.split(',')[1];
-    if(secondContactNumber){
-      (this.updateProfileForm.controls['phoneNumber'] as FormArray).push(new FormControl(secondContactNumber, [this.customFormValidators.validatePhoneNumber]));
+    )   
+    if(this.userProfile.contactNumbers[1]){
+      (this.updateProfileForm.controls['phoneNumber'] as FormArray).push(new FormControl(this.userProfile.contactNumbers[1].number, [this.customFormValidators.validatePhoneNumber]));
     }
     this.updateProfile = true;
   }
 
   isFormChanged(){
+
     for(const key in this.updateProfileForm.value){
-      if( this.updateProfileForm.controls[key].value.toString() != this.profileToUpdate[key]){
+      if(key != 'phoneNumber' && this.updateProfileForm.controls[key].value.toString() != this.profileToUpdate[key]){
         return true;
       }
+      if(this.phoneNumbers[0].value !== this.profileToUpdate.contactNumbers[0].number){
+        return true;
+      }
+      if(this.phoneNumbers[1] && (this.phoneNumbers[1]?.value !== this.profileToUpdate.contactNumbers[1].number) ){
+        return true;
+      }
+      
     }
     return false;
   }
@@ -232,13 +241,21 @@ export class ProfileComponent implements OnInit, OnDestroy{
     else{
 
       if(!this.updateProfileForm.invalid){
+
         const newUserProfile : Partial<UserProfile> = {
           firstName : this.updateProfileForm.controls['firstName'].value,
           lastName : this.updateProfileForm.controls['lastName'].value,
           address : this.updateProfileForm.controls['address'].value,
-          phoneNumber : this.updateProfileForm.controls['phoneNumber'].value
+          contactNumbers : [
+            new ContactNumber(this.phoneNumbers[0].value.toString()),
+          ]
         }
+        if(this.userProfile.contactNumbers[1]){
+          newUserProfile.contactNumbers?.push(new ContactNumber(this.phoneNumbers[1].value.toString()));
+        }
+        
         this.appService.updateDisplayOverlaySpinnerSubject(true);
+        
         this.updateUserProfileSubscription = this.profileService.updateUserProfile(newUserProfile, this.userProfile.id!).subscribe(
           {
             next : (requestResult : RequestResult)=>{
@@ -285,6 +302,14 @@ export class ProfileComponent implements OnInit, OnDestroy{
         this.disableUpdatePasswordForm();
         this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message, life: 3000 });
       },
+      error : (error) => {
+        if(error.status === 401){
+          this.appService.updateDisplayErrorToastSubject('Incorrect password');
+        }
+        else{
+          throw(error);
+        }
+      }
     });
 
   }

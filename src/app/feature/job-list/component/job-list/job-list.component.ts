@@ -23,48 +23,15 @@ export class JobListComponent implements OnInit, OnDestroy{
   firstJobInListNumber! : number;
   lastJobInListNumber! : number;
   getAllJobsSubscription! : Subscription;
-  isRedirectedFromDashboardSubscription! : Subscription;
 
   constructor(
     private jobListService : JobListService,
     private router : Router,
-    private confirmationService : ConfirmationService,
     private messageService : MessageService,
-    
   ){}
   
   ngOnInit(): void {
     this.getJobs();
-
-    this.isRedirectedFromDashboardSubscription = this.jobListService.isRedirectedFromDashboardObservable.subscribe({
-      next : (isRedirected) => {
-        if(isRedirected){
-          this.confirmationService.confirm({
-            header: 'Log In',
-            message: 'Please Log In to proceed',
-            closable: true,
-            closeOnEscape: true,
-            icon: 'pi pi-info-circle',
-            rejectButtonProps: {
-              label: 'Cancel',
-              severity: 'secondary',
-              outlined: true,
-            },
-            acceptButtonProps: {
-                label: 'Okay',
-                severity : 'contrast'
-            },
-            accept: () => {
-              this.jobListService.emitIsRedirectedFromDashboardSubject(false);
-              this.router.navigate(['/user/login']);
-            },
-            reject: () => {
-              this.jobListService.emitIsRedirectedFromDashboardSubject(false);
-            },
-          });
-        }
-      }
-    })
 
     this.jobListService.getTotalNumberOfJobs().subscribe({
       next : (requestResult : RequestResult) => {
@@ -135,6 +102,5 @@ export class JobListComponent implements OnInit, OnDestroy{
 
   ngOnDestroy(): void {
     this.getAllJobsSubscription?.unsubscribe();
-    this.isRedirectedFromDashboardSubscription?.unsubscribe();
   }
 }
