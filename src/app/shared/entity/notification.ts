@@ -5,15 +5,18 @@ export class Notification{
     message : string;
     actionUrl : string;
     isRead : boolean;
+    generatedAt : Date;
     user! : User;
 
     constructor(
         message : string,
         actionUrl : string,
-        isRead : boolean
+        isRead : boolean,
+        generatedAt : Date
     ){
         this.message = message;
         this.actionUrl = actionUrl;
         this.isRead = isRead;
+        this.generatedAt = generatedAt;
     }
 }

@@ -14,8 +14,8 @@ import { ApplicationService } from '../../service/appliaction/application.servic
 export class ApplicationComponent implements OnInit, OnDestroy{
   getApplicationsOfUserSubscription! : Subscription;
   applicationData! : any[];
-  applicationDataTitle : string[] = ['Job Position', 'Applicant Name', 'E-mail', 'Contact Numbers', 'Applied Date','Status', 'Actions'];
-  applicationDataKey : string[] = ['title', 'applicantName', 'applicantEmail', 'contactNumber', 'appliedDate', 'status'];
+  applicationDataTitle : string[] = ['Application ID','Job Position', 'Applicant Name', 'E-mail', 'Contact Numbers', 'Applied Date','Status', 'Actions'];
+  applicationDataKey : string[] = ['id' ,'title', 'applicantName', 'applicantEmail', 'contactNumber', 'appliedDate', 'status'];
   actions : string[] = ['View'];
   
   constructor(

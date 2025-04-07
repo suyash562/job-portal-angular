@@ -1,5 +1,6 @@
 
 <p-toast />
+
 <div class="parent-div">
 
     <div [style]="{ width: '50rem'}">
@@ -40,10 +41,7 @@
             <div class="input-field">
                 <span>Date</span>
                 <div class="inputFloatLabel">
-                    <!-- <p-floatlabel variant="on"> -->
-                        <input formControlName="interviewDate" min="{{minDate}}" type="date" id="date"/>
-                        <!-- <label for="date">Interview Date</label>
-                    </p-floatlabel> -->
+                    <input formControlName="interviewDate" min="{{minDate}}" type="date" id="date"/>
                     <small>{{getErrorMessage('interviewDate')}}</small>
                 </div>
             </div>

@@ -10,13 +10,14 @@ import { AppService } from '../../../app.service';
 })
 export class HeaderComponent{
   @Input('isUserLoggedIn') isUserLoggedIn! : boolean;
+  @Input('newNotificationsCount') newNotificationsCount : number = 0;
   @Output() logoutEvent : EventEmitter<void> = new EventEmitter();
   
   constructor(
     private appService : AppService,
   ){}
 
-  enableNotificationsDrawer(){
+  enableNotificationsDrawer(){    
     this.appService.updateNotificationsDrawerVisisbleSubject(true);
   }
 

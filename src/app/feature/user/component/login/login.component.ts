@@ -7,7 +7,6 @@ import { User } from '../../../../shared/entity/user';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 import { RequestResult } from '../../../../shared/types/types';
 import { JobListService } from '../../../job-list/service/jobList/job-list.service';
-import { MessageService } from 'primeng/api';
 import { AppService } from '../../../../app.service';
 
 @Component({
@@ -61,6 +60,14 @@ export class LoginComponent implements OnInit, OnDestroy{
             this.jobListService.emitIsRedirectedFromDashboardSubject(false);
             this.router.navigate(['/jobs']);
           },
+          error : (error) => {
+            if(error.status === 401){
+              this.appService.updateDisplayErrorToastSubject('Incorrect email or password');
+            }
+            else{
+              throw(error);
+            }
+          }
         }
       )
     }

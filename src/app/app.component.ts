@@ -19,6 +19,7 @@ export class AppComponent implements OnInit, OnDestroy{
   userLoggedIn! : boolean;
   displayOverlaySpinner : boolean = false;
   userNotifications! : Notification[];
+  newNotificationsCount : number = 0;
   userLoggedInSubscription! : Subscription;
   displayOverlaySpinnerSubscription! : Subscription;
   displayErrorToastSubscription! : Subscription;
@@ -36,6 +37,9 @@ export class AppComponent implements OnInit, OnDestroy{
     this.userLoggedInSubscription = this.userService.userLoggedInSubject.subscribe({
       next : (value) => {
         this.userLoggedIn = value;
+        if(value){
+          this.getUserNotifications();
+        }
       }
     });
 
@@ -51,13 +55,17 @@ export class AppComponent implements OnInit, OnDestroy{
       }
     });
 
-    this.getUserNotificationSubscription = this.appService.getUserNotification().subscribe({
-      next : (requestResult : RequestResult) => {
-        this.userNotifications = requestResult.value;        
-      }
-    })
   }
   
+  getUserNotifications(){
+    this.getUserNotificationSubscription = this.appService.getUserNotification().subscribe({
+      next : (requestResult : RequestResult) => {
+        this.userNotifications = requestResult.value.notifications; 
+        this.newNotificationsCount = requestResult.value.newNotificationsCount;
+      }
+    });
+  }
+
   logout(){
     this.displayOverlaySpinner = true;
     this.userService.logout().subscribe({
@@ -70,14 +78,21 @@ export class AppComponent implements OnInit, OnDestroy{
   }
 
   markNotificationAsRead(event : any){
-    this.displayOverlaySpinner = true;
-    this.appService.markNotificationAsRead(event.notification.id).subscribe({
-      next : (requestResult : RequestResult) => {
-        this.appService.updateNotificationsDrawerVisisbleSubject(false);
-        this.userNotifications[event.index].isRead = true;
-        this.router.navigate([event.notification.actionUrl]);
-      }
-    })
+    if(!event.notification.isRead){      
+      this.displayOverlaySpinner = true;
+      this.appService.markNotificationAsRead(event.notification.id).subscribe({
+        next : (requestResult : RequestResult) => {
+          this.userNotifications[event.index].isRead = true;
+          this.newNotificationsCount--;
+          this.appService.updateNotificationsDrawerVisisbleSubject(false);
+          this.router.navigate([event.notification.actionUrl]);
+        }
+      })
+    }
+    else{
+      this.appService.updateNotificationsDrawerVisisbleSubject(false);
+      this.router.navigate([event.notification.actionUrl]);
+    }
   }
 
   ngOnDestroy(): void {

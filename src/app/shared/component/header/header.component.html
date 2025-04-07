@@ -1,17 +1,17 @@
 
 <header>
-    <h1>Job Portal</h1>
+    <p>Snap Hire</p>
     <nav>
         <a [routerLink]="['jobs']">Jobs</a>
         <a [routerLink]="['dashboard']">Dashboard</a>
 
         <ng-container *ngIf="isUserLoggedIn; else userLoggedIn">
             <div id="notifications-icon-div" (click)="enableNotificationsDrawer()">
-                <p-overlaybadge size="small" severity="info" value="0">
+                <p-overlaybadge size="small" severity="info" value='{{newNotificationsCount}}'>
                     <i class="pi pi-bell" style="font-size: 1.4rem" ></i>
                 </p-overlaybadge>
             </div>
-            <p-button severity="info" icon="pi pi-sign-out" label="Logout" (click)="logout()"></p-button>
+            <p-button severity="info" icon="pi pi-sign-out" [outlined]="true" label="Logout" (click)="logout()"></p-button>
         </ng-container>
 
         <ng-template #userLoggedIn>

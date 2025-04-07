@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { AppService } from '../../../app.service';
 import { Subscription } from 'rxjs';
 import { Notification } from '../../entity/notification';
-import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-notification-drawer',
@@ -11,6 +11,11 @@ import { Router } from '@angular/router';
   styleUrl: './notification-drawer.component.css'
 })
 export class NotificationDrawerComponent implements OnInit, OnDestroy{
+  pDrawerStyle = {
+    width : '30%', 
+    'background-color' : 'rgb(245, 245, 245)',
+    'border-radius' : '14px'
+  };
   isDrawerVisible : boolean = false;
   notificationsDrawerVisisbleSubscription! : Subscription;
   @Input('notifications') notifications! : Notification[];
@@ -39,6 +44,10 @@ export class NotificationDrawerComponent implements OnInit, OnDestroy{
       };
     }
     return null;
+  }
+
+  getLocalTime(date : Date){
+    return new Date(date).toLocaleString().split(',');
   }
 
   ngOnDestroy(): void {

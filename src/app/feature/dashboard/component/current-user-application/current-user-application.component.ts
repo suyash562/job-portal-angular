@@ -19,6 +19,7 @@ export class CurrentUserApplicationComponent {
   applicationData! : any[];
   removedApplicationsId : number[] = [];
   applicationDataTitle : string[] = [
+    'Application ID',
     'Job Position',
     'Employement Type',
     'Work Mode',
@@ -28,6 +29,7 @@ export class CurrentUserApplicationComponent {
     'Actions'
   ];
   applicationDataKey : string[] = [
+    'id',
     'title',
     'employementType',
     'workMode',

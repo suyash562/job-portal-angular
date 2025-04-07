@@ -1,11 +1,25 @@
 <div>
-    <p-drawer [(visible)]="isDrawerVisible" position="right" header="Notifications" [style]="{width : '30%'}">
+    <p-drawer [(visible)]="isDrawerVisible" position="right" header="Notifications" [style]="pDrawerStyle">
        
-        <div id="notification-item-div" *ngFor="let notification of notifications; let i = index">
-            <div class="notification-item" [ngStyle]="{ 'background-color' : !notification.isRead ? 'rgb(163, 195, 245)' : null}" (click)="onNotificationSelected(i, notification)">
-                <p>{{notification.message}}</p>
+        <ng-template [ngIf]="notifications && notifications.length != 0" [ngIfElse]="noNotificationsTemplate">
+            <div id="notification-item-div" *ngFor="let notification of notifications; let i = index">
+                <div class="notification-item" [ngStyle]="{ 'background-color' : !notification.isRead ? 'rgb(201, 203, 206)' : null}" (click)="onNotificationSelected(i, notification)">
+                    
+                    <p>{{notification.message}}</p>
+                    <div id="date-time-div">
+                        <p>{{notification.generatedAt.toString().split('T')[0]}}</p>
+                        <p>{{getLocalTime(notification.generatedAt)[1]}}</p>
+                    </div>
+    
+                </div>
             </div>
-        </div>
+        </ng-template>
         
+        <ng-template #noNotificationsTemplate>
+            <div>
+                You don't have any notifications yet.
+            </div>
+        </ng-template>
+
     </p-drawer>
 </div>
