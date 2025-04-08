@@ -89,6 +89,7 @@ small{
 .flex-column{
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 #firstName{
@@ -105,10 +106,6 @@ small{
 
 .flex-row-center  p-button{
     margin: 10px;
-}
-
-.flex-column{
-    width: 100%;
 }
 
 .flex-row-center input{

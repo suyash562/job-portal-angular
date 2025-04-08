@@ -9,6 +9,7 @@ import { RequestResult } from './shared/types/types';
 })
 export class AppService {
   private displayErrorToastSubject : Subject<string> = new Subject();
+  private displaySuccessToastSubject : Subject<string> = new Subject();
   private displayOverlaySpinnerSubject : Subject<boolean> = new Subject();
   private notificationsDrawerVisisbleSubject : Subject<boolean> = new Subject();
   private isRedirectedFromDashboardSubject : BehaviorSubject<boolean> = new BehaviorSubject(false);  
@@ -24,6 +25,10 @@ export class AppService {
 
   get displayErrorToast(){
     return this.displayErrorToastSubject.asObservable();
+  }
+
+  get displaySuccessToastObservable(){
+    return this.displaySuccessToastSubject.asObservable();
   }
 
   get notificationsDrawerVisisble(){
@@ -44,6 +49,10 @@ export class AppService {
 
   updateDisplayErrorToastSubject(errorMessage : string){
     this.displayErrorToastSubject.next(errorMessage);
+  }
+
+  updateDisplaySuccessToastSubject(successMessage : string){
+    this.displaySuccessToastSubject.next(successMessage);
   }
 
   updateNotificationsDrawerVisisbleSubject(isVisible : boolean){

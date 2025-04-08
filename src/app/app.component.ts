@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { AppService } from './app.service';
 import { RequestResult } from './shared/types/types';
 import { Notification } from './shared/entity/notification';
+import { WebSocketService } from './service/web-socket.service';
 
 
 @Component({
@@ -23,9 +24,11 @@ export class AppComponent implements OnInit, OnDestroy{
   userLoggedInSubscription! : Subscription;
   displayOverlaySpinnerSubscription! : Subscription;
   displayErrorToastSubscription! : Subscription;
+  displaySuccessToastSubscription! : Subscription;
   getUserNotificationSubscription! : Subscription;
   markNotificationAsReadSubscription! : Subscription;
   isRedirectedFromDashboardSubscription! : Subscription;
+  webSocketClientSubscription! : Subscription;
 
   constructor(
     private appService : AppService,
@@ -33,6 +36,7 @@ export class AppComponent implements OnInit, OnDestroy{
     private router : Router,
     private messageService : MessageService,
     private confirmationService : ConfirmationService,
+    private webSocketService : WebSocketService,
   ){}
 
   ngOnInit(): void {    
@@ -42,6 +46,10 @@ export class AppComponent implements OnInit, OnDestroy{
         this.userLoggedIn = value;
         if(value){
           this.getUserNotifications();
+          this.connectToWebSocket();
+        }
+        else{
+          this.webSocketClientSubscription?.unsubscribe();
         }
       }
     });
@@ -55,6 +63,12 @@ export class AppComponent implements OnInit, OnDestroy{
     this.displayErrorToastSubscription = this.appService.displayErrorToast.subscribe({
       next : (errorMessage : string) => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: errorMessage, life : 4000});
+      }
+    });
+
+    this.displaySuccessToastSubscription = this.appService.displaySuccessToastObservable.subscribe({
+      next : (successMessage : string) => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: successMessage, life : 4000});
       }
     });
 
@@ -98,11 +112,25 @@ export class AppComponent implements OnInit, OnDestroy{
     });
   }
 
+  connectToWebSocket(){
+    this.webSocketService.connectToWebSocketServer();
+    this.webSocketClientSubscription = this.webSocketService.webSocketClient.subscribe({
+      next : (value) => {
+        this.userNotifications?.unshift(value);
+        this.newNotificationsCount++;
+      },
+      error : (err) => {
+        console.log(err);
+      }
+    })
+  }
+
   logout(){
     this.displayOverlaySpinner = true;
     this.userService.logout().subscribe({
       next : () => {
         sessionStorage.removeItem('role');
+        sessionStorage.removeItem('email');
         this.userService.updateUserLoginStatus(false);
         this.router.navigate(['']);
       }
@@ -134,5 +162,6 @@ export class AppComponent implements OnInit, OnDestroy{
     this.getUserNotificationSubscription?.unsubscribe();
     this.markNotificationAsReadSubscription?.unsubscribe();
     this.isRedirectedFromDashboardSubscription?.unsubscribe();
+    this.webSocketClientSubscription?.unsubscribe();
   }
 }

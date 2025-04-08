@@ -9,6 +9,4 @@ import { EmployeerCompany } from '../../../../shared/entity/employeerCompany';
 })
 export class ViewEmployerDetailsComponent {
   @Input('employerCompany') employerCompany! : EmployeerCompany;
-
-  
 }

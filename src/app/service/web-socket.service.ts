@@ -6,16 +6,12 @@ import { WebSocketSubject, webSocket } from 'rxjs/webSocket';
 })
 export class WebSocketService {
   private webSocketClient$! : WebSocketSubject<any>;
-
-  constructor() {
-    this.connectToWebSocketServer();
-  }
   
   get webSocketClient(){
     return this.webSocketClient$.asObservable();
   }
   
   connectToWebSocketServer(){
-    this.webSocketClient$ = webSocket('ws://localhost:8080');
+    this.webSocketClient$ = webSocket(`ws://localhost:8080/${sessionStorage.getItem('email')}`);
   }
 }

@@ -8,7 +8,8 @@ import { RequestResult } from '../../../shared/types/types';
   providedIn: 'root'
 })
 export class UserService {
-  userEmailForOtpVerification! : string;
+  emailForOtpVerification! : string;
+  otpForForgotPassword : boolean = false;
   private isUserLoggedIn : BehaviorSubject<boolean> = new BehaviorSubject(sessionStorage.getItem('role') ? true : false);
 
   constructor(
@@ -32,12 +33,20 @@ export class UserService {
     return this.httpClient.post<RequestResult>("http://localhost:3200/user/register", formData);
   }
 
-  verifyOtp(email : string, otp : string){        
-    return this.httpClient.post<RequestResult>("http://localhost:3200/user/verify-otp", {email : email, otp : otp});
+  verifyOtp(email : string, otp : string, passwordReset : boolean){        
+    return this.httpClient.post<RequestResult>("http://localhost:3200/user/verify-otp", {email : email, otp : otp, passwordReset : passwordReset});
   }
 
-  resendOtp(email : string){        
-    return this.httpClient.post<RequestResult>("http://localhost:3200/user/resend-otp", {email : email});
+  resendOtp(email : string, passwordReset : boolean){        
+    return this.httpClient.post<RequestResult>("http://localhost:3200/user/resend-otp", {email : email, passwordReset : passwordReset});
+  }
+
+  resetPassword(email : string, password : string){        
+    return this.httpClient.post<RequestResult>("http://localhost:3200/user/reset-password", {email : email, password : password});
+  }
+
+  checkIfEmailExistsAndSendOtp(email : string){        
+    return this.httpClient.get<RequestResult>(`http://localhost:3200/user/forgot-password/${email}`);
   }
 
   login(user : Partial<User>){

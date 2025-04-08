@@ -164,7 +164,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
       this.registerSubscription = this.userService.register(formData).subscribe(
         {
           next : (requestResult : RequestResult)=>{     
-            this.userService.userEmailForOtpVerification = this.registerForm.controls['email'].value;
+            this.userService.emailForOtpVerification = this.registerForm.controls['email'].value;
             this.router.navigate(['user','validateOtp']);
           }
         }

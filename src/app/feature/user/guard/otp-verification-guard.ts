@@ -13,7 +13,7 @@ export class OtpVerificationGuard implements CanActivate{
     ){}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<GuardResult> {
-        if(this.userService.userEmailForOtpVerification){
+        if(this.userService.emailForOtpVerification){
             return true;
         }
         return this.router.navigate(['user', 'register']);

@@ -7,16 +7,18 @@
                 <small>{{getErrorMessage('email')}}</small>
             </div>
         </div>
-        <div id="passwordInputDiv">
-            <div>
-                <p-password id="passwordInput" formControlName="password" placeholder="Password" [toggleMask]="true" [feedback]="false" />
-                <small>{{getErrorMessage('password')}}</small>
+        <ng-container *ngIf="!forgotPassword">
+            <div id="passwordInputDiv">
+                <div>
+                    <p-password id="passwordInput" formControlName="password" placeholder="Password" [toggleMask]="true" [feedback]="false" />
+                    <small>{{getErrorMessage('password')}}</small>
+                </div>
             </div>
-        </div>
+        </ng-container>
     </div>
     <div id="submitContainer">
         <div id="submitOptionsDiv">
-            <a [routerLink]="['/user/forgotPassword']">Forgot Password</a>
+            <p-button [label]="forgotPassword ? 'Cancel' : 'Forgot Password'" size="small" severity="contrast" (onClick)="forgotPassword ? disableForgotPassword() : enableForgotPassword()"></p-button>
             <p-button type="submit" raised="true" severity="help">Submit</p-button>
         </div>
     </div>

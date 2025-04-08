@@ -4,6 +4,9 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AppService } from '../../../../app.service';
+import { FormControl, FormGroup } from '@angular/forms';
+import { CustomFormValidators } from '../../../../shared/validators/formValidators';
+import { RequestResult } from '../../../../shared/types/types';
 
 @Component({
   selector: 'app-otp-validation',
@@ -12,10 +15,13 @@ import { AppService } from '../../../../app.service';
   styleUrl: './otp-validation.component.css'
 })
 export class OtpValidationComponent implements OnInit, OnDestroy{
+  otpForForgotPassword : boolean = false;
+  changePasswordDialogue : boolean = false;
   userEmail! : string;
   otpValue! : string;
   countdown! : number;
   countDownInterval! : any;
+  resetPasswordForm : FormGroup = new FormGroup({});
   verifyOtpSubscription! : Subscription;
   resendOtpSubscription! : Subscription;
 
@@ -24,28 +30,46 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
     private router : Router,
     private messageService: MessageService,
     private appService: AppService,
+    private customFormValidators : CustomFormValidators,
   ){}
 
   ngOnInit(): void {
     this.initiateCountdown();
-    this.userEmail = this.userService.userEmailForOtpVerification;
+    this.userEmail = this.userService.emailForOtpVerification;
+    this.otpForForgotPassword = this.userService.otpForForgotPassword;
+
+    this.resetPasswordForm = new FormGroup({
+      newPassword : new FormControl('', [this.customFormValidators.validatePassword, this.customFormValidators.defaultValidator]),
+      confirmNewPassword : new FormControl('',[this.customFormValidators.validatePassword, this.customFormValidators.defaultValidator]),
+    });
   }
 
   otpVerification(){
     this.appService.updateDisplayOverlaySpinnerSubject(true);
-    this.verifyOtpSubscription = this.userService.verifyOtp(this.userEmail, this.otpValue).subscribe({
+    this.verifyOtpSubscription = this.userService.verifyOtp(this.userEmail, this.otpValue, this.otpForForgotPassword).subscribe({
       next : () => {
-        this.router.navigate(['user']);
+        if(!this.otpForForgotPassword){
+          this.router.navigate(['user']);
+          this.appService.updateDisplaySuccessToastSubject('OTP Verified Successfully');
+        }
+        else{
+          this.changePasswordDialogue = true;
+        }
       },
-      error : () => {
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: "Incorrect OTP" });
+      error : (error) => {
+        if(error.status === 401){
+          this.appService.updateDisplayErrorToastSubject('Incorrect OTP');
+        }
+        else{
+          throw(error);
+        }      
       }
     });
   }
   
   resendOtpAction(){
     this.appService.updateDisplayOverlaySpinnerSubject(true);
-    this.resendOtpSubscription = this.userService.resendOtp(this.userEmail).subscribe({
+    this.resendOtpSubscription = this.userService.resendOtp(this.userEmail, this.otpForForgotPassword ).subscribe({
       next : (result : any) => {
         this.initiateCountdown();
         this.messageService.add({ severity: 'success', summary: 'Success', detail: result.message });
@@ -61,6 +85,36 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
     setTimeout(() => {
       clearInterval(this.countDownInterval);
     }, 1000 * 60 * 3);
+  }
+
+  updatePassword(){
+    if(this.resetPasswordForm.invalid){
+      this.resetPasswordForm.controls['newPassword'].markAsDirty();
+      this.resetPasswordForm.controls['confirmNewPassword'].markAsDirty();
+      return;
+    }
+    
+    if(this.resetPasswordForm.controls['newPassword'].value !== this.resetPasswordForm.controls['confirmNewPassword'].value){
+      this.resetPasswordForm.get('confirmNewPassword')?.setErrors({error : 'Confirm password must match provided password'});
+      return;
+    }
+    
+    this.appService.updateDisplayOverlaySpinnerSubject(true);
+    this.userService.resetPassword( this.userEmail, this.resetPasswordForm.controls['newPassword'].value).subscribe({
+      next : (requestResult : RequestResult) => {
+        this.disableResetPasswordForm();
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message, life: 3000 });
+      }
+    });
+  }
+
+  disableResetPasswordForm(){
+    this.changePasswordDialogue = false;
+    this.resetPasswordForm.reset();
+  }
+
+  getErrorMessageForPassword(field : string){
+    return this.resetPasswordForm.get(field)?.dirty && this.resetPasswordForm.get(field)?.errors ? this.resetPasswordForm.get(field)?.getError('error') : ''
   }
 
   ngOnDestroy(): void {    

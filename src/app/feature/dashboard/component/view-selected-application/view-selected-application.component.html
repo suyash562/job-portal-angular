@@ -30,7 +30,7 @@
                 </div>
                 <div class="application-field">
                     <label>Contact Number:</label>
-                    <span>{{application.user.profile?.contactNumbers![0].number + ' ' + application.user.profile?.contactNumbers![1].number}}</span>
+                    <span>{{application.user.profile?.contactNumbers![0].number + ' ' + (application.user.profile?.contactNumbers![1] ? application.user.profile?.contactNumbers![1].number : '')}}</span>
                 </div>
                 <div class="application-field">
                     <label>Address:</label>
@@ -100,7 +100,7 @@
                     </div>
                     <div class="schedule-field">
                         <label>Interview Date:</label>
-                        <span>{{schedule.interviewDate.toString().split('T')[0 ]}}</span>
+                        <span>{{schedule.interviewDate.toString().split('T')[0]}}</span>
                     </div>
                     <div class="schedule-field">
                         <label>Interview Time:</label>

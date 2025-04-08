@@ -23,8 +23,40 @@
         </div>
         <ng-template #footer>
             <div id="verify-button-div" class="flex-row-center">
-                <p-button label="Verify OTP" size="small" severity="help" (onClick)="otpVerification()"/>
+                <p-button label="Verify OTP" [disabled]="!otpValue || otpValue.length < 6" size="small" severity="help" (onClick)="otpVerification()"/>
             </div>
         </ng-template>
     </p-card>
+</div>
+
+<div>
+    <p-dialog header="Update Password" [modal]="true" [(visible)]="changePasswordDialogue" [style]="{ width: '25rem' }">
+        
+        <ng-template #headless>
+            <div id="update-password-head">
+                Reset Password
+            </div>
+            <div>
+                <form [formGroup]="resetPasswordForm">
+                    <div class="flex-row-center">
+                        <div class="flex-column">
+                            <input pInputText formControlName="newPassword" placeholder="New password" autocomplete="off" />
+                            <small>{{getErrorMessageForPassword('newPassword')}}</small>
+                        </div>
+                    </div>
+                    <div class="flex-row-center">
+                        <div class="flex-column">    
+                            <input pInputText formControlName="confirmNewPassword" placeholder="Confirm new password" autocomplete="off" />
+                            <small>{{getErrorMessageForPassword('confirmNewPassword')}}</small>
+                        </div>
+                    </div>
+                    <div class="flex-row-center">
+                        <p-button label="Cancel" severity="contrast" variant="outlined" size="small"   (click)="disableResetPasswordForm()" />
+                        <p-button label="Save" severity="help" size="small" (click)="updatePassword()" />
+                    </div>
+                </form>
+            </div>
+        </ng-template>
+        
+    </p-dialog>
 </div>

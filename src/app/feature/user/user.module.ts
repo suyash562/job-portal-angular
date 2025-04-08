@@ -15,6 +15,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { OtpValidationComponent } from './component/otp-validation/otp-validation.component';
 import { CardModule } from 'primeng/card';
 import { InputOtpModule } from 'primeng/inputotp';
+import { DialogModule } from 'primeng/dialog';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { InputOtpModule } from 'primeng/inputotp';
     SharedModule,
     CardModule,
     InputOtpModule,
-    FormsModule
+    FormsModule,
+    DialogModule
   ],
   providers: [
     MessageService
