@@ -42,7 +42,7 @@ export class ApplicationComponent implements OnInit, OnDestroy{
           );
         });          
       },
-    })
+    });
   }
 
   viewSelectedApplication(applicationId : number){

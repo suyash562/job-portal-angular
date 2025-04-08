@@ -55,7 +55,7 @@ export class AppService {
   }
 
   markNotificationAsRead(notificationId : number){
-    return this.httpClient.post<RequestResult>('http://localhost:3200/notification/mark-as-read', {notificationId : notificationId}, {withCredentials : true});
+    return this.httpClient.get<RequestResult>(`http://localhost:3200/notification/mark-as-read/${notificationId}`, {withCredentials : true});
   }
 
 }
