@@ -1,0 +1,16 @@
+
+<p-toast />
+<p-confirmdialog />
+
+<ng-container *ngIf="!viewEmployerCompany && !employerCompany; else viewEmployerCompanyTemplate">
+    <app-table [userRole]="userRole" [tableData]="employerData" [tableDataKey]="employerDataKey" [tableHead]="employerDataTitle" [actions]="actions" (actionPerformed)="performSpecifiedAction($event)"></app-table>
+</ng-container>
+
+<ng-template #viewEmployerCompanyTemplate>
+    <div style="margin: 2rem;">
+        <p-button icon="pi pi-arrow-left" [rounded]="true" severity="contrast" [outlined]="true" (onClick)="disableCompanyInfo()"></p-button>
+    </div>
+    <ng-container >
+        <app-view-employer-details [employerCompany]="employerCompany!"></app-view-employer-details>
+    </ng-container>
+</ng-template>

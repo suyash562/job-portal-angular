@@ -36,6 +36,9 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
     this.verifyOtpSubscription = this.userService.verifyOtp(this.userEmail, this.otpValue).subscribe({
       next : () => {
         this.router.navigate(['user']);
+      },
+      error : () => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: "Incorrect OTP" });
       }
     });
   }

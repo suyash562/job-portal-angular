@@ -79,7 +79,7 @@
                                     <p-button severity="contrast" size="small" (onClick)="pDialogueBoxEnabled = true">Not Available</p-button>
                                 </ng-container>
                                 <ng-template #actionButton>
-                                    <p-button severity="info" size="small" (click)="actionClick(action, dataObject['id'])">{{action}}</p-button>
+                                    <p-button severity="info" size="small" (click)="actionClick(action, dataObject['id'] ? dataObject['id'] : dataObject['email'])">{{action}}</p-button>
                                 </ng-template>
                             </ng-container>
                         </td> 

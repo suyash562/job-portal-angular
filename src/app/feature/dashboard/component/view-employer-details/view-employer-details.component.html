@@ -1,0 +1,36 @@
+
+
+<div class="parent-div" *ngIf="employerCompany">
+
+    <p-card [style]="{ width: '30rem', overflow: 'hidden' }">
+        
+        <div>
+            <div class="application-div">
+                <div class="application-field">
+                    <label>E-mail:</label>
+                    <span>{{employerCompany.name}}</span>
+                </div>
+                <div class="application-field">
+                    <label>Contact Number:</label>
+                    <span>{{employerCompany.description}}</span>
+                </div>
+                <div class="application-field">
+                    <label>Address:</label>
+                    <span>{{employerCompany.industry}}</span>
+                </div>
+                <div class="application-field">
+                    <label>Applied Date:</label>
+                    <span>{{employerCompany.location}}</span>
+                </div>
+                <div class="application-field">
+                    <label>Applied Date:</label>
+                    <span>{{employerCompany.companySize}}</span>
+                </div>
+                <div class="application-field">
+                    <label>Applied Date:</label>
+                    <span>{{employerCompany.website}}</span>
+                </div>
+            </div>
+        </div>
+    </p-card>
+</div>

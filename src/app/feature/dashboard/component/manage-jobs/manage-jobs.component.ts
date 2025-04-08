@@ -59,7 +59,7 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
   }
 
   getAllPostedJobs(){
-    this.getPostedJobsSubscription  = this.getPostedJobsSubscription = this.jobsService.getAllPostedJobs().subscribe({
+    this.getPostedJobsSubscription = this.jobsService.getAllPostedJobs().subscribe({
       next : (result : RequestResult) => {
         this.postedJobsData = [];
         result.value.forEach((job : Job) => {

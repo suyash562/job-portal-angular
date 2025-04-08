@@ -30,6 +30,8 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 import { AvatarModule } from 'primeng/avatar';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
+import { VerifyEmployersComponent } from './component/verify-employers/verify-employers.component';
+import { ViewEmployerDetailsComponent } from './component/view-employer-details/view-employer-details.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,8 @@ import { DialogModule } from 'primeng/dialog';
     CurrentUserApplicationComponent,
     ViewSelectedApplicationComponent,
     ScheduleInterviewComponent,
+    VerifyEmployersComponent,
+    ViewEmployerDetailsComponent,
   ],
   imports: [
     CommonModule,

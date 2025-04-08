@@ -144,8 +144,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
           formData.set(key, this.registerForm.value[key]);
         }
       }
-      console.log(this.phoneNumbers[0].value);
-      
+            
       formData.set('role',this.employeerRegistration ? 'employeer' : 'user');
       formData.set('contactNumber1',this.phoneNumbers[0].value.toString());
       formData.set('contactNumber2',this.phoneNumbers[1]?.value.toString() ?? '');

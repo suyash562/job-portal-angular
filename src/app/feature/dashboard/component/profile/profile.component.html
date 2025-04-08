@@ -6,7 +6,7 @@
 
     <div id="profile-div" *ngIf="userProfile; else loading">
         <div id="update-buttons">
-            <p-button severity="contrast" icon="pi pi-user-edit" label="{{updateProfile ? 'Cancel' : 'Update Profile'}}" id="update-button" size="small" (onClick)="updateProfile ? updateProfile = false : enableProfileUpdate()"></p-button>
+            <p-button *ngIf="userProfile.user?.role != 'admin'" severity="contrast" icon="pi pi-user-edit" label="{{updateProfile ? 'Cancel' : 'Update Profile'}}" id="update-button" size="small" (onClick)="updateProfile ? updateProfile = false : enableProfileUpdate()"></p-button>
             <p-button *ngIf="!updateProfile" label="Update Password" icon="pi pi-pencil" severity="contrast" id="update-button" size="small" (onClick)="showUpdatePasswordDialog()"></p-button>
         </div>
 
@@ -25,14 +25,16 @@
                     <p class="title-font">Name</p>
                     <p class="info-field-value">{{userProfile.firstName+' '+userProfile.lastName}}</p>
                 </div>
-                <div class="info-field">
-                    <p class="title-font">Contact Number</p>
-                    <p class="info-field-value">{{userProfile.contactNumbers[0].number +' '+ (userProfile.contactNumbers[1] ? userProfile.contactNumbers[1].number : '')}}</p>
-                </div>
-                <div class="info-field">
-                    <p class="title-font">Address</p>
-                    <p class="info-field-value">{{userProfile.address}}</p>
-                </div>
+                <ng-container *ngIf="userProfile.user?.role != 'admin'">
+                    <div class="info-field">
+                        <p class="title-font">Contact Number</p>
+                        <p class="info-field-value">{{userProfile.contactNumbers[0].number +' '+ (userProfile.contactNumbers[1] ? userProfile.contactNumbers[1].number : '')}}</p>
+                    </div>
+                    <div class="info-field">
+                        <p class="title-font">Address</p>
+                        <p class="info-field-value">{{userProfile.address}}</p>
+                    </div>
+                </ng-container>
 
                 <div *ngIf="userProfile.user?.role === 'user'">
 
