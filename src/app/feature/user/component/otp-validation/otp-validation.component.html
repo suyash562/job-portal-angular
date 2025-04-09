@@ -18,7 +18,7 @@
             <p-inputotp [(ngModel)]="otpValue" [length]="6" [integerOnly]="true" />
         </div>
         <div id="countdown-div">
-            <p>{{countdown}}s</p>
+            <p>{{countdown > 0 ? countdown+'s' : ''}}</p>
             <p-button label="Resend OTP" [disabled]="countdown != 0" size="small" severity="info" (onClick)="resendOtpAction()"></p-button>
         </div>
         <ng-template #footer>

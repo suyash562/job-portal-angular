@@ -36,8 +36,8 @@ export class ViewJobComponent implements OnInit, OnDestroy{
             }
           })
         }
-        else{
-          this.router.navigate(['../../manageJobs'], {relativeTo : this.activatedRoute});
+        else{          
+          this.router.navigate(['/']);
         }
       }
     })

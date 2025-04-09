@@ -1,0 +1,6 @@
+<p-toast />
+<p-confirmdialog />
+
+<ng-container>
+    <app-table [tableData]="userData" [tableDataKey]="userDataKey" [tableHead]="usersDataTitle" [actions]="actions" (actionPerformed)="performSpecifiedAction($event)"></app-table>
+</ng-container>

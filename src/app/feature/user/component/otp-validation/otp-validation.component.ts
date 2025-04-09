@@ -78,13 +78,13 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
   }
 
   initiateCountdown(){
-    this.countdown = 60 * 3;
+    this.countdown = 60 * 1;
     this.countDownInterval = setInterval(() => {
       this.countdown--;
     }, 1000);
     setTimeout(() => {
       clearInterval(this.countDownInterval);
-    }, 1000 * 60 * 3);
+    }, 1000 * 60 * 1);
   }
 
   updatePassword(){

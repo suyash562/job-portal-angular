@@ -203,32 +203,32 @@ export class ProfileComponent implements OnInit, OnDestroy{
       {
         firstName : new FormControl(this.userProfile.firstName, [this.customFormValidators.defaultValidator,]),
         lastName : new FormControl(this.userProfile.lastName, [this.customFormValidators.defaultValidator,]),
-        phoneNumber : new FormArray(
-          [
-            new FormControl(this.userProfile.contactNumbers[0].number, [this.customFormValidators.validatePhoneNumber,]),
-          ]
-        ),
+        // phoneNumber : new FormArray(
+        //   [
+        //     new FormControl(this.userProfile.contactNumbers[0].number, [this.customFormValidators.validatePhoneNumber,]),
+        //   ]
+        // ),
         address : new FormControl(this.userProfile.address, [this.customFormValidators.defaultValidator]),
       }
     )   
-    if(this.userProfile.contactNumbers[1]){
-      (this.updateProfileForm.controls['phoneNumber'] as FormArray).push(new FormControl(this.userProfile.contactNumbers[1].number, [this.customFormValidators.validatePhoneNumber]));
-    }
+    // if(this.userProfile.contactNumbers[1]){
+    //   (this.updateProfileForm.controls['phoneNumber'] as FormArray).push(new FormControl(this.userProfile.contactNumbers[1].number, [this.customFormValidators.validatePhoneNumber]));
+    // }
     this.updateProfile = true;
   }
 
   isFormChanged(){
 
     for(const key in this.updateProfileForm.value){
-      if(key != 'phoneNumber' && this.updateProfileForm.controls[key].value.toString() != this.profileToUpdate[key]){
+      if(this.updateProfileForm.controls[key].value.toString() != this.profileToUpdate[key]){
         return true;
       }
-      if(this.phoneNumbers[0].value !== this.profileToUpdate.contactNumbers[0].number){
-        return true;
-      }
-      if(this.phoneNumbers[1] && (this.phoneNumbers[1]?.value !== this.profileToUpdate.contactNumbers[1].number) ){
-        return true;
-      }
+      // if(this.phoneNumbers[0].value !== this.profileToUpdate.contactNumbers[0].number){
+      //   return true;
+      // }
+      // if(this.phoneNumbers[1] && (this.phoneNumbers[1]?.value !== this.profileToUpdate.contactNumbers[1].number) ){
+      //   return true;
+      // }
       
     }
     return false;
@@ -246,13 +246,13 @@ export class ProfileComponent implements OnInit, OnDestroy{
           firstName : this.updateProfileForm.controls['firstName'].value,
           lastName : this.updateProfileForm.controls['lastName'].value,
           address : this.updateProfileForm.controls['address'].value,
-          contactNumbers : [
-            new ContactNumber(this.phoneNumbers[0].value.toString()),
-          ]
+          // contactNumbers : [
+          //   new ContactNumber(this.phoneNumbers[0].value.toString()),
+          // ]
         }
-        if(this.userProfile.contactNumbers[1]){
-          newUserProfile.contactNumbers?.push(new ContactNumber(this.phoneNumbers[1].value.toString()));
-        }
+        // if(this.userProfile.contactNumbers[1]){
+        //   newUserProfile.contactNumbers?.push(new ContactNumber(this.phoneNumbers[1].value.toString()));
+        // }
         
         this.appService.updateDisplayOverlaySpinnerSubject(true);
         
@@ -274,8 +274,8 @@ export class ProfileComponent implements OnInit, OnDestroy{
         this.updateProfileForm.get('lastName')?.markAsDirty();
         this.updateProfileForm.get('lastName')?.markAsDirty();
         this.updateProfileForm.get('address')?.markAsDirty();
-        this.phoneNumbers[0].markAsDirty();
-        this.phoneNumbers[1]?.markAsDirty();  
+        // this.phoneNumbers[0].markAsDirty();
+        // this.phoneNumbers[1]?.markAsDirty();  
       }
     }
   }
@@ -331,9 +331,9 @@ export class ProfileComponent implements OnInit, OnDestroy{
     return this.updatePasswordForm.get(field)?.dirty && this.updatePasswordForm.get(field)?.errors ? this.updatePasswordForm.get(field)?.getError('error') : ''
   }
   
-  getErrorMessageForContact(contactControlName : number){
-    return this.phoneNumbers[contactControlName].dirty && this.phoneNumbers[contactControlName].errors ? this.phoneNumbers[contactControlName].getError('error') : ''
-  }
+  // getErrorMessageForContact(contactControlName : number){
+  //   return this.phoneNumbers[contactControlName].dirty && this.phoneNumbers[contactControlName].errors ? this.phoneNumbers[contactControlName].getError('error') : ''
+  // }
 
   ngOnDestroy(): void {
     this.getUserProfileSubscription?.unsubscribe();

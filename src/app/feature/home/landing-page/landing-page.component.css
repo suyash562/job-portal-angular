@@ -1,0 +1,26 @@
+.parent-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+}
+.p-card{
+    width: 75%;
+    padding: 0.8%;
+    margin-top: 5%;
+}
+
+#header {
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    margin-top: 5%;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+#title{
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 5%;
+}

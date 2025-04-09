@@ -35,7 +35,7 @@ export class ApplicationComponent implements OnInit, OnDestroy{
               title : application.job.title,
               applicantName : application.user.profile?.firstName +' '+ application.user.profile?.lastName,
               applicantEmail : application.user.email,
-              contactNumber : application.user.profile?.contactNumbers[0].number +' '+ application.user.profile?.contactNumbers[1]?.number,
+              contactNumber : application.user.profile?.contactNumbers[0].number +' '+ (application.user.profile?.contactNumbers[1]?.number ?? ''),
               appliedDate : application.applyDate.toString().split('T')[0],
               status : application.status,
             }
@@ -46,7 +46,7 @@ export class ApplicationComponent implements OnInit, OnDestroy{
   }
 
   viewSelectedApplication(applicationId : number){
-    this.router.navigate(['dashboard','component','userApplication',applicationId]);
+    this.router.navigate(['dashboard','component','user','userApplication',applicationId]);
   }
 
   performSpecifiedAction(event : {actionType : string, dataObjectId : number}){

@@ -70,7 +70,7 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
               vacancies : job.vacancies,
               employementType : job.employementType,
               workMode : job.workMode,
-              salaryRange : job.salaryRange,
+              salaryRange : job.salaryRange + ' LPA',
               postingDate : job.postingDate.toString().split('T')[0],
               deadlineForApplying : job.deadlineForApplying.toString().split('T')[0],
             }
@@ -81,11 +81,11 @@ export class ManageJobsComponent implements OnInit, OnDestroy{
   }
 
   viewJob(jobId : number){
-   this.router.navigate(['dashboard','component','viewJob',jobId]);
+   this.router.navigate(['dashboard','component','user','viewJob',jobId]);
   }
 
   updateJob(jobId : number){
-   this.router.navigate(['dashboard','component','updateJob',jobId]);
+   this.router.navigate(['dashboard','component', 'employeer' ,'updateJob',jobId]);
   }
 
   deleteJob(jobId : number){

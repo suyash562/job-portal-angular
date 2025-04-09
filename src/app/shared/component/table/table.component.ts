@@ -34,10 +34,10 @@ export class TableComponent{
   }
   
   getStyleForStatusField(status : string){
-    if(status === 'Accepted'){
+    if(status === 'Accepted' || status === 'Active'){
       return  { color : 'green', 'font-weight' : 'bold'};
     }  
-    else if(status === 'Rejected'){
+    else if(status === 'Rejected' || status === 'Inactive'){
       return  { color : 'red', 'font-weight' : 'bold'};
     }
     else if(status === 'Interview'){

@@ -49,12 +49,14 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
 
     this.activatedRouteSubcription = this.activatedRoute.params.subscribe({
       next : (value) => {
+        console.log(value);
+        
         if(value['applicationId'] && parseInt(value['applicationId'])){
           this.applicationId = value['applicationId'];
           this.getApplicationById(value['applicationId']);
         }
         else{
-          this.router.navigate(['../../applications'], {relativeTo : this.activatedRoute});
+          this.router.navigate(['/']);
         }
       }
     })

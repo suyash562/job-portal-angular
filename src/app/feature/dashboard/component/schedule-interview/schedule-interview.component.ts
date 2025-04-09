@@ -55,7 +55,6 @@ export class ScheduleInterviewComponent implements OnInit, OnDestroy{
         }
       },
       error : (err) => {
-        console.log(err);
         this.router.navigate(['../../applications'], {relativeTo : this.activatedRoute})
       }
     })

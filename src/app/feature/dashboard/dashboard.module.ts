@@ -32,6 +32,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
 import { VerifyEmployersComponent } from './component/verify-employers/verify-employers.component';
 import { ViewEmployerDetailsComponent } from './component/view-employer-details/view-employer-details.component';
+import { ManageUsersComponent } from './component/manage-users/manage-users.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { ViewEmployerDetailsComponent } from './component/view-employer-details/
     ScheduleInterviewComponent,
     VerifyEmployersComponent,
     ViewEmployerDetailsComponent,
+    ManageUsersComponent,
   ],
   imports: [
     CommonModule,

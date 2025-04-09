@@ -15,7 +15,15 @@ export class AdminService {
     return this.httpClient.get<RequestResult>(`http://localhost:3200/user/employerDetails`, {withCredentials : true});
   }
 
+  getAllVerifiedEmployers(){
+    return this.httpClient.get<RequestResult>(`http://localhost:3200/user/verified-users`, {withCredentials : true});
+  }
+
   approveEmployer(employerEmail : string){
     return this.httpClient.get<RequestResult>(`http://localhost:3200/user/approve-employer/${employerEmail}`, {withCredentials : true});
+  }
+
+  updateUserAccountStatus(userEmail : string, status : string){
+    return this.httpClient.get<RequestResult>(`http://localhost:3200/user/update-account-status/${userEmail}/${status}`, {withCredentials : true});
   }
 }

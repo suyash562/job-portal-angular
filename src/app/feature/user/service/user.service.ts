@@ -10,6 +10,7 @@ import { RequestResult } from '../../../shared/types/types';
 export class UserService {
   emailForOtpVerification! : string;
   otpForForgotPassword : boolean = false;
+  userRole : string = sessionStorage.getItem('role') ?? '';
   private isUserLoggedIn : BehaviorSubject<boolean> = new BehaviorSubject(sessionStorage.getItem('role') ? true : false);
 
   constructor(

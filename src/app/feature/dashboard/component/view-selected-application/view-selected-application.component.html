@@ -46,7 +46,7 @@
                 </div>
                 <div class="application-field" *ngIf="application.status === 'Pending' || application.status === 'Interview'; else statusAlreadyUpdated">
                     <label>Actions:</label>
-                    <p-button class="action-button" severity="info" size="small" [routerLink]="['/dashboard','component','schedule-interview',applicationId]">Schedule Interview</p-button>
+                    <p-button class="action-button" severity="info" size="small" [routerLink]="['/dashboard','component','employeer','schedule-interview',applicationId]">Schedule Interview</p-button>
                     <p-button class="action-button" severity="success" size="small" (click)="acceptApplicationDialogue()">Accept</p-button>
                     <p-button class="action-button" severity="danger" size="small" (click)="rejectApplicationDialogue()">Reject </p-button>
                 </div>

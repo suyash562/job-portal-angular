@@ -188,12 +188,12 @@ export class RegisterComponent implements OnInit, OnDestroy{
       }
 
       if(this.employeerRegistration){
-        this.employeerCompanyFormGroup.controls['companyName'].markAsDirty();
-        this.employeerCompanyFormGroup.controls['description'].markAsDirty();
-        this.employeerCompanyFormGroup.controls['industry'].markAsDirty();
-        this.employeerCompanyFormGroup.controls['companySize'].markAsDirty();
-        this.employeerCompanyFormGroup.controls['website'].markAsDirty();
-        this.employeerCompanyFormGroup.controls['location'].markAsDirty();
+        this.employeerCompanyFormGroup.controls['companyName']?.markAsDirty();
+        this.employeerCompanyFormGroup.controls['description']?.markAsDirty();
+        this.employeerCompanyFormGroup.controls['industry']?.markAsDirty();
+        this.employeerCompanyFormGroup.controls['companySize']?.markAsDirty();
+        this.employeerCompanyFormGroup.controls['website']?.markAsDirty();
+        this.employeerCompanyFormGroup.controls['location']?.markAsDirty();
       }
     }
   }

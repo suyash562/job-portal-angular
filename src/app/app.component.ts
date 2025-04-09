@@ -16,7 +16,6 @@ import { WebSocketService } from './service/web-socket.service';
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit, OnDestroy{
-  title = 'job-portal';
   userLoggedIn! : boolean;
   displayOverlaySpinner : boolean = false;
   userNotifications! : Notification[];

@@ -4,7 +4,8 @@ import { IsLoggedIn } from './route-guard/loggedIn-guard';
 
 
 const routes: Routes = [
-  {path : '', redirectTo : 'jobs', pathMatch : 'full'},
+  {path : '', redirectTo : 'home', pathMatch : 'full'},
+  {path : 'home', loadChildren : () => import('../app/feature/home/home.module').then(m => m.HomeModule)},
   {path : 'jobs', loadChildren : () => import('../app/feature/job-list/job-list.module').then(m => m.JobListModule)},
   {path : 'dashboard', canActivate : [IsLoggedIn] ,loadChildren : () => import('../app/feature/dashboard/dashboard.module').then(m => m.DashboardModule)},
   {path : 'user', loadChildren : () => import('./feature/user/user.module').then(m => m.UserModule)},

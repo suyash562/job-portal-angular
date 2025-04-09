@@ -5,6 +5,7 @@ export class User{
     email : string;
     password : string;
     newNotifications!  : number;
+    isVerifiedByAdmin!  : boolean;
     role  : 'user' | 'employeer' | 'admin';
     employeerCompany : EmployeerCompany | undefined;
     profile : UserProfile | undefined;

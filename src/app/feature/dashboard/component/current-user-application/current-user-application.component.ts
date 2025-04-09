@@ -73,7 +73,7 @@ export class CurrentUserApplicationComponent {
     }
 
     viewApplication(applicationId : number){
-      this.router.navigate(['dashboard','component','userApplication',applicationId]);
+      this.router.navigate(['dashboard','component','user','userApplication',applicationId]);
     }
 
     performSpecifiedAction(event : {actionType : string, dataObjectId : number}){
