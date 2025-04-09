@@ -7,7 +7,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
 import { AppService } from '../../../../app.service';
-import { ContactNumber } from '../../../../shared/entity/contactNumber';
+
 
 @Component({
   selector: 'app-profile',

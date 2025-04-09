@@ -10,11 +10,13 @@ header {
     border-bottom-right-radius: 14px;
 }
 
-header p {
+header span {
     margin: 0;
     font-size: 26px;
-    color: rgb(34, 34, 34);
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: rgb(27, 27, 27);
+    /* font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; */
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
 }
 
 header nav {

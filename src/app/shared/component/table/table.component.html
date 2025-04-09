@@ -33,7 +33,7 @@
             <i class="pi pi-info-circle" style="font-size: 3rem;"></i>
         </div>
         <div class="flex items-center gap-4 mb-4">
-            <span class="font-bold whitespace-nowrap" style="font-size: large;">This job post has been removed by the employeer and not available anymore</span >
+            <span style="font-size: large;">This job post has been removed by the employer and not available anymore.</span >
         </div>
         <ng-template #footer>
             <p-button label="Okay" severity="contrast" (onClick)="pDialogueBoxEnabled = false"/>
@@ -53,7 +53,7 @@
     </div>
 
     <div class="card">
-        <p-table [value]="tableDataObject">
+        <p-table stripedRows [value]="tableDataObject">
             <ng-template #header>
                 <tr>
                     <ng-container *ngFor="let title of tableHead">

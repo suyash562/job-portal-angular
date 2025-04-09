@@ -42,7 +42,7 @@ export class JobListService {
 
     return jobs.filter((job) => {
         
-      const company = event.company ? (job.employeer!.employeerCompany!.name === event.company) : false;
+      const company = event.company ? (job.employeer!.employeerCompany!.name.toLowerCase() === event.company) : false;
       const workMode = event.workMode ? (job.workMode === event.workMode) : false;
       const employementType = event.employementType ? (job.employementType === event.employementType) : false;
       

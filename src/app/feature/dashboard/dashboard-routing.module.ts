@@ -13,11 +13,13 @@ import { VerifyEmployersComponent } from './component/verify-employers/verify-em
 import { ManageUsersComponent } from './component/manage-users/manage-users.component';
 import { AdminGuard } from './guard/admin.guard';
 import { EmployerGuard } from './guard/employer.guard';
+import { UserInfoComponent } from './component/user-info/user-info.component';
 
 
 const routes: Routes = [
   {path : '', redirectTo : 'component', pathMatch : 'full'},
   {path : 'component',  component : DashboardParentComponent, children : [
+    
     {path : '', redirectTo : 'userProfile' , pathMatch : 'full'},
     {path : 'userProfile', component : ProfileComponent},
 
@@ -38,6 +40,7 @@ const routes: Routes = [
     {path : 'admin', canActivate : [AdminGuard] ,children : [
       {path : 'verify-employeers', component : VerifyEmployersComponent},
       {path : 'manage-users', component : ManageUsersComponent},
+      {path : 'user-info', component : UserInfoComponent},
     ]},
   ]},
 ];

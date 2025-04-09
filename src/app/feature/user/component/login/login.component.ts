@@ -18,17 +18,16 @@ export class LoginComponent implements OnInit, OnDestroy{
   forgotPassword : boolean = false;
   displayOverlaySpinner : boolean = false; 
   loginForm! : FormGroup;
-  customFormValidators! : CustomFormValidators;
   loginSubscription! : Subscription;
   
   constructor(
     private userService : UserService,
     private router : Router,
     private appService : AppService,
+    private customFormValidators : CustomFormValidators,
   ){}
 
   ngOnInit(): void {
-    this.customFormValidators = new CustomFormValidators();
 
     this.loginForm = new FormGroup(
       {
@@ -80,13 +79,14 @@ export class LoginComponent implements OnInit, OnDestroy{
         next : (requestResult : RequestResult)=>{
           sessionStorage.setItem('role', requestResult.value.role);
           sessionStorage.setItem('email', requestResult.value.email);
+          this.userService.userRole = requestResult.value.role;
           this.userService.updateUserLoginStatus(true);
           this.appService.emitIsRedirectedFromDashboardSubject(false);
           this.router.navigate(['/jobs']);
         },
         error : (error) => {
           if(error.status === 401){
-            this.appService.updateDisplayErrorToastSubject('Incorrect email or password');
+            this.appService.updateDisplayErrorToastSubject(error.error);
           }
           else{
             throw(error);

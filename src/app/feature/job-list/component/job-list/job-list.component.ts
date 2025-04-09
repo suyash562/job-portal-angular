@@ -37,10 +37,6 @@ export class JobListComponent implements OnInit, OnDestroy{
       next : (requestResult : RequestResult) => {
         this.totalJobsCount = requestResult.value;
         this.totalJobsCountAfterFiltering = requestResult.value;
-      },
-      error : (err) => {
-        this.totalJobsCount = 0;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
       }
     });
   }
@@ -58,6 +54,8 @@ export class JobListComponent implements OnInit, OnDestroy{
   }
 
   filterJobsList(event : any) {
+    console.log(event);
+    
     if(event.workMode || event.employementType || event.company){
       this.filteredJobs = this.jobListService.filterJobsBasedOnOptions(event, this.jobs);
       this.totalJobsCountAfterFiltering = this.filteredJobs.length;

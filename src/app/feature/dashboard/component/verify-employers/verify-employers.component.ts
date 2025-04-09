@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RequestResult } from '../../../../shared/types/types';
 import { UserService } from '../../../user/service/user.service';
@@ -15,7 +15,7 @@ import { MessageService } from 'primeng/api';
   templateUrl: './verify-employers.component.html',
   styleUrl: './verify-employers.component.css'
 })
-export class VerifyEmployersComponent {
+export class VerifyEmployersComponent implements OnInit, OnDestroy{
     userRole! : string | null;
     viewEmployerCompany : boolean = false;
     notVerifiedEmployers : User[] = [];
@@ -45,7 +45,6 @@ export class VerifyEmployersComponent {
       private appService : AppService,
       private adminService : AdminService,
       private messageService: MessageService,
-      private router : Router,
     ){}
 
     ngOnInit(): void {
@@ -101,5 +100,9 @@ export class VerifyEmployersComponent {
         this.approveRequest(event.dataObjectId);
       }
 
+    }
+
+    ngOnDestroy(): void {
+      this.getNotVerifiedEmployersSubscription?.unsubscribe();
     }
 }

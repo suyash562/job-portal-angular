@@ -78,13 +78,13 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
   }
 
   initiateCountdown(){
-    this.countdown = 60 * 1;
+    this.countdown = 60 * 3;
     this.countDownInterval = setInterval(() => {
       this.countdown--;
     }, 1000);
     setTimeout(() => {
       clearInterval(this.countDownInterval);
-    }, 1000 * 60 * 1);
+    }, 1000 * 60 * 3);
   }
 
   updatePassword(){
@@ -103,7 +103,9 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
     this.userService.resetPassword( this.userEmail, this.resetPasswordForm.controls['newPassword'].value).subscribe({
       next : (requestResult : RequestResult) => {
         this.disableResetPasswordForm();
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message, life: 3000 });
+        this.appService.updateDisplaySuccessToastSubject(requestResult.message);
+        this.router.navigate(['/','user']);
+        // this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message, life: 3000 });
       }
     });
   }

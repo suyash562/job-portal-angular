@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { debounceTime, Subject } from 'rxjs';
 
 
 @Component({
@@ -9,12 +10,13 @@ import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
   templateUrl: './filter-options.component.html',
   styleUrl: './filter-options.component.css'
 })
-export class FilterOptionsComponent {
+export class FilterOptionsComponent implements OnInit{
   matchedCompanyNames : string[] = [];
   selectedCompanyName : FormControl = new FormControl();
   selectedworkMode! : { option: string};
   selectedemployementType! : { option: string};
   selectedSort! : { option: string};
+  searchInput = new Subject<string>();
   @Input('companyNamesList') companyNamesList! : string[];
 
   workModeOptions : { option : string}[] = [
@@ -39,6 +41,14 @@ export class FilterOptionsComponent {
     }> = new EventEmitter();
   @Output() clearFilterEvent : EventEmitter<void> = new EventEmitter();
 
+  ngOnInit(): void {
+    this.searchInput.pipe(
+      debounceTime(500) 
+    ).subscribe((searchTerm: string) => {
+      this.matchedCompanyNames = this.companyNamesList.filter(companyName => companyName.toLowerCase().includes(searchTerm));
+    });
+  }
+
   filterOptionSelected(){    
     this.filterEvent.emit(
       {
@@ -61,7 +71,7 @@ export class FilterOptionsComponent {
   }
 
   getSuggestions(event: AutoCompleteCompleteEvent) {
-    this.matchedCompanyNames = this.companyNamesList.filter(companyName => companyName.toLowerCase().includes(event.query.toLowerCase()));
+    this.searchInput.next(event.query.toLowerCase());
   }
 
   onCompanySelected(){

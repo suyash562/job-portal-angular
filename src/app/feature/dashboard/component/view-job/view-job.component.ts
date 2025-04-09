@@ -3,7 +3,6 @@ import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Job } from '../../../../shared/entity/job';
 import { RequestResult } from '../../../../shared/types/types';
-import { MessageService } from 'primeng/api';
 import { JobListService } from '../../../job-list/service/jobList/job-list.service';
 
 
@@ -22,7 +21,6 @@ export class ViewJobComponent implements OnInit, OnDestroy{
   constructor(
     private jobListService : JobListService,
     private activatedRoute : ActivatedRoute,
-    private messageService: MessageService,
     private router: Router,
   ){}
 

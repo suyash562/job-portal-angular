@@ -47,7 +47,6 @@ export class ManageUsersComponent implements OnInit , OnDestroy{
 
     this.getUsersSubscription = this.adminService.getAllVerifiedEmployers().subscribe({
       next : (requestResult : RequestResult) => {
-        console.log(requestResult);
         this.userData = [];
         
         requestResult.value.forEach((user : User) => {

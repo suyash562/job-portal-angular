@@ -1,0 +1,28 @@
+<ng-container *ngIf="adminCount; else loading">
+    <div style="height: 35vh; width: 100%; display: flex; justify-content: space-around; align-items: center;">
+        <p-card [style]="{ width: '10rem', overflow: 'hidden' }">
+            <ng-template #title>Total</ng-template>
+            <ng-template #subtitle>Total Users</ng-template>
+            <p style="margin: 0;">{{adminCount + employersCount + usersCount}}</p>
+        </p-card>
+        <p-card [style]="{ width: '10rem', overflow: 'hidden' }">
+            <ng-template #title>Admin</ng-template>
+            <ng-template #subtitle>Total Admins</ng-template>
+            <p style="margin: 0;">{{adminCount}}</p>
+        </p-card>
+        <p-card [style]="{ width: '10rem', overflow: 'hidden' }">
+            <ng-template #title>Employers</ng-template>
+            <ng-template #subtitle>Total Employers</ng-template>
+            <p style="margin: 0;">{{employersCount}}</p>
+        </p-card>
+        <p-card [style]="{ width: '10rem', overflow: 'hidden' }">
+            <ng-template #title>Job Seekers</ng-template>
+            <ng-template #subtitle>Total Job Seekers</ng-template>
+            <p style="margin: 0;">{{usersCount}}</p>
+        </p-card>
+    </div>
+</ng-container>
+
+<ng-template #loading>
+    <app-progress-spinner></app-progress-spinner>
+</ng-template>

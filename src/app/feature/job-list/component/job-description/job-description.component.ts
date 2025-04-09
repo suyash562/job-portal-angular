@@ -65,23 +65,14 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
               this.userAppliedJobs.push(application.job.id);
             });
           }
-        },
-        error : (err) => {
-          console.log(err);
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
         }
       })
 
       this.getUserProfileSubscription = this.profileService.getUserProfile().subscribe({
         next : (result : RequestResult) => {
           this.userProfile = result.value;
-        },
-        error : (err) => {
-          console.log(err);
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
         }
       })
-
     }
     else{
       this.userAppliedJobs = [];
@@ -117,9 +108,6 @@ export class JobDescriptionComponent implements OnInit, OnDestroy{
           next : (result : RequestResult) => {
             this.userAppliedJobs.push(jobId);
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Applied to Job Successfully', life: 3000 });
-          },
-          error : (err) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: typeof(err.error) === 'string' ? err.error : 'Unable to reach server', life: 3000 });
           }
         });
         

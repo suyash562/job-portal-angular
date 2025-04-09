@@ -33,6 +33,7 @@ import { DialogModule } from 'primeng/dialog';
 import { VerifyEmployersComponent } from './component/verify-employers/verify-employers.component';
 import { ViewEmployerDetailsComponent } from './component/view-employer-details/view-employer-details.component';
 import { ManageUsersComponent } from './component/manage-users/manage-users.component';
+import { UserInfoComponent } from './component/user-info/user-info.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { ManageUsersComponent } from './component/manage-users/manage-users.comp
     VerifyEmployersComponent,
     ViewEmployerDetailsComponent,
     ManageUsersComponent,
+    UserInfoComponent,
   ],
   imports: [
     CommonModule,

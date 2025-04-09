@@ -22,6 +22,9 @@
 
 <div *ngIf="userRole === 'admin'">
     <div class="optionsDiv">
+        <p-button [style]="{width: '80%'}" icon="pi pi-users" label="Overall Info" severity="info" [routerLink]="['admin', 'user-info']"></p-button>
+    </div>
+    <div class="optionsDiv">
         <p-button [style]="{width: '80%'}" icon="pi pi-verified" label="Approve Employers" severity="info" [routerLink]="['admin', 'verify-employeers']"></p-button>
     </div>
     <div class="optionsDiv">

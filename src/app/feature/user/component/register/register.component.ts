@@ -32,7 +32,6 @@ export class RegisterComponent implements OnInit, OnDestroy{
     {name : 'Automotive', code: 'NY'},
     {name : 'Banking and Finance'},
     {name : 'Construction'},
-    {name : 'Consumer Goods'},
     {name : 'Education'},
     {name : 'Energy'},
     {name : 'Entertainment'},
@@ -44,6 +43,7 @@ export class RegisterComponent implements OnInit, OnDestroy{
     {name : 'Retail'},
     {name : 'Telecommunications'},
     {name : 'Transportation'},
+    {name : 'Other'},
   ];
   
   constructor(
@@ -166,6 +166,10 @@ export class RegisterComponent implements OnInit, OnDestroy{
           next : (requestResult : RequestResult)=>{     
             this.userService.emailForOtpVerification = this.registerForm.controls['email'].value;
             this.router.navigate(['user','validateOtp']);
+          },
+          error : (err) => {
+            console.log(err);
+            
           }
         }
       );
