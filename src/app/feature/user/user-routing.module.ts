@@ -5,11 +5,12 @@ import { RegisterComponent } from './component/register/register.component';
 import { OtpValidationComponent } from './component/otp-validation/otp-validation.component';
 import { OtpVerificationGuard } from './guard/otp-verification-guard';
 
+
 const routes: Routes = [
   {path : '', redirectTo : 'login', pathMatch :'full'},
   {path : 'login', component : LoginComponent},
   {path : 'register', component : RegisterComponent},
-  {path : 'validateOtp', canActivate : [OtpVerificationGuard], component : OtpValidationComponent},
+  {path : 'validateOtp', canActivate : [OtpVerificationGuard] ,component : OtpValidationComponent},
 ];
 
 @NgModule({

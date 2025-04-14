@@ -50,7 +50,7 @@ export class CustomFormValidators{
     validatePhoneNumber(control : AbstractControl) : ValidationErrors | null {
         const regEx : RegExp = /^[6-9]\d{9}$/;
         if(!regEx.test(control.value)){
-            return {error : 'Invalid phone number'}
+            return {error : 'Invalid contact number'}
         }
         return null;
     }
@@ -78,6 +78,7 @@ export class CustomFormValidators{
     }
 
     validateResume(control : AbstractControl) : ValidationErrors | null{
+        
         if(!control.value || control.value === ''){
             return {error : '* Required'};
         }

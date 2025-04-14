@@ -153,7 +153,7 @@ export class AddJobComponent implements OnInit, OnDestroy{
         new Date(this.addJobFormGroup.controls['deadlineForApplying'].value),
         new Date(),
         true
-      )
+      );
       
       if(this.updateJobForm){
         if(this.isFormChanged()){

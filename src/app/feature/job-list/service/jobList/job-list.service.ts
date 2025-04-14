@@ -64,9 +64,12 @@ export class JobListService {
   }
 
   getCompanies(jobs : Job[]){
+    
     const companies : string[] = [];
+    
     jobs.forEach((job) => {
       let companyName = job.employeer?.employeerCompany?.name;
+      
       if(companyName && !companies.includes(companyName)){
         companies.push(companyName);
       }

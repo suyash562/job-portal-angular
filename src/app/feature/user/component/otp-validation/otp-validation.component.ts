@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from '../../service/user.service';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { AppService } from '../../../../app.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { CustomFormValidators } from '../../../../shared/validators/formValidators';
@@ -28,15 +28,27 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
   constructor(
     private userService : UserService,
     private router : Router,
+    private activatedRoute : ActivatedRoute,
     private messageService: MessageService,
     private appService: AppService,
     private customFormValidators : CustomFormValidators,
+    private confirmationService : ConfirmationService
   ){}
 
   ngOnInit(): void {
     this.initiateCountdown();
     this.userEmail = this.userService.emailForOtpVerification;
     this.otpForForgotPassword = this.userService.otpForForgotPassword;
+
+    this.userService.exitFromOtpComponentObservable.subscribe({
+      next : (value) => {
+        console.log(value);
+        if(value){ 
+          
+          this.confirmExitFromComponentDialogue();
+        }
+      }
+    });
 
     this.resetPasswordForm = new FormGroup({
       newPassword : new FormControl('', [this.customFormValidators.validatePassword, this.customFormValidators.defaultValidator]),
@@ -105,9 +117,31 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
         this.disableResetPasswordForm();
         this.appService.updateDisplaySuccessToastSubject(requestResult.message);
         this.router.navigate(['/','user']);
-        // this.messageService.add({ severity: 'success', summary: 'Success', detail: requestResult.message, life: 3000 });
       }
     });
+  }
+
+  confirmExitFromComponentDialogue(){
+      this.confirmationService.confirm({
+        message: 'Cancel OTP verification ?',
+        header: 'Cancel',
+        closable: true,
+        closeOnEscape: true,
+        icon: 'pi pi-info-circle',
+        rejectButtonProps: {
+            label: 'Cancel',
+            severity: 'contrast',
+            outlined: true,
+        },
+        acceptButtonProps: {
+            label: 'Ok',
+            severity: 'contrast',
+        },
+        accept: () => {
+          this.router.navigate(['..'], {relativeTo : this.activatedRoute});
+        },
+    })
+    
   }
 
   disableResetPasswordForm(){

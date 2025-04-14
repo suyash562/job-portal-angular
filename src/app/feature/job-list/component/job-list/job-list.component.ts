@@ -4,7 +4,7 @@ import { RequestResult } from '../../../../shared/types/types';
 import { Job } from '../../../../shared/entity/job';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ConfirmationService, MessageService } from 'primeng/api';
+
 
 @Component({
   selector: 'app-job-list',
@@ -27,7 +27,6 @@ export class JobListComponent implements OnInit, OnDestroy{
   constructor(
     private jobListService : JobListService,
     private router : Router,
-    private messageService : MessageService,
   ){}
   
   ngOnInit(): void {
@@ -54,7 +53,6 @@ export class JobListComponent implements OnInit, OnDestroy{
   }
 
   filterJobsList(event : any) {
-    console.log(event);
     
     if(event.workMode || event.employementType || event.company){
       this.filteredJobs = this.jobListService.filterJobsBasedOnOptions(event, this.jobs);

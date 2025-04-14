@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { User } from '../../../shared/entity/user';
 import { RequestResult } from '../../../shared/types/types';
 
@@ -12,17 +12,26 @@ export class UserService {
   otpForForgotPassword : boolean = false;
   userRole : string = sessionStorage.getItem('role') ?? '';
   private isUserLoggedIn : BehaviorSubject<boolean> = new BehaviorSubject(sessionStorage.getItem('role') ? true : false);
+  private exitFromOtpComponent : BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
     private httpClient : HttpClient,
   ){}
 
-  get userLoggedInSubject(){
+  get userLoggedInObservable(){
     return this.isUserLoggedIn.asObservable();
+  }
+
+  get exitFromOtpComponentObservable(){
+    return this.exitFromOtpComponent.asObservable();
   }
 
   updateUserLoginStatus(status : boolean){
     this.isUserLoggedIn.next(status);
+  }
+
+  updateExitFromOtpComponent(){
+    this.exitFromOtpComponent.next(true);
   }
 
   clearUserSession(){

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ApplicationService } from '../../service/appliaction/application.service';
+import { ApplicationService } from '../../service/application/application.service';
 import { Application } from '../../../../shared/entity/application';
 import { RequestResult } from '../../../../shared/types/types';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -49,7 +49,6 @@ export class ViewSelectedApplicationComponent implements OnInit, OnDestroy{
 
     this.activatedRouteSubcription = this.activatedRoute.params.subscribe({
       next : (value) => {
-        console.log(value);
         
         if(value['applicationId'] && parseInt(value['applicationId'])){
           this.applicationId = value['applicationId'];

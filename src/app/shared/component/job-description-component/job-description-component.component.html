@@ -62,7 +62,7 @@
             <p>{{job.deadlineForApplying.toString().split('T')[0]}}</p>
         </div>
 
-        <div id="button-div" *ngIf="userRole === 'user'">
+        <div id="button-div" *ngIf="userRole !== 'employeer' && userRole !== 'admin'">
             <ng-container *ngIf="userAppliedJobs.includes(job.id); else applyForJobButton">
                 <p-button severity="info" disabled>Already Applied !</p-button>
             </ng-container>

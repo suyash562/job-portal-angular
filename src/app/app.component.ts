@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {    
 
-    this.userLoggedInSubscription = this.userService.userLoggedInSubject.subscribe({
+    this.userLoggedInSubscription = this.userService.userLoggedInObservable.subscribe({
       next : (value) => {
         this.userLoggedIn = value;
         if(value){

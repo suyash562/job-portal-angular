@@ -3,7 +3,7 @@ import { Application } from '../../../../shared/entity/application';
 import { RequestResult } from '../../../../shared/types/types';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
-import { ApplicationService } from '../../service/appliaction/application.service';
+import { ApplicationService } from '../../service/application/application.service';
 
 @Component({
   selector: 'app-application',
@@ -29,6 +29,7 @@ export class ApplicationComponent implements OnInit, OnDestroy{
       next : (result : RequestResult) => {
         this.applicationData = [];
         result.value.forEach((application : Application) => {
+          
           this.applicationData.push(
             {
               id : application.id,

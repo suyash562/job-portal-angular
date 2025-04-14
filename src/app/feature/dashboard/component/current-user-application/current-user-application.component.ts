@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { RequestResult } from '../../../../shared/types/types';
 import { Application } from '../../../../shared/entity/application';
-import { ApplicationService } from '../../service/appliaction/application.service';
+import { ApplicationService } from '../../service/application/application.service';
 import { UserService } from '../../../user/service/user.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';

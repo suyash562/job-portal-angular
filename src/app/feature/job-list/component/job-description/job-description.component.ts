@@ -6,7 +6,7 @@ import { RequestResult } from '../../../../shared/types/types';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../../user/service/user.service';
 import { Application } from '../../../../shared/entity/application';
-import { ApplicationService } from '../../../dashboard/service/appliaction/application.service';
+import { ApplicationService } from '../../../dashboard/service/application/application.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { UserProfile } from '../../../../shared/entity/userProfile';
 import { ProfileService } from '../../../dashboard/service/profile/profile.service';
