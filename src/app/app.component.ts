@@ -140,7 +140,7 @@ export class AppComponent implements OnInit, OnDestroy{
     if(!event.notification.isRead){      
       this.displayOverlaySpinner = true;
       this.appService.markNotificationAsRead(event.notification.id).subscribe({
-        next : (requestResult : RequestResult) => {
+        next : () => {
           this.userNotifications[event.index].isRead = true;
           this.newNotificationsCount--;
           this.appService.updateNotificationsDrawerVisisbleSubject(false);

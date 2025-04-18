@@ -22,6 +22,7 @@ export class JobListComponent implements OnInit, OnDestroy{
   limit : number = 3;
   firstJobInListNumber! : number;
   lastJobInListNumber! : number;
+  filterEvent : any = null;
   getAllJobsSubscription! : Subscription;
 
   constructor(
@@ -53,22 +54,25 @@ export class JobListComponent implements OnInit, OnDestroy{
   }
 
   filterJobsList(event : any) {
-    
-    if(event.workMode || event.employementType || event.company){
-      this.filteredJobs = this.jobListService.filterJobsBasedOnOptions(event, this.jobs);
-      this.totalJobsCountAfterFiltering = this.filteredJobs.length;
-    }
-    if(event.sort){
-      this.filteredJobs = this.filteredJobs.sort((job1 , job2) => {
-        if(event.sort === 'A-Z'){
-          return job1.title < job2.title ? -1 : 1;
-        }
-        return job1.title < job2.title ? 1 : -1;
-      });      
+    this.filterEvent = event;
+    if(this.filterEvent){
+      if(this.filterEvent.workMode || this.filterEvent.employementType || this.filterEvent.company){
+        this.filteredJobs = this.jobListService.filterJobsBasedOnOptions(this.filterEvent, this.jobs);
+        this.totalJobsCountAfterFiltering = this.filteredJobs.length;
+      }
+      if(this.filterEvent.sort){
+        this.filteredJobs = this.filteredJobs.sort((job1 , job2) => {
+          if(this.filterEvent.sort === 'A-Z'){
+            return job1.title < job2.title ? -1 : 1;
+          }
+          return job1.title < job2.title ? 1 : -1;
+        });      
+      }
     }
   }
 
   clearFilters(){
+    this.filterEvent = null;
     this.filteredJobs = this.jobs;
     this.totalJobsCountAfterFiltering = this.totalJobsCount;
   }

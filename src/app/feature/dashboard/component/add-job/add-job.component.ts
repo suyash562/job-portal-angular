@@ -72,6 +72,9 @@ export class AddJobComponent implements OnInit, OnDestroy{
         workLocation  : new FormControl('', [this.customFormValidators.defaultValidator]),
         deadlineForApplying  : new FormControl('', [this.customFormValidators.requiredValidator]),
       },
+      {
+        validators : this.customFormValidators.validateSalaryRange
+      }
     );
 
     this.formInputFields = [
@@ -132,11 +135,6 @@ export class AddJobComponent implements OnInit, OnDestroy{
   submitForm(){
     
     if(!this.addJobFormGroup.invalid){
-
-      if(this.addJobFormGroup.controls['salaryRangeFrom'].value >= this.addJobFormGroup.controls['salaryRangeTo'].value){
-        this.addJobFormGroup.controls['salaryRangeTo'].setErrors({error : 'Must be greater than base salary'});
-        return;
-      }
       
       const newJob : Job = new Job(
         this.addJobFormGroup.controls['title'].value,

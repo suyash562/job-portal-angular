@@ -99,4 +99,14 @@ export class CustomFormValidators{
         }
         return null;
     }
+
+    validateSalaryRange(formControl: AbstractControl): ValidationErrors | null{
+        const salaryRangeFrom : number = formControl.get('salaryRangeFrom')?.value;
+        const salaryRangeTo : number = formControl.get('salaryRangeTo')?.value;
+        
+        if(!salaryRangeFrom || !salaryRangeTo || (salaryRangeFrom >= salaryRangeTo)){
+            formControl.get('salaryRangeTo')?.setErrors({error : 'Must be greater than base salary'});
+        }
+        return null;
+  };
 }
