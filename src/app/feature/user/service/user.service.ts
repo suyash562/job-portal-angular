@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { User } from '../../../shared/entity/user';
 import { RequestResult } from '../../../shared/types/types';
 
@@ -11,8 +11,9 @@ export class UserService {
   emailForOtpVerification! : string;
   otpForForgotPassword : boolean = false;
   userRole : string = sessionStorage.getItem('role') ?? '';
+  nextUrlForExitFromOtpComponent : BehaviorSubject<string> = new BehaviorSubject('');
+  exitFromOtpComponent : boolean = false;
   private isUserLoggedIn : BehaviorSubject<boolean> = new BehaviorSubject(sessionStorage.getItem('role') ? true : false);
-  private exitFromOtpComponent : BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
     private httpClient : HttpClient,
@@ -22,16 +23,16 @@ export class UserService {
     return this.isUserLoggedIn.asObservable();
   }
 
-  get exitFromOtpComponentObservable(){
-    return this.exitFromOtpComponent.asObservable();
+  get nextUrlForExitFromOtpComponentObservable(){
+    return this.nextUrlForExitFromOtpComponent.asObservable();
   }
 
   updateUserLoginStatus(status : boolean){
     this.isUserLoggedIn.next(status);
   }
 
-  updateExitFromOtpComponent(){
-    this.exitFromOtpComponent.next(true);
+  updateNextUrlForExitFromOtpComponent(nextUrl : string){
+    this.nextUrlForExitFromOtpComponent.next(nextUrl);
   }
 
   clearUserSession(){

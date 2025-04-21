@@ -24,11 +24,11 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
   resetPasswordForm : FormGroup = new FormGroup({});
   verifyOtpSubscription! : Subscription;
   resendOtpSubscription! : Subscription;
+  nextUrlForExitFromOtpComponentSubscription! : Subscription;
 
   constructor(
     private userService : UserService,
     private router : Router,
-    private activatedRoute : ActivatedRoute,
     private messageService: MessageService,
     private appService: AppService,
     private customFormValidators : CustomFormValidators,
@@ -40,12 +40,10 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
     this.userEmail = this.userService.emailForOtpVerification;
     this.otpForForgotPassword = this.userService.otpForForgotPassword;
 
-    this.userService.exitFromOtpComponentObservable.subscribe({
-      next : (value) => {
-        console.log(value);
-        if(value){ 
-          
-          this.confirmExitFromComponentDialogue();
+    this.nextUrlForExitFromOtpComponentSubscription = this.userService.nextUrlForExitFromOtpComponentObservable.subscribe({
+      next : (nextUrl) => {
+        if(nextUrl != ''){ 
+          this.confirmExitFromComponentDialogue(nextUrl);
         }
       }
     });
@@ -121,7 +119,7 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
     });
   }
 
-  confirmExitFromComponentDialogue(){
+  confirmExitFromComponentDialogue(nextUrl : string){
       this.confirmationService.confirm({
         message: 'Cancel OTP verification ?',
         header: 'Cancel',
@@ -137,8 +135,10 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
             label: 'Ok',
             severity: 'contrast',
         },
-        accept: () => {
-          this.router.navigate(['..'], {relativeTo : this.activatedRoute});
+        accept: () => {          
+          this.userService.exitFromOtpComponent = true;
+          this.userService.updateNextUrlForExitFromOtpComponent('');
+          this.router.navigate([nextUrl]);
         },
     })
     
@@ -156,5 +156,6 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {    
     this.verifyOtpSubscription?.unsubscribe();
     this.resendOtpSubscription?.unsubscribe();
+    this.nextUrlForExitFromOtpComponentSubscription.unsubscribe();
   }
 }
