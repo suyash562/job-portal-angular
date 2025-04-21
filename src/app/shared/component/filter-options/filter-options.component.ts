@@ -36,14 +36,14 @@ export class FilterOptionsComponent implements OnInit{
   @Output() filterEvent : EventEmitter<
     { company : string | null,
       workMode : string | null,
-      employementType : string | null,
+      employmentType : string | null,
       sort : string | null
     }> = new EventEmitter();
   @Output() clearFilterEvent : EventEmitter<void> = new EventEmitter();
 
   ngOnInit(): void {
     this.searchInput.pipe(
-      debounceTime(500) 
+      debounceTime(100) 
     ).subscribe((searchTerm: string) => {
       this.matchedCompanyNames = this.companyNamesList.filter(companyName => companyName.toLowerCase().includes(searchTerm));
     });
@@ -54,7 +54,7 @@ export class FilterOptionsComponent implements OnInit{
       {
         company : this.selectedCompanyName.value ? this.selectedCompanyName.value.toLowerCase() : null,
         workMode : this.selectedworkMode ? this.selectedworkMode.option : null,
-        employementType : this.selectedemployementType ? this.selectedemployementType.option : null,
+        employmentType : this.selectedemployementType ? this.selectedemployementType.option : null,
         sort : this.selectedSort ? this.selectedSort.option : null
       }
     );

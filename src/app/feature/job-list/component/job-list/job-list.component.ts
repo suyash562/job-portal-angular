@@ -14,7 +14,6 @@ import { Subscription } from 'rxjs';
 })
 export class JobListComponent implements OnInit, OnDestroy{
   jobs! : Job[];
-  filteredJobs! : Job[];
   companies! : string[];
   totalJobsCount! : number;
   totalJobsCountAfterFiltering! : number;
@@ -32,7 +31,7 @@ export class JobListComponent implements OnInit, OnDestroy{
   
   ngOnInit(): void {
     this.getJobs();
-
+    
     this.jobListService.getTotalNumberOfJobs().subscribe({
       next : (requestResult : RequestResult) => {
         this.totalJobsCount = requestResult.value;
@@ -40,14 +39,20 @@ export class JobListComponent implements OnInit, OnDestroy{
       }
     });
   }
-
+  
   getJobs(){
     
-    this.getAllJobsSubscription = this.jobListService.getAllJobs(this.page, this.limit).subscribe({
+    this.getAllJobsSubscription = this.jobListService.getAllJobs(this.page, this.limit, this.filterEvent).subscribe({
       next : (result : RequestResult) => {
-        this.jobs = result.value;     
-        this.filteredJobs = this.jobs;
-        this.companies = this.jobListService.getCompanies(this.jobs); 
+        
+        this.jobs = result.value;
+        if(this.filterEvent && (this.filterEvent.company || this.filterEvent.workMode || this.filterEvent.employmentType)){
+          this.totalJobsCountAfterFiltering = this.jobs.length;
+        }
+        else{
+          this.companies = this.jobListService.getCompanies(this.jobs); 
+          this.totalJobsCountAfterFiltering = this.totalJobsCount;
+        }
       }
     });
     
@@ -55,26 +60,12 @@ export class JobListComponent implements OnInit, OnDestroy{
 
   filterJobsList(event : any) {
     this.filterEvent = event;
-    if(this.filterEvent){
-      if(this.filterEvent.workMode || this.filterEvent.employementType || this.filterEvent.company){
-        this.filteredJobs = this.jobListService.filterJobsBasedOnOptions(this.filterEvent, this.jobs);
-        this.totalJobsCountAfterFiltering = this.filteredJobs.length;
-      }
-      if(this.filterEvent.sort){
-        this.filteredJobs = this.filteredJobs.sort((job1 , job2) => {
-          if(this.filterEvent.sort === 'A-Z'){
-            return job1.title < job2.title ? -1 : 1;
-          }
-          return job1.title < job2.title ? 1 : -1;
-        });      
-      }
-    }
+    this.getJobs();
   }
 
   clearFilters(){
     this.filterEvent = null;
-    this.filteredJobs = this.jobs;
-    this.totalJobsCountAfterFiltering = this.totalJobsCount;
+    this.getJobs();
   }
 
   loadDescriptionPage(job : Job){

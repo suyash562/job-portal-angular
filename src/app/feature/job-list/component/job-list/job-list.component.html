@@ -3,11 +3,11 @@
 
 <app-filter-options [companyNamesList]="companies" (filterEvent)="filterJobsList($event)" (clearFilterEvent)="clearFilters()"></app-filter-options>
 
-<div id="parent-div" *ngIf="filteredJobs; else loading">
+<div id="parent-div" *ngIf="jobs; else loading">
     <div id="current-jobs-displayed-div">
         <p>Showing {{getFirstJobInListNumber()}} to {{getLastJobInListNumber()}} of {{totalJobsCountAfterFiltering}} jobs</p>
     </div>
-    <div class="job-list-item" *ngFor="let job of filteredJobs" (click)="loadDescriptionPage(job)">
+    <div class="job-list-item" *ngFor="let job of jobs" (click)="loadDescriptionPage(job)">
         <p-card>
             <ng-template #title>
                 <p class="job-position">{{job.title}}</p>

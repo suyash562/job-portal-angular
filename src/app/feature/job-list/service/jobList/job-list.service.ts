@@ -22,8 +22,19 @@ export class JobListService {
     this.selectedJobFromListSubject.next(job);
   }
   
-  getAllJobs(page : number, limit : number){
-    return this.httpClient.get<RequestResult>(`http://localhost:3200/job/jobs?page=${page}&limit=${limit}`,{withCredentials : true});
+  getAllJobs(page : number, limit : number, filterEvent : any){
+    let url : string = '';
+    if(filterEvent){
+      const company = filterEvent.company;
+      const workMode = filterEvent.workMode;
+      const employmentType = filterEvent.employmentType;
+      const sort = filterEvent.sort;
+      url = `http://localhost:3200/job/jobs?page=${page}&limit=${limit}&company=${company}&workMode=${workMode}&employmentType=${employmentType}&sort=${sort}`;
+    }
+    else{
+      url = `http://localhost:3200/job/jobs?page=${page}&limit=${limit}`;
+    }
+    return this.httpClient.get<RequestResult>(url,{withCredentials : true});
   }
 
   getTotalNumberOfJobs(){
@@ -38,30 +49,30 @@ export class JobListService {
     return this.httpClient.get<RequestResult>(`http://localhost:3200/application/apply/${jobId}` ,{withCredentials : true});
   }
 
-  filterJobsBasedOnOptions(event : any, jobs : Job[]){
+  // filterJobsBasedOnOptions(event : any, jobs : Job[]){
 
-    return jobs.filter((job) => {
+  //   return jobs.filter((job) => {
         
-      const company = event.company ? (job.employeer!.employeerCompany!.name.toLowerCase() === event.company) : false;
-      const workMode = event.workMode ? (job.workMode === event.workMode) : false;
-      const employementType = event.employementType ? (job.employementType === event.employementType) : false;
+  //     const company = event.company ? (job.employeer!.employeerCompany!.name.toLowerCase() === event.company) : false;
+  //     const workMode = event.workMode ? (job.workMode === event.workMode) : false;
+  //     const employementType = event.employementType ? (job.employementType === event.employementType) : false;
       
-      if(event.workMode && event.employementType && event.company){
-        return workMode && employementType && company;
-      }
-      else if(event.workMode && event.employementType){
-        return workMode && employementType;
-      }
-      else if(event.employementType && event.company){
-        return employementType && company;
-      }
-      else if(event.workMode && event.company){
-        return workMode && company;
-      }
+  //     if(event.workMode && event.employementType && event.company){
+  //       return workMode && employementType && company;
+  //     }
+  //     else if(event.workMode && event.employementType){
+  //       return workMode && employementType;
+  //     }
+  //     else if(event.employementType && event.company){
+  //       return employementType && company;
+  //     }
+  //     else if(event.workMode && event.company){
+  //       return workMode && company;
+  //     }
      
-      return workMode || employementType || company;
-    });
-  }
+  //     return workMode || employementType || company;
+  //   });
+  // }
 
   getCompanies(jobs : Job[]){
     
