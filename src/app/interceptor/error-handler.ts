@@ -1,6 +1,6 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError, finalize, Observable, tap, throwError } from "rxjs";
+import { catchError, finalize, Observable, throwError } from "rxjs";
 import { AppService } from "../app.service";
 
 @Injectable({
@@ -13,6 +13,7 @@ export class ErrorHandlerInterceptor implements HttpInterceptor {
     ){}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        
         return next.handle(req).pipe(
             catchError(error => {
                 return throwError(error);

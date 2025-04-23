@@ -9,6 +9,7 @@ const routes: Routes = [
   {path : 'jobs', loadChildren : () => import('../app/feature/job-list/job-list.module').then(m => m.JobListModule)},
   {path : 'dashboard', canActivate : [IsLoggedIn] ,loadChildren : () => import('../app/feature/dashboard/dashboard.module').then(m => m.DashboardModule)},
   {path : 'user', loadChildren : () => import('./feature/user/user.module').then(m => m.UserModule)},
+  {path : '**', redirectTo : 'home'},
 ];
 
 @NgModule({

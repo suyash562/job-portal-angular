@@ -1,31 +1,3 @@
-<!-- <table>
-    <thead>
-        <tr>
-            <ng-container *ngFor="let title of tableHead">
-                <th>{{title}}</th>
-            </ng-container>
-        </tr>
-    </thead>
-    <tbody>
-        <ng-container *ngFor="let dataObject of tableDataObject">
-            <tr [ngClass]="getClassForTableData(dataObject)">
-                <ng-container *ngFor="let title of applicationDataKey">
-                    <td>{{dataObject[title]}}</td>
-                </ng-container>
-                <td class="actions">
-                    <ng-container *ngFor="let action of actions">
-                        <ng-container *ngIf="action === 'View' && removedApplicationsId?.includes(dataObject['id']); else actionButton">
-                            <button>Not Available</button>
-                        </ng-container>
-                        <ng-template #actionButton>
-                            <button (click)="actionClick(action, dataObject['id'])">{{action}}</button>
-                        </ng-template>
-                    </ng-container>
-                </td> 
-            </tr>
-        </ng-container>
-    </tbody>
-</table> -->
 
 <div class="card flex justify-center">
     <p-dialog header="Not Available" [modal]="true" [(visible)]="pDialogueBoxEnabled" [style]="{ width: '25rem' }">
@@ -92,3 +64,37 @@
 <ng-template #spinner>
     <app-progress-spinner></app-progress-spinner>
 </ng-template>
+
+
+
+
+
+
+<!-- <table>
+    <thead>
+        <tr>
+            <ng-container *ngFor="let title of tableHead">
+                <th>{{title}}</th>
+            </ng-container>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let dataObject of tableDataObject">
+            <tr [ngClass]="getClassForTableData(dataObject)">
+                <ng-container *ngFor="let title of applicationDataKey">
+                    <td>{{dataObject[title]}}</td>
+                </ng-container>
+                <td class="actions">
+                    <ng-container *ngFor="let action of actions">
+                        <ng-container *ngIf="action === 'View' && removedApplicationsId?.includes(dataObject['id']); else actionButton">
+                            <button>Not Available</button>
+                        </ng-container>
+                        <ng-template #actionButton>
+                            <button (click)="actionClick(action, dataObject['id'])">{{action}}</button>
+                        </ng-template>
+                    </ng-container>
+                </td> 
+            </tr>
+        </ng-container>
+    </tbody>
+</table> -->

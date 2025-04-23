@@ -38,7 +38,7 @@ import { ConfirmationService } from 'primeng/api';
     }),
     { provide : ErrorHandler, useClass : GlobalErrorHandler },
     httpInterceptorsProvider,
-    ConfirmationService
+    { provide : ConfirmationService, useClass : ConfirmationService}
   ],
   bootstrap: [AppComponent]
 })

@@ -1,3 +1,10 @@
+
+<ng-container>
+    <app-table [tableData]="applicationData" [tableDataKey]="applicationDataKey" [tableHead]="applicationDataTitle" [actions]="actions" (actionPerformed)="performSpecifiedAction($event)"></app-table>
+</ng-container>
+
+
+
 <!-- <table>
     <thead>
         <tr>
@@ -24,7 +31,3 @@
         </ng-container>
     </tbody>
 </table> -->
-
-<ng-container>
-    <app-table [tableData]="applicationData" [tableDataKey]="applicationDataKey" [tableHead]="applicationDataTitle" [actions]="actions" (actionPerformed)="performSpecifiedAction($event)"></app-table>
-</ng-container>

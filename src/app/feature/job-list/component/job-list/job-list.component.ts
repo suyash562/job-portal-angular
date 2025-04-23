@@ -22,6 +22,7 @@ export class JobListComponent implements OnInit, OnDestroy{
   firstJobInListNumber! : number;
   lastJobInListNumber! : number;
   filterEvent : any = null;
+  getTotalNumberOfJobsSubscription! : Subscription;
   getAllJobsSubscription! : Subscription;
 
   constructor(
@@ -32,7 +33,7 @@ export class JobListComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.getJobs();
     
-    this.jobListService.getTotalNumberOfJobs().subscribe({
+    this.getTotalNumberOfJobsSubscription = this.jobListService.getTotalNumberOfJobs().subscribe({
       next : (requestResult : RequestResult) => {
         this.totalJobsCount = requestResult.value;
         this.totalJobsCountAfterFiltering = requestResult.value;
@@ -45,9 +46,9 @@ export class JobListComponent implements OnInit, OnDestroy{
     this.getAllJobsSubscription = this.jobListService.getAllJobs(this.page, this.limit, this.filterEvent).subscribe({
       next : (result : RequestResult) => {
         
-        this.jobs = result.value;
+        this.jobs = result.value.jobs;
         if(this.filterEvent && (this.filterEvent.company || this.filterEvent.workMode || this.filterEvent.employmentType)){
-          this.totalJobsCountAfterFiltering = this.jobs.length;
+          this.totalJobsCountAfterFiltering = result.value.jobsCount;
         }
         else{
           this.companies = this.jobListService.getCompanies(this.jobs); 
@@ -92,6 +93,7 @@ export class JobListComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.getAllJobsSubscription?.unsubscribe();
+    this.getTotalNumberOfJobsSubscription.unsubscribe();
+    this.getAllJobsSubscription.unsubscribe();
   }
 }

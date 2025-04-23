@@ -59,6 +59,8 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
     this.verifyOtpSubscription = this.userService.verifyOtp(this.userEmail, this.otpValue, this.otpForForgotPassword).subscribe({
       next : () => {
         if(!this.otpForForgotPassword){
+          this.userService.exitFromOtpComponent = true;
+          this.userService.updateNextUrlForExitFromOtpComponent('');
           this.router.navigate(['user']);
           this.appService.updateDisplaySuccessToastSubject('OTP Verified Successfully');
         }
@@ -114,6 +116,8 @@ export class OtpValidationComponent implements OnInit, OnDestroy{
       next : (requestResult : RequestResult) => {
         this.disableResetPasswordForm();
         this.appService.updateDisplaySuccessToastSubject(requestResult.message);
+        this.userService.exitFromOtpComponent = true;
+        this.userService.updateNextUrlForExitFromOtpComponent('');
         this.router.navigate(['/','user']);
       }
     });
